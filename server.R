@@ -1,6 +1,7 @@
 library(shiny)
 library(plyr)
 
+
 shinyServer(function(input, output) {
   
   # different stimulus onsets for the non-target stimulus
@@ -37,12 +38,14 @@ shinyServer(function(input, output) {
     if(input$dist == "exp")
       (plot(dexp(x, rate = 1/input$mu_t),
             type = "l",
+            lwd=3,
             ylab = "Probability",
             xlab = "first stage (target stimulus)"))
     # normal distribution
     else if(input$dist == "norm")
       (plot(dnorm(x, mean = input$mun_t, sd = input$sd_t),
             type = "l",
+            lwd=3,
             ylab = "Probability",
             xlab = "first stage (target stimulus)"))
     # uniform distribution
@@ -53,6 +56,7 @@ shinyServer(function(input, output) {
              "Please check your input data for the target!"))
       plot(dunif(x, min = input$min_t, max = input$max_t),
            type = "l",
+           lwd=3,
            ylab = "Probability",
            xlab = "first stage (target stimulus")}
   })
@@ -62,11 +66,13 @@ shinyServer(function(input, output) {
     if(input$dist == "exp")
       (plot(dexp(x, rate = 1/input$mu_nt),
             type = "l",
+            lwd=3,
             ylab = "Probability",
             xlab = "first stage (non-target stimulus)"))
     else if(input$dist == "norm")
       (plot(dnorm(x, mean = input$mun_nt, sd = input$sd_nt),
             type = "l",
+            lwd=3,
             ylab = "Probability",
             xlab = "first stage (non-target stimulus)"))
     else{
@@ -75,6 +81,7 @@ shinyServer(function(input, output) {
              "Please check your input data for the non-target!"))
       plot(dunif(x, min = input$min_nt, max = input$max_nt),
            type = "l",
+           lwd=3,
            ylab = "Probability",
            xlab = "first stage (non-target stimulus)")}
   })
@@ -136,12 +143,14 @@ shinyServer(function(input, output) {
     # plot the means against the SOA values
     plot(results$tau, results$means, 
          type = "b", col = "red", 
+         lwd=3,
          ylim=c(0, max),
          ylab = "Reaction Times",
          xlab = "SOA of the non-target stimulus")
     par(new = T)
     plot(results$tau, results$mean_t, 
          type = "l", col = "blue", 
+         lwd=3,
          ylim = c(0, max),
          ylab = " ",
          xlab = " ")
@@ -179,9 +188,23 @@ shinyServer(function(input, output) {
     else(plot(results$tau, 
               results$prob_value, 
               type = "b", 
+              lwd=3,
               col = "blue",
               ylab = "Probability of Integration",
               xlab = "SOA of the non-target stimulus"))
+  })
+  
+  output$dt1 <- renderDataTable({
+    infile <- input$file1
+    if(is.null(infile))
+      return(NULL)
+    read.csv(infile$datapath, header = TRUE)
+    
+  })
+  
+
+  output$frame <- renderUI({
+    tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
   
 })
