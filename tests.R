@@ -8,7 +8,7 @@ source("simulateFAP.R")
 # parameter values
 # stimulus onset asynchrony
 soa <- c(-200, -100, -50, 0, 50, 100, 200)
-nsoa <- length(soa)
+
 
 # processing time of visual/auditory stimulus on stage 1
 lambdaA <- 100       # = 1/lambdaA

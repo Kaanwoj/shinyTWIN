@@ -1,5 +1,6 @@
 library(shiny)
 library(plyr)
+source("simulateFAP.R")
 
 
 shinyServer(function(input, output) {
@@ -11,14 +12,13 @@ shinyServer(function(input, output) {
   
   # unimodal simulation of the first stage according to the chosen distribution
   # target stimulus
-  stage1_t <- reactive({ if(input$dist == "exp")(rexp(n, rate = 1/input$mu_t))
-    else if(input$dist == "norm")(rnorm(n, mean = input$mun_t, sd = input$sd_t))
-    else (runif(n, min = input$min_t, max = input$max_t))
+  stage1_t <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_t))
+    else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_t))
   })
+    
   # non-target stimulus
-  stage1_nt <- reactive({ if(input$dist == "exp")(rexp(n, rate = 1/input$mu_nt))
-    else if(input$dist == "norm")(rnorm(n, mean = input$mun_nt, sd = input$sd_nt))
-    else (runif(n, min = input$min_nt, max =  input$max_nt))
+  stage1_nt <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_nt))
+    else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_nt))
   })
   
   # simulation of the second stage (assumed normal distribution)
@@ -34,66 +34,44 @@ shinyServer(function(input, output) {
   
   ## --- PLOT THE DISTRIBUTION OF THE FIRST STAGE RT
   output$uni_data_t <- renderPlot({
-    # exponential distribution with rate lambda = 1/mu
-    if(input$dist == "exp")
+    # exponential distribution with rate lambda = 1/mu for FAP
+    if(input$dist == "expFAP")
       (plot(dexp(x, rate = 1/input$mu_t),
             type = "l",
             lwd=3,
             ylab = "Probability",
             xlab = "first stage (target stimulus)"))
-    # normal distribution
-    else if(input$dist == "norm")
-      (plot(dnorm(x, mean = input$mun_t, sd = input$sd_t),
-            type = "l",
-            lwd=3,
-            ylab = "Probability",
-            xlab = "first stage (target stimulus)"))
-    # uniform distribution
-    else{
-      # check if the given values make sense
-      validate(
-        need(input$max_t - input$min_t > 0, 
-             "Please check your input data for the target!"))
-      plot(dunif(x, min = input$min_t, max = input$max_t),
-           type = "l",
-           lwd=3,
-           ylab = "Probability",
-           xlab = "first stage (target stimulus")}
+    # exp distribution for RSP
+    else (input$dist == "expRSP")
+    (plot(dexp(x, rate = 1/input$mu_t),
+          type = "l",
+          lwd=3,
+          ylab = "Probability",
+          xlab = "first stage (target stimulus)"))
   })
   
   # do the same for the non-target distribution
   output$uni_data_nt <- renderPlot({
-    if(input$dist == "exp")
+    if(input$dist == "expFAP")
       (plot(dexp(x, rate = 1/input$mu_nt),
             type = "l",
             lwd=3,
             ylab = "Probability",
             xlab = "first stage (non-target stimulus)"))
-    else if(input$dist == "norm")
-      (plot(dnorm(x, mean = input$mun_nt, sd = input$sd_nt),
-            type = "l",
-            lwd=3,
-            ylab = "Probability",
-            xlab = "first stage (non-target stimulus)"))
-    else{
-      validate(
-        need(input$max_nt - input$min_nt > 0, 
-             "Please check your input data for the non-target!"))
-      plot(dunif(x, min = input$min_nt, max = input$max_nt),
-           type = "l",
-           lwd=3,
-           ylab = "Probability",
-           xlab = "first stage (non-target stimulus)")}
+    
+    else (input$dist == "expRSP")
+    (plot(dexp(x, rate = 1/input$mu_nt),
+          type = "l",
+          lwd=3,
+          ylab = "Probability",
+          xlab = "first stage (non-target stimulus)"))
+    
   })
   
   ### --- PLOT THE REACTION TIME MEANS AS FUNCTION OF THE SOA ---
   output$data <- renderPlot({
     # check if the input variables make sense for the uniform data
-    if(input$dist == "uni"){
-      validate(
-        need(input$max_nt > input$min_nt && input$max_t > input$min_t, 
-             "Please check your input data"))
-    }
+   
     
     # unimodal reaction times (first plus second stage, without integration)
     obs_t <- stage1_t() + stage2()
@@ -159,11 +137,7 @@ shinyServer(function(input, output) {
   ### PLOT THE PROBABILITY OF INTEGRATION ---
   # check the input data of the uniform distribution
   output$prob <- renderPlot({
-    if(input$dist == "uni"){
-      validate(
-        need(input$max_nt > input$min_nt && input$max_t > input$min_t, 
-             "Please check your input data"))
-    }
+   
     
     # same integration calculation as for the other plot
     for(i in 1:SOA){
@@ -202,9 +176,53 @@ shinyServer(function(input, output) {
     
   })
   
-
+##################### PDF of article 
+  
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
+  
+  ################### Generate the Simulation 
+  
+  soa <- c(-200, -100, -50, 0, 50, 100, 200)
+  sigma <- 25
+ 
+   output$simtable <- renderTable({
+    
+    simulate.fap (soa, input$lambdaA, input$lambdaV, input$mu, sigma, input$om, input$del, input$N)
+   
+ 
+  })
+  
+
+  ################### Download the Simulation output 
+   
+   datasetInput <- data.frame(data)
+   
+   output$table <- renderTable({
+     datasetInput()
+   })
+   
+   # downloadHandler() takes two arguments, both functions.
+   # The content function is passed a filename as an argument, and
+   #   it should write out data to that filename.
+   output$downloadData <- downloadHandler(
+     
+     # This function returns a string which tells the client
+     # browser what name to use when saving the file.
+     filename = function() {
+       paste(input$dataset, input$filetype, sep = ".")
+     },
+     
+     # This function should write data to a file given to it by
+     # the argument 'file'.
+     content = function(file) {
+       sep <- switch(input$filetype, "csv" = ",", "tsv" = "\t")
+       
+       # Write to a file specified by the 'file' argument
+       write.table(datasetInput(), file, sep = sep,
+                   row.names = FALSE)
+     }
+   )
   
 })
