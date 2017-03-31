@@ -2,11 +2,13 @@
 ### Simulation ###
 ##################
 
+
+
 simulate.fap <- function(soa, lambdaA, lambdaV, mu, sigma, omega, delta, N) {
 
   # draw random samples for processing time on stage 1 (A and V) or 2 (M)
-  A <- matrix(rexp(N * nsoa, rate = 1 / lambdaA), ncol = nsoa)
-  V <- matrix(rexp(N * nsoa, rate = 1 / lambdaV), ncol = nsoa)
+  A <- matrix(rexp(N * nsoa, rate = lambdaA), ncol = nsoa)
+  V <- matrix(rexp(N * nsoa, rate = lambdaV), ncol = nsoa)
   M <- matrix(rnorm(N * nsoa, mean = mu, sd = sigma), ncol = nsoa)
 
   data <- matrix(nrow=40, ncol=7)
