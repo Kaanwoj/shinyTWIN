@@ -301,8 +301,6 @@ ui <- shinyUI(fluidPage(
                                                 max = 200,
                                                 value = 10),
                                     
-                                    
-                                    
                                     downloadButton('downloadData', 'Download (CSV)')
                                     
                                     
