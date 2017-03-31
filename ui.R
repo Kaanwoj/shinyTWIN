@@ -11,7 +11,10 @@ ui <- shinyUI(fluidPage(
   h4("Focused Attention Paradigm & Redundant Signals Paradigm", align = "center"),
   
   tabsetPanel(id = "TWINTabset",
-              tabPanel("Home", id = "Home",
+
+              
+              tabPanel("Introduction", value = "intro",
+
                        fluidRow(
                          column(4,
                                 wellPanel(
@@ -19,13 +22,16 @@ ui <- shinyUI(fluidPage(
                                               choices = c("About this app" = "aboutapp",
                                                           "The TWIN model" = "twinmod",
                                                           "Parameters" = "param", "Model equations" = "equ"
-                                              )))),
+
+                                                          )))),
                          
                          
-                         mainPanel(conditionalPanel (condition = ("input.topic == 'aboutapp'"),
+             mainPanel(conditionalPanel (condition = ("input.topic == 'aboutapp'"),
                                                      p(h2("Welcome!", align = "center")), 
                                                      br(),
-                                                     p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN).", align = "center")), 
+                                                     p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN), developed by
+                                                          Hans Colonius, Adele Diederich, and colleagues.", align = "center")), 
+
                                                      p(h5("It allows you to simulate and estimate the parameteres and even to upload your own data file.", align = "center")),
                                                      p(h5("Feel free to explore the app and navigate through the tabs!", align ="center")),
                                                      br(),
@@ -39,7 +45,7 @@ ui <- shinyUI(fluidPage(
                                                      p(h5("Martin Ingram", img(src="glasgow.png", width = "150"), align = "center")),
                                                      p(h5("Melanie Spindler", img(src="oldenburg.png", width = "110", height = "90"), align = "center")),
                                                      p(h5("Silvia Lopes", img(src="lisbon.png", width = "200"), align = "center"))
-                                                     
+                             
                                                      
                                                      
                          ),
@@ -122,7 +128,7 @@ ui <- shinyUI(fluidPage(
                        fluidRow(
                          column(4,
                                 wellPanel(
-                                  
+                  
                                   selectInput("dist", "Assumed Distribution: ",
                                               choices = c("Focused Attention Paradigm" = "expFAP",
                                                           "Redundant Signals Paradigm" = "expRSP")),
