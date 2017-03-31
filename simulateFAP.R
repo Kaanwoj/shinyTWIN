@@ -9,7 +9,7 @@ simulate.fap <- function(soa, lambdaA, lambdaV, mu, sigma, omega, delta, N) {
   V <- matrix(rexp(N * nsoa, rate = 1 / lambdaV), ncol = nsoa)
   M <- matrix(rnorm(N * nsoa, mean = mu, sd = sigma), ncol = nsoa)
 
-  data <- matrix(nrow=40, ncol=7)
+  data <- matrix(nrow=N, ncol=nsoa)
 
   for (i in 1:N) {
     for(j in 1:nsoa) {
