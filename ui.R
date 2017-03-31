@@ -4,33 +4,27 @@ library(shiny)
 shinyUI(fluidPage(
   # Application title
   
-  #Custom Colored Sliderbars
-  tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #000090}")),
-  tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #000070}")),
+  
    fluidRow(
     column(6,
            img(src = "tquant100.png", align = "left"))),
    br(),
-   
    headerPanel(h1("The Time-Window of INtegration Model (TWIN)", align = "center")),
   
   h4("Focused Attention Paradigm & Redundant Signals Paradigm", align = "center"),
   
-  
   tabsetPanel(id = "TWINTabset",
-              tabPanel("Simulation", value = "Sim", 
+              tabPanel("Parameters", value = "Para", 
+              
   fluidRow(
     column(4,
            wellPanel(
              
              selectInput("dist", "Assumed Distribution: ",
-                         choices = c("Exponential FAP" = "exp",
-                                     "Normal FAP" = "norm",
-                                     "Uniform FAP" = "uni",
-                                     "Exponential RSP" = "expRSP",
-                                     "Normal RSP" = "normRSP",
-                                     "Uniform RSP" = "uniRSP")),
-             conditionalPanel( condition = ("input.dist == 'exp'"),
+                         choices = c("Focused Attention Paradigm" = "expFAP",
+                                    "Redundant Signals Paradigm" = "expRSP")),
+             
+             conditionalPanel( condition = ("input.dist == 'expFAP'"),
                                sliderInput("mu_t",
                                            "Mean (target): ",
                                            min = 1,
@@ -42,50 +36,7 @@ shinyUI(fluidPage(
                                            max = 100,
                                            value = 50)
              ),
-             conditionalPanel( condition = ("input.dist == 'norm'"),
-                               sliderInput("mun_t",
-                                           "Mean (target): ",
-                                           min = 1,
-                                           max = 150,
-                                           value = 50),
-                               sliderInput("sd_t",
-                                           "Standard deviation (target):",
-                                           min = 1, 
-                                           max = 50,
-                                           value = 25),
-                               sliderInput("mun_nt",
-                                           "Mean (non-target): ",
-                                           min = 1,
-                                           max = 150,
-                                           value = 50),
-                               sliderInput("sd_nt",
-                                           "Standard Deviation (non-target):",
-                                           min = 1, 
-                                           max = 50,
-                                           value = 25)
-             ),
-             conditionalPanel( condition = ("input.dist == 'uni'"),
-                               sliderInput("min_t",
-                                           "Minimum (target): ",
-                                           min = 1,
-                                           max = 300,
-                                           value = 50),
-                               sliderInput("max_t",
-                                           "Maximum (target):",
-                                           min = 1,
-                                           max = 300,
-                                           value = 150),
-                               sliderInput("min_nt",
-                                           "Minimum (non-target): ",
-                                           min = 1,
-                                           max = 300,
-                                           value = 50),
-                               sliderInput("max_nt",
-                                           "Maximum (non-target):",
-                                           min = 1,
-                                           max = 300,
-                                           value = 150)
-             ),
+            
              conditionalPanel( condition = ("input.dist == 'expRSP'"),
                                sliderInput("mu_s1",
                                            "Mean (Stimulus 1): ",
@@ -174,6 +125,77 @@ shinyUI(fluidPage(
            plotOutput("prob")
     )
   )),
+  
+  ################### Simulation tab
+  
+  tabPanel("Simulation", value = "Sim",
+  fluidRow(
+  column(12,
+  
+  sidebarLayout(
+  sidebarPanel(
+    
+            
+    #sliderInput("soa",
+   #             "SOA:",
+    #            min = 0,
+     #           max = 500,
+      #          value = 200),
+    
+    sliderInput("lambdaA",
+                "Intensity of Auditory Stimuli:",
+                min = 20,
+                max = 150,
+                value = 50),
+    
+    sliderInput("lambdaV",
+                "Intensity of Visual Stimuli:",
+                min = 20,
+                max = 150,
+                value = 50),
+    
+    sliderInput("mu",
+                "Duration of 2nd stage:",
+                min = 50,
+                max = 200,
+                value = 100),
+    
+   # sliderInput("sigma",
+    #            "Standard Deviation:",
+     #           min = 500,
+      #          max = 200,
+       #         value = 50),
+           
+    sliderInput("om",
+                "Width of the window:",
+                min = 100,
+                max = 300,
+                value = 200),
+    
+    sliderInput("del",
+                "Amount of integration:",
+                min = 20,
+                max = 100,
+                value = 50),
+    
+    sliderInput("N",
+                "Trial Number:",
+                min = 1,
+                max = 200,
+                value = 10),
+   
+   tags$style(HTML('#SimButton1{background-color:orange}')),
+   actionButton("SimButton1", "Simulate"),
+    
+    radioButtons("filetype", "File type:",
+                 choices = c("csv", "tsv")),
+           downloadButton('downloadData', 'Download')
+  ),
+  mainPanel(
+  tableOutput("simtable")
+  )))
+  )),
+ 
   tabPanel("Estimation", value = "Est",
           fluidRow(
           column(4,
@@ -200,6 +222,11 @@ shinyUI(fluidPage(
                                 min = 1,
                                 max = 100,
                                 value = 50),
+                    numericInput("n1", "Number Input:", min = 0, max = 1000, value = 50),
+                    numericInput("n2", "Number Input:", min = 0, max = 1000, value = 50),
+                    numericInput("n3", "Number Input:", min = 0, max = 1000, value = 50),
+                    actionButton("AButton", "ActionButton"),
+                    tags$style(HTML('#AButton{background-color:orange}')),
                     fileInput('file1', 'Choose file to upload',
                               accept = c(
                                 'text/csv',
@@ -222,13 +249,22 @@ shinyUI(fluidPage(
            
   ),
   column(8,
-  p("Content goes here"), 
-  numericInput("n", "Number Input:", min = 0, max = 1000, value = 50),
-  br(),
-  actionButton("AButton", "ActionButton"),
-  p("Click the button to engage action.")
+  p("Content goes here")
           )),
-  dataTableOutput("dt1"))
+  dataTableOutput("dt1")),
+  
+  #Custom Colored Items
+  tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-2 .irs-single, .js-irs-2 .irs-bar-edge, .js-irs-2 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-3 .irs-single, .js-irs-3 .irs-bar-edge, .js-irs-3 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-4 .irs-single, .js-irs-4 .irs-bar-edge, .js-irs-4 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-5 .irs-single, .js-irs-5 .irs-bar-edge, .js-irs-5 .irs-bar {background: #000070}")), 
+  tags$style(HTML(".js-irs-6 .irs-single, .js-irs-6 .irs-bar-edge, .js-irs-6 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-7 .irs-single, .js-irs-7 .irs-bar-edge, .js-irs-7 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-8 .irs-single, .js-irs-8 .irs-bar-edge, .js-irs-8 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-9 .irs-single, .js-irs-9 .irs-bar-edge, .js-irs-9 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-10 .irs-single, .js-irs-10 .irs-bar-edge, .js-irs-10 .irs-bar {background: #000070}"))
   
   
 
