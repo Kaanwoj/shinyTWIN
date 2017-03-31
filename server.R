@@ -1,5 +1,6 @@
 library(plyr)
 source("simulateFAP.R")
+source("simulateRTP.R")
 library(xtable)
 
 server <- shinyServer(function(input, output) {
