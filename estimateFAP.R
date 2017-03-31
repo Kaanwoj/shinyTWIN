@@ -47,11 +47,11 @@ predict.rt <- function(soa, param) {
 objective.function <- function(param, obs.m, obs.se, soa) {
 
     # check if parameters are in bounds
-    if (param[1] < 5 && param[1] > 250 ) return(Inf)  # proc.A
-    if (param[2] < 5 && param[2] > 250 ) return(Inf)  # proc.A
-    if (param[3] < 0                   ) return(Inf)  # mu
-    if (param[4] < 5 && param[4] > 1000) return(Inf)  # omega
-    if (param[5] < 0 && param[5] > 175 ) return(Inf)  # delta
+    if (param[1] < 5 && param[1] > 250 ) return(60000)  # proc.A
+    if (param[2] < 5 && param[2] > 250 ) return(60000)  # proc.A
+    if (param[3] < 0                   ) return(60000)  # mu
+    if (param[4] < 5 && param[4] > 1000) return(60000)  # omega
+    if (param[5] < 0 && param[5] > 175 ) return(60000)  # delta
 
     pred <- predict.rt(soa, param)
 
