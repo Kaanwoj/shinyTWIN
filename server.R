@@ -44,14 +44,14 @@ server <- shinyServer(function(input, output) {
             type = "l",
             lwd=3,
             ylab = "Density Function",
-            xlab = "first stage (target stimulus)"))
+            xlab = "first stage (target stimulus / stimulus 1)"))
     # exp distribution for RSP
     else (input$dist == "expRSP")
     (plot(dexp(x, rate = 1/input$mu_t),
           type = "l",
           lwd=3,
           ylab = "Density Function",
-          xlab = "first stage (target stimulus)"))
+          xlab = "first stage (target stimulus / stimulus 1)"))
   })
   
   # do the same for the non-target distribution
@@ -61,14 +61,14 @@ server <- shinyServer(function(input, output) {
             type = "l",
             lwd=3,
             ylab = "Density Function",
-            xlab = "first stage (non-target stimulus)"))
+            xlab = "first stage (non-target stimulus / stimulus 2)"))
     
     else (input$dist == "expRSP")
     (plot(dexp(x, rate = 1/input$mu_nt),
           type = "l",
           lwd=3,
           ylab = "Density Function",
-          xlab = "first stage (non-target stimulus)"))
+          xlab = "first stage (non-target stimulus / stimulus 2)"))
     
   })
   

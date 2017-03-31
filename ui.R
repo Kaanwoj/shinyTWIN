@@ -129,18 +129,21 @@ ui <- shinyUI(fluidPage(
                          column(4,
                                 wellPanel(
                   
-                                  selectInput("dist", "Chosen Paradigm ",
-                                              choices = c("Focused Attention Paradigm" = "expFAP",
-                                                          "Redundant Target Paradigm" = "expRSP")),
+
+                                  selectInput("dist", "Distribution ",
+                                              choices = c("Exponential" = "expFAP",
+                                                          " " = "expRSP")),
                                   
                                   conditionalPanel( condition = ("input.dist == 'expFAP'"),
                                                     sliderInput("mu_t",
-                                                                "Mean (target): ",
+                                                                "Mean (target / stimulus 1): ",
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50),
                                                     sliderInput("mu_nt",
-                                                                "Mean (non-target): ",
+
+                                                                 "Mean (non-target / stimulus 2): ",
+
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50)
