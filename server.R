@@ -1,6 +1,9 @@
 library(plyr)
 source("simulateFAP.R")
 source("simulateRTP.R")
+#source("testRTP.R")
+#source("tests.R")
+
 library(xtable)
 
 server <- shinyServer(function(input, output) {
@@ -9,6 +12,7 @@ server <- shinyServer(function(input, output) {
   tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
   SOA <- length(tau)
   n <- 1000 # number of simulated observations
+  
   
   # unimodal simulation of the first stage according to the chosen distribution
   # target stimulus
@@ -186,16 +190,21 @@ server <- shinyServer(function(input, output) {
   
   ################### Generate the Simulation 
   
-  soa <- c(-200, -100, -50, 0, 50, 100, 200)
+  # Simulation with FAP Paradigm
   sigma <- 25
   
-  
-  
-  dataset <- reactive({
-    
-    simulate.fap (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
+   dataset <- reactive({
+    if (input$dist2 == "expFAP"){
+      soa <- c(-200,-100,-50,0,50,100,200)
+     simulate.fap (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
+    }
+     else if (input$dist2 == "expRSP"){
+     soa <- c(0,50,100,200)
+     simulate.rtp (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
+     }
     
   })
+
   
   output$simtable <- renderTable(dataset())
   

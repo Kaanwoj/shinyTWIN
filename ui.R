@@ -244,11 +244,11 @@ ui <- shinyUI(fluidPage(
               
                               
                                 sidebarPanel(
-                                selectInput("dist", "Chosen Paradigm ",
+                                selectInput("dist2", "Chosen Paradigm ",
                                               choices = c("Focused Attention Paradigm" = "expFAP",
                                                          "Redundant Target Paradigm" = "expRSP")),
-                                  conditionalPanel( condition = ("input.dist == 'expFAP'"),
-                                                    conditionalPanel( condition = ("input.dist == 'expRSP'"))),
+                                  #conditionalPanel( condition = ("input.dist == 'expFAP'"),
+                                  #                  conditionalPanel( condition = ("input.dist == 'expRSP'"))),
                                 #
                                
                                     
