@@ -8,11 +8,15 @@ simulate.rtp <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
   lambdaV <- 1/proc.V
   
   # draw random samples for processing time on stage 1 (only A) or 2 (M)
+  nsoa <- length(soa)
   A <- matrix(rexp(N * nsoa, rate = proc.A), ncol = nsoa)
   V <- matrix(rexp(N * nsoa, rate = proc.V), ncol = nsoa)
   M <- matrix(rnorm(N * nsoa, mean = mu, sd = sigma), ncol = nsoa)
+  dimnames_a <- list(tr=c(1:N), name=c("SOA(0ms)_A","SOA(50ms)_A","SOA(100ms)_A","SOA(200ms)_A"))
+  dimnames_v <- list(tr=c(1:N), name=c("SOA(0ms)_V","SOA(50ms)_V","SOA(100ms)_V","SOA(200ms)_V"))
   
-  data.a <- matrix(nrow=N, ncol=nsoa) # data matrix for RTs
+  
+  data.a <- matrix(nrow=N, ncol=nsoa,dimnames = dimnames_a) # data matrix for RTs
   
   for (i in 1:N) {
     for(j in 1:nsoa) {
@@ -22,11 +26,10 @@ simulate.rtp <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
       } else  # no
         data.a[i,j] <- A[i,j] + M[i,j]
     }}
-  return(data.a)
   
 ######## for visual
   
-data.v <- matrix(nrow=N, ncol=nsoa) # data matrix for RTs
+data.v <- matrix(nrow=N, ncol=nsoa, dimnames = dimnames_v) # data matrix for RTs
 
 for (i in 1:N) {
   for(j in 1:nsoa) {
@@ -36,5 +39,8 @@ for (i in 1:N) {
     } else  #no
       data.v[i,j] <- V[i,j] + M[i,j]
   }}
-return(data.v)
+data.merge <- cbind(data.a,data.v)
+return(data.merge)
+
+
 }

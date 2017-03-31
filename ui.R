@@ -92,7 +92,7 @@ ui <- shinyUI(fluidPage(
                                            p(h4("Intensity of the auditory stimuli"), img(src="lamba.jpeg", width = "50"), align = "left"),
                                            p(h4("Intensity of the visual stimuli"), img(src="lambv.jpeg", width = "50"), align = "left"),
                                            p(h4("Processing time for the second stage"), img(src="u.jpeg", width = "40"), align = "left"),
-                                           p(h4("Width of the time window"), img(src="w.jpeg", width = "40"), align = "left"),
+                                           p(h4("Width of the time window of integration"), img(src="w.jpeg", width = "40"), align = "left"),
                                            p(h4("Effect size / Amount of integration"), img(src="delta.jpeg", width = "40"), align = "left")
                                            
                          ),
@@ -103,7 +103,7 @@ ui <- shinyUI(fluidPage(
                                            p(h4("Observable reaction time following the logic of the model"), img(src="rt.jpeg", width = "400"), align = "left"),
                                            p(h4("Objective function"), img(src="objfun.jpeg", width = "300"), align = "left"),
                                            br(),
-                                           p(h4("Three cases for the sign of t + w")),
+                                           p(h4("Three cases for the probability of integration P(I)")),
                                            p(img(src="p1.jpeg", width = "400", align = "left")),
                                            p(img(src="p2.jpeg", width = "400", align = "left")),
                                            p(img(src="p3.jpeg", width = "400", align = "left"))
@@ -130,18 +130,21 @@ ui <- shinyUI(fluidPage(
                          column(4,
                                 wellPanel(
                   
-                                  selectInput("dist", "Assumed Distribution: ",
-                                              choices = c("Focused Attention Paradigm" = "expFAP",
-                                                          "Redundant Signals Paradigm" = "expRSP")),
+
+                                  selectInput("dist", "Distribution ",
+                                              choices = c("Exponential" = "expFAP",
+                                                          " " = "expRSP")),
                                   
                                   conditionalPanel( condition = ("input.dist == 'expFAP'"),
                                                     sliderInput("mu_t",
-                                                                "Mean (target): ",
+                                                                "Mean (target / stimulus 1): ",
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50),
                                                     sliderInput("mu_nt",
-                                                                "Mean (non-target): ",
+
+                                                                 "Mean (non-target / stimulus 2): ",
+
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50)
@@ -241,11 +244,19 @@ ui <- shinyUI(fluidPage(
               tabPanel("Simulation", value = "Sim",
                        fluidRow(
                          column(12,
-                                
                                 sidebarLayout(
-                                  sidebarPanel(
+              
+                              
+                                sidebarPanel(
+                                selectInput("dist2", "Chosen Paradigm ",
+                                              choices = c("Focused Attention Paradigm" = "expFAP",
+                                                         "Redundant Target Paradigm" = "expRSP")),
+                                  #conditionalPanel( condition = ("input.dist == 'expFAP'"),
+                                  #                  conditionalPanel( condition = ("input.dist == 'expRSP'"))),
+                                #
+                               
                                     
-                                    
+                                #
                                     #sliderInput("soa",
                                     #             "SOA:",
                                     #            min = 0,
