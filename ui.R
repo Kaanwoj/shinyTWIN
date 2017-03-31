@@ -34,7 +34,8 @@ shinyUI(fluidPage(
              mainPanel(conditionalPanel (condition = ("input.topic == 'aboutapp'"),
                                                      p(h2("Welcome!", align = "center")), 
                                                      br(),
-                                                     p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN).", align = "center")), 
+                                                     p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN), developed by
+                                                          Hans Colonius, Adele Diederich, and colleagues.", align = "center")), 
                                                      p(h5("It allows you to simulate and estimate the parameteres and even to upload your own data file.", align = "center")),
                                                      p(h5("Feel free to explore the app and navigate through the tabs!", align ="center")),
                                                      br(),
