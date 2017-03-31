@@ -1,9 +1,8 @@
-library(shiny)
 library(plyr)
 source("simulateFAP.R")
 library(xtable)
 
-shinyServer(function(input, output) {
+server <- shinyServer(function(input, output) {
   
   # different stimulus onsets for the non-target stimulus
   tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
@@ -15,7 +14,7 @@ shinyServer(function(input, output) {
   stage1_t <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_t))
     else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_t))
   })
-    
+  
   # non-target stimulus
   stage1_nt <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_nt))
     else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_nt))
@@ -71,7 +70,7 @@ shinyServer(function(input, output) {
   ### --- PLOT THE REACTION TIME MEANS AS FUNCTION OF THE SOA ---
   output$data <- renderPlot({
     # check if the input variables make sense for the uniform data
-   
+    
     
     # unimodal reaction times (first plus second stage, without integration)
     obs_t <- stage1_t() + stage2()
@@ -126,7 +125,7 @@ shinyServer(function(input, output) {
          ylab = "Reaction Times",
          xlab = "SOA"
          #legend('topright',)
-         )
+    )
     par(new = T)
     plot(results$tau, results$mean_t, 
          type = "l", col = "blue", 
@@ -139,7 +138,7 @@ shinyServer(function(input, output) {
   ### PLOT THE PROBABILITY OF INTEGRATION ---
   # check the input data of the uniform distribution
   output$prob <- renderPlot({
-   
+    
     
     # same integration calculation as for the other plot
     for(i in 1:SOA){
@@ -178,7 +177,7 @@ shinyServer(function(input, output) {
     
   })
   
-##################### PDF of article 
+  ##################### PDF of article 
   
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
@@ -188,43 +187,53 @@ shinyServer(function(input, output) {
   
   soa <- c(-200, -100, -50, 0, 50, 100, 200)
   sigma <- 25
- 
-   output$simtable <- renderTable({
+  
+  
+  
+  dataset <- reactive({
     
     simulate.fap (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
-   
- 
+    
   })
   
-
+  output$simtable <- renderTable(dataset())
+  
+  
+  
   ################### Download the Simulation output 
-   
-   
-   
-   output$table <- renderTable({
-     data
-   })
-   
-   # downloadHandler() takes two arguments, both functions.
-   # The content function is passed a filename as an argument, and
-   #   it should write out data to that filename.
-   output$downloadData <- downloadHandler(
-     
-     # This function returns a string which tells the client
-     # browser what name to use when saving the file.
-     filename = function() {
-       paste(input$dataset, input$filetype, sep = ".")
-     },
-     
-     # This function should write data to a file given to it by
-     # the argument 'file'.
-     content = function(file) {
-       sep <- switch(input$filetype, "csv" = ",", "tsv" = "\t")
-       
-       # Write to a file specified by the 'file' argument
-       write.table(data, file, sep = sep,
-                   row.names = FALSE)
-     }
-   )
+  
+  #output$table <- renderTable({
+  #data
+  #}) 
+  
+  # downloadHandler() takes two arguments, both functions.
+  # The content function is passed a filename as an argument, and
+  #   it should write out data to that filename.
+  output$downloadData <- downloadHandler(
+    
+    # This function returns a string which tells the client
+    # browser what name to use when saving the file.
+    
+    filename = function() {
+      #paste(input$dataset, input$filetype, sep = ".")
+      paste("dat-", Sys.Date(), ".csv", sep="")
+    },
+    
+    # This function should write data to a file given to it by
+    # the argument 'file'.
+    
+    
+    content = function(file) {
+      
+      #sep <- switch(input$filetype, "csv" = ",", "tsv" = "\t")
+      
+      #write.table(data, file, sep = sep,
+      # row.names = FALSE)
+      
+      
+      write.csv(dataset(), file)
+    }
+  )
   
 })
+
