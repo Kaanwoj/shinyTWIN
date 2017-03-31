@@ -1,6 +1,7 @@
 library(shiny)
 
 ui <- shinyUI(fluidPage(
+    withMathJax(),
   # Application title
   fluidRow(
     column(6,
@@ -290,15 +291,15 @@ ui <- shinyUI(fluidPage(
                                     sliderInput("N",
                                                 "Trial Number:",
                                                 min = 1,
-                                                max = 200,
-                                                value = 10),
+                                                max = 1000,
+                                                value = 500),
                                     
                                     downloadButton('downloadData', 'Download (CSV)')
                                     
                                     
                                   ),
                                   mainPanel(
-                                    tableOutput("simtable")
+                                    tableOutput("simtable"), plotOutput("plot")
                                   )))
                        )),
               
@@ -306,25 +307,33 @@ ui <- shinyUI(fluidPage(
                        fluidRow(
                          column(4,
                                 wellPanel(
-                                  selectInput("dist2", "Assumed Distribution: ",
-                                              choices = c("Exponential FAP" = "exp",
-                                                          "Normal FAP" = "norm",
-                                                          "Uniform FAP" = "uni",
-                                                          "Exponential RSP" = "expRSP",
-                                                          "Normal RSP" = "normRSP",
-                                                          "Uniform RSP" = "uniRSP")),
-                                  sliderInput("SlidE",
-                                              "Slider Example1",
+                                  selectInput("estParadigm", "Chosen Paradigm:",
+                                              choices = c("Focused Attention Paradigm" = "fap",
+                                                          "Redundant Signal Paradigm" = "rsp")),
+                                h4("First stage"),
+                                  sliderInput("est_procV",
+                                              "Visual processing time (\\(\\frac{1}{\\lambda_V}\\))",
                                               min = 1,
                                               max = 100,
                                               value = 50),
-                                  sliderInput("SlidE2",
-                                              "Slider Example2",
+                                  sliderInput("est_procA",
+                                              "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
                                               min = 1,
                                               max = 100,
                                               value = 50),
-                                  sliderInput("SlidE3",
-                                              "Slider Example3",
+                                  h4("Second stage"),
+                                  sliderInput("est_mu",
+                                              "... processing time (\\(\\mu\\))",
+                                              min = 100,
+                                              max = 500,
+                                              value = 50),
+                                  sliderInput("est_omega",
+                                              "Window width (\\(\\omega\\))",
+                                              min = 1,
+                                              max = 100,
+                                              value = 50),
+                                  sliderInput("est_delta",
+                                              "Amount of integration (\\(\\delta\\))",
                                               min = 1,
                                               max = 100,
                                               value = 50),
@@ -355,7 +364,8 @@ ui <- shinyUI(fluidPage(
                                 
                          ),
                          column(8,
-                                p("Content goes here")
+                                h2("Estimated values"),
+                                tableOutput("estTextOut")
                          )),
                        dataTableOutput("dt1")),
               

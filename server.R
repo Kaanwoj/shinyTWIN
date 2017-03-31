@@ -1,5 +1,6 @@
 library(plyr)
 source("simulateFAP.R")
+source("estimateFAP.R")
 library(xtable)
 
 server <- shinyServer(function(input, output) {
@@ -197,6 +198,10 @@ server <- shinyServer(function(input, output) {
   })
   
   output$simtable <- renderTable(dataset())
+
+  output$plot <- renderPlot({
+      plot(colSums(dataset())/input$N)
+  })
   
   
   
@@ -234,6 +239,17 @@ server <- shinyServer(function(input, output) {
       write.csv(dataset(), file)
     }
   )
+
+  ###################### ESTIMATION ###########################
+  estimates <- reactive(estimateFAP(dataset()))
+
+  output$estTextOut <- renderTable({
+                    est <- matrix(estimates()$estimate, nrow=1)
+                    dimnames(est) <- list(NULL, c("1/lambdaV", "1/lambdaV", "mu",
+                                                  "omega", "delta"))
+                    est
+  })
+
   
 })
 
