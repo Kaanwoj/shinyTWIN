@@ -8,8 +8,8 @@ simulate.rtp <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
   lambdaV <- 1/proc.V
   
   # draw random samples for processing time on stage 1 (only A) or 2 (M)
-  A <- matrix(rexp(N * nsoa, rate = lambdaA), ncol = nsoa)
-  V <- matrix(rexp(N * nsoa, rate = lambdaV), ncol = nsoa)
+  A <- matrix(rexp(N * nsoa, rate = proc.A), ncol = nsoa)
+  V <- matrix(rexp(N * nsoa, rate = proc.V), ncol = nsoa)
   M <- matrix(rnorm(N * nsoa, mean = mu, sd = sigma), ncol = nsoa)
   
   data.a <- matrix(nrow=N, ncol=nsoa) # data matrix for RTs
