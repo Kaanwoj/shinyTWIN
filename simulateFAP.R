@@ -2,16 +2,16 @@
 ### Simulation ###
 ##################
 
-simulate.fap <- function(soa, lambdaA, lambdaV, mu, sigma, om, del, N) {
+simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, om, del, N) {
 
   # draw random samples for processing time on stage 1 (A and V) or 2 (M)
   nsoa <- length(soa)
-  A <- matrix(rexp(N * nsoa, rate = 1 / lambdaA), ncol = nsoa)
-  V <- matrix(rexp(N * nsoa, rate = 1 / lambdaV), ncol = nsoa)
+  A <- matrix(rexp(N * nsoa, rate = proc.A), ncol = nsoa)
+  V <- matrix(rexp(N * nsoa, rate = proc.V), ncol = nsoa)
   M <- matrix(rnorm(N * nsoa, mean = mu, sd = sigma), ncol = nsoa)
   
   dimnames <- list(tr=c(1:N), name=c("SOA(-200ms)", "SOA(-100ms)","SOA(-50ms)","SOA(0ms)","SOA(50ms)","SOA(100ms)","SOA(-200ms)"))
-  data <- matrix(0,nrow=N, ncol=7,  dimnames= dimnames)
+  data <- matrix(nrow=N, ncol=nsoa,  dimnames= dimnames)
  
 
   for (i in 1:N) {
