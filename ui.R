@@ -11,7 +11,6 @@ shinyUI(fluidPage(
   h4("Focused Attention Paradigm & Redundant Signals Paradigm", align = "center"),
   
   tabsetPanel(id = "TWINTabset",
-<<<<<<< HEAD
               
               tabPanel("Introduction", value = "intro",
                        fluidRow(
@@ -127,73 +126,7 @@ shinyUI(fluidPage(
                        fluidRow(
                          column(4,
                                 wellPanel(
-=======
-              tabPanel("Home", id = "Home",
-              fluidRow(
-                column(4,
-                       wellPanel(
-                         selectInput("topic", "Select the topic: ",
-                                     choices = c("About this app" = "aboutapp",
-                                                 "The TWIN model" = "twinmod",
-                                                 "Parameters" = "param", "Model equations" = "equ"
-                                     )))),
-                
-                
-                mainPanel(conditionalPanel (condition = ("input.topic == 'aboutapp'"),
-                                            p(h2("Welcome!", align = "center")), 
-                                            br(),
-                                            p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN).", align = "center")), 
-                                            p(h5("It allows you to simulate and estimate the parameteres and even to upload your own data file.", align = "center")),
-                                            p(h5("Feel free to explore the app and navigate through the tabs!", align ="center")),
-                                            br(),
-                                            p(h5(strong("Based on the original Shiny App by Annika Thierfelder, this app was expanded by:"), align = "center")),
-                                            br(),
-                                            p(h5("Aditya Dandekar", img(src="bremen.png", width = "150"), align = "center")),
-                                            p(h5("Amalia Gomoiu", img(src="glasgow.png", width = "150"), align = "center")),
-                                            p(h5("António Fernandes", img(src="lisbon.png", width = "200"), align = "center")),
-                                            p(h5("Katharina Dücker", img(src="oldenburg.png", width = "110", height = "90"), align = "center")),
-                                            p(h5("Katharina Naumann", img(src="tubingen.png", width = "150"), align = "center")),
-                                            p(h5("Martin Ingram", img(src="glasgow.png", width = "150"), align = "center")),
-                                            p(h5("Melanie Spindler", img(src="oldenburg.png", width = "110", height = "90"), align = "center")),
-                                            p(h5("Silvia Lopes", img(src="lisbon.png", width = "200"), align = "center"))
-                                            
-                                            
-                                            
-                ),
-                
-                conditionalPanel (condition = ("input.topic == 'twinmod'"),
-                                  p(h4("Crossmodal interaction is defined as the situation in which the
-                                       perception of an event as measured in terms of one modality
-                                       is changed in some way by the concurrent stimulation of one or
-                                       more other sensory modalities (Welch & Warren, 1986).", align = "left")),
-                                  p(h4("Multisensory integration is defined as the (neural) mechanism underlying 
-                                       crossmodal interaction.", align = "left")),
-                                  p(h4("The Time-Window of Integration Model (TWIN) postulates that a crossmodal
-                                       stimulus triggers a race mechanism among the activations in very early, 
-                                       peripheral sensory pathways. This first stage is followed by a compound
-                                       stage of converging subprocesses that comprise neural integration of the
-                                       input and preparation of a response. The second stage is defined by
-                                       default: It includes all subsequent processes that are not part of the
-                                       peripheral processes in the first stage (Diederich, Colonius, & Kandil, 2016).",
-                                       align = "left")),
-                                  p(img(src="modeltwin.png", width = "550"), align = "center"),
-                                  p(h4("At the behavioral level, multisensory integration translates itself into 
-                                       faster reaction times, higher detection probabilities, and improved discrimination.")),
-                                  p(h4("At the neural level, multisensory integration translates itself into an increased total
-                                       number of responses, as well as shorter response latencies.")),
-                                  p(h4("In the Focused Attention Paradigm (FAP), two or more stimuli are presented
-                                       simultaneously or with a short delay between the stimuli. 
-                                       The participant is asked to respond as quickly as possible
-                                       to a stimulus of a pre-defined modality (target) and ignore
-                                       the other stimulus (non-target modality).")),
-                                  p(img(src="fap.jpeg", width = "500", align = "center")),
-                                  p(h4("In the Redundant Signals Paradigm (RSP), two or more stimuli
-                                       are also presented simultanously or with a short delay between 
-                                       the stimulus. However, the participant is asked to respond to
-                                       a stimulus of any modality detected first.")),
-                                  p(img(src="rtp.jpeg", width = "500", align = "center"))
->>>>>>> f9be6e886cb63e479a2170db8e1140216b6d1c14
-                                  
+                                
                                   
                                   
                                   
