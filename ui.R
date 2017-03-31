@@ -120,12 +120,158 @@ shinyUI(fluidPage(
                        )
               
 
+    column(4,
+           plotOutput("uni_data_t"),
+           plotOutput("uni_data_nt")),
     
-  )
-              
-              
-              
-  )
+    column(4,
+           plotOutput("data"),
+           plotOutput("prob")
+    )
+  )),
+  
+  ################### Simulation tab
+  
+  tabPanel("Simulation", value = "Sim",
+  fluidRow(
+  column(12,
+  
+  sidebarLayout(
+  sidebarPanel(
+    
+            
+    #sliderInput("soa",
+   #             "SOA:",
+    #            min = 0,
+     #           max = 500,
+      #          value = 200),
+    
+    sliderInput("proc.A",
+                "Intensity of Auditory Stimuli:",
+                min = 20,
+                max = 150,
+                value = 50),
+    
+    sliderInput("proc.V",
+                "Intensity of Visual Stimuli:",
+                min = 20,
+                max = 150,
+                value = 50),
+    
+    sliderInput("mu",
+                "Duration of 2nd stage:",
+                min = 50,
+                max = 200,
+                value = 100),
+    
+   # sliderInput("sigma",
+    #            "Standard Deviation:",
+     #           min = 500,
+      #          max = 200,
+       #         value = 50),
+           
+    sliderInput("om",
+                "Width of the window:",
+                min = 100,
+                max = 300,
+                value = 200),
+    
+    sliderInput("del",
+                "Amount of integration:",
+                min = 20,
+                max = 100,
+                value = 50),
+    
+    sliderInput("N",
+                "Trial Number:",
+                min = 1,
+                max = 200,
+                value = 10),
+   
+   tags$style(HTML('#SimButton1{background-color:orange}')),
+   actionButton("SimButton1", "Simulate"),
+   
+   ##### Download simulated data
+   
+    radioButtons("filetype", "File type:",
+                 choices = c("csv", "tsv")),
+    downloadButton('downloadData', 'Download')
+  ),
+  mainPanel(
+  uiOutput("simtable")
+  )))
+  )),
+ 
+  tabPanel("Estimation", value = "Est",
+          fluidRow(
+          column(4,
+           wellPanel(
+                    selectInput("dist2", "Assumed Distribution: ",
+                                choices = c("Exponential FAP" = "exp",
+                                            "Normal FAP" = "norm",
+                                            "Uniform FAP" = "uni",
+                                            "Exponential RSP" = "expRSP",
+                                            "Normal RSP" = "normRSP",
+                                            "Uniform RSP" = "uniRSP")),
+                    sliderInput("SlidE",
+                                "Slider Example1",
+                                min = 1,
+                                max = 100,
+                                value = 50),
+                    sliderInput("SlidE2",
+                                "Slider Example2",
+                                min = 1,
+                                max = 100,
+                                value = 50),
+                    sliderInput("SlidE3",
+                                "Slider Example3",
+                                min = 1,
+                                max = 100,
+                                value = 50),
+                    numericInput("n1", "Number Input:", min = 0, max = 1000, value = 50),
+                    numericInput("n2", "Number Input:", min = 0, max = 1000, value = 50),
+                    numericInput("n3", "Number Input:", min = 0, max = 1000, value = 50),
+                    actionButton("AButton", "ActionButton"),
+                    tags$style(HTML('#AButton{background-color:orange}')),
+                    fileInput('file1', 'Choose file to upload',
+                              accept = c(
+                                'text/csv',
+                                'text/comma-separated-values',
+                                'text/tab-separated-values',
+                                'text/plain',
+                                '.csv',
+                                '.tsv'
+                              )
+                    ), 
+                  
+                    fluidRow(column(8,align="left",
+                                    a("Click to learn more", href="http://jov.arvojournals.org/article.aspx?articleid=2193864", target="_blank")
+                    )             
+                    )
+               
+        
+                   
+           )
+           
+  ),
+  column(8,
+  p("Content goes here")
+          )),
+  dataTableOutput("dt1")),
+  
+  #Custom Colored Items
+  tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-2 .irs-single, .js-irs-2 .irs-bar-edge, .js-irs-2 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-3 .irs-single, .js-irs-3 .irs-bar-edge, .js-irs-3 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-4 .irs-single, .js-irs-4 .irs-bar-edge, .js-irs-4 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-5 .irs-single, .js-irs-5 .irs-bar-edge, .js-irs-5 .irs-bar {background: #000070}")), 
+  tags$style(HTML(".js-irs-6 .irs-single, .js-irs-6 .irs-bar-edge, .js-irs-6 .irs-bar {background: #000090}")),
+  tags$style(HTML(".js-irs-7 .irs-single, .js-irs-7 .irs-bar-edge, .js-irs-7 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-8 .irs-single, .js-irs-8 .irs-bar-edge, .js-irs-8 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-9 .irs-single, .js-irs-9 .irs-bar-edge, .js-irs-9 .irs-bar {background: #000070}")),
+  tags$style(HTML(".js-irs-10 .irs-single, .js-irs-10 .irs-bar-edge, .js-irs-10 .irs-bar {background: #000070}"))
+
   
 ),
               

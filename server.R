@@ -1,6 +1,11 @@
 
 library(shiny)
 library(plyr)
+<<<<<<< HEAD
+source("simulateFAP.R")
+library(xtable)
+=======
+>>>>>>> 7c5abb4aad65f3de8093d42368ea59c6445bea2d
 
 
 shinyServer(function(input, output) {
@@ -41,8 +46,17 @@ shinyServer(function(input, output) {
       (plot(dexp(x, rate = 1/input$mu_t),
             type = "l",
             lwd=3,
-            ylab = "Probability",
+            ylab = "Density Function",
             xlab = "first stage (target stimulus)"))
+<<<<<<< HEAD
+    # exp distribution for RSP
+    else (input$dist == "expRSP")
+    (plot(dexp(x, rate = 1/input$mu_t),
+          type = "l",
+          lwd=3,
+          ylab = "Density Function",
+          xlab = "first stage (target stimulus)"))
+=======
     # normal distribution
     else if(input$dist == "norm")
       (plot(dnorm(x, mean = input$mun_t, sd = input$sd_t),
@@ -61,6 +75,7 @@ shinyServer(function(input, output) {
            lwd=3,
            ylab = "Probability",
            xlab = "first stage (target stimulus")}
+>>>>>>> 7c5abb4aad65f3de8093d42368ea59c6445bea2d
   })
   
   # do the same for the non-target distribution
@@ -69,8 +84,18 @@ shinyServer(function(input, output) {
       (plot(dexp(x, rate = 1/input$mu_nt),
             type = "l",
             lwd=3,
-            ylab = "Probability",
+            ylab = "Density Function",
             xlab = "first stage (non-target stimulus)"))
+<<<<<<< HEAD
+    
+    else (input$dist == "expRSP")
+    (plot(dexp(x, rate = 1/input$mu_nt),
+          type = "l",
+          lwd=3,
+          ylab = "Density Function",
+          xlab = "first stage (non-target stimulus)"))
+    
+=======
     else if(input$dist == "norm")
       (plot(dnorm(x, mean = input$mun_nt, sd = input$sd_nt),
             type = "l",
@@ -86,6 +111,7 @@ shinyServer(function(input, output) {
            lwd=3,
            ylab = "Probability",
            xlab = "first stage (non-target stimulus)")}
+>>>>>>> 7c5abb4aad65f3de8093d42368ea59c6445bea2d
   })
   
   ### --- PLOT THE REACTION TIME MEANS AS FUNCTION OF THE SOA ---
@@ -148,7 +174,10 @@ shinyServer(function(input, output) {
          lwd=3,
          ylim=c(0, max),
          ylab = "Reaction Times",
-         xlab = "SOA of the non-target stimulus")
+         xlab = "SOA")
+    
+         legend("topright", c("Unimodal RT","Full RT"), lty=1, col=c("blue", "red"),cex=.75)
+         
     par(new = T)
     plot(results$tau, results$mean_t, 
          type = "l", col = "blue", 
@@ -193,7 +222,7 @@ shinyServer(function(input, output) {
               lwd=3,
               col = "blue",
               ylab = "Probability of Integration",
-              xlab = "SOA of the non-target stimulus"))
+              xlab = "SOA"))
   })
   
   output$dt1 <- renderDataTable({
@@ -209,4 +238,53 @@ shinyServer(function(input, output) {
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
   
+
+  ################### Generate the Simulation 
+  
+  soa <- c(-200, -100, -50, 0, 50, 100, 200)
+  sigma <- 25
+ 
+   output$simtable <- renderTable({
+    
+    simulate.fap (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
+   
+ 
+  })
+  
+
+  ################### Download the Simulation output 
+  # data<-data.frame(data)
+   
+  
+     # Fetch the appropriate data object, depending on the value
+     # of input$dataset.
+     
+   
+   output$simtable <- renderUI({
+    data
+   })
+   
+   # downloadHandler() takes two arguments, both functions.
+   # The content function is passed a filename as an argument, and
+   #   it should write out data to that filename.
+   output$downloadData <- downloadHandler(
+     
+     # This function returns a string which tells the client
+     # browser what name to use when saving the file.
+     filename = function() {
+       paste(input$dataset, input$filetype, sep = ".")
+     },
+     
+     # This function should write data to a file given to it by
+     # the argument 'file'.
+     content = function(file) {
+       sep <- switch(input$filetype, "csv" = ",", "tsv" = "\t")
+       
+       # Write to a file specified by the 'file' argument
+       write.table(data, file, sep = sep,
+                   row.names = FALSE)
+     }
+   )
+  
 })
+
