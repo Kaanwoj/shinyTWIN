@@ -142,13 +142,13 @@ shinyUI(fluidPage(
      #           max = 500,
       #          value = 200),
     
-    sliderInput("lambdaA",
+    sliderInput("proc.A",
                 "Intensity of Auditory Stimuli:",
                 min = 20,
                 max = 150,
                 value = 50),
     
-    sliderInput("lambdaV",
+    sliderInput("proc.V",
                 "Intensity of Visual Stimuli:",
                 min = 20,
                 max = 150,
@@ -186,13 +186,15 @@ shinyUI(fluidPage(
    
    tags$style(HTML('#SimButton1{background-color:orange}')),
    actionButton("SimButton1", "Simulate"),
-    
+   
+   ##### Download simulated data
+   
     radioButtons("filetype", "File type:",
                  choices = c("csv", "tsv")),
-           downloadButton('downloadData', 'Download')
+    downloadButton('downloadData', 'Download')
   ),
   mainPanel(
-  tableOutput("simtable")
+  uiOutput("simtable")
   )))
   )),
  
