@@ -1,8 +1,10 @@
+
 library(shiny)
 library(plyr)
 
 
 shinyServer(function(input, output) {
+
   
   # different stimulus onsets for the non-target stimulus
   tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
@@ -202,7 +204,7 @@ shinyServer(function(input, output) {
     
   })
   
-
+  
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })

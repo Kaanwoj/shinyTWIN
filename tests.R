@@ -8,11 +8,11 @@ source("simulateFAP.R")
 # parameter values
 # stimulus onset asynchrony
 soa <- c(-200, -100, -50, 0, 50, 100, 200)
-nsoa <- length(soa)
+
 
 # processing time of visual/auditory stimulus on stage 1
-lambdaA <- 100       # = 1/lambdaA
-lambdaV <- 50
+proc.A <- 100       # = 1/lambdaA
+proc.V <- 50
 
 # mean processing time and sd on stage 2
 mu <- 150
@@ -27,10 +27,10 @@ delta <- 50
 # number of observations per SOA
 N <- 40
 
-data <- simulate.fap(soa, lambdaA, lambdaV, mu, sigma, omega, delta, N)
+data <- simulate.fap(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 
 # save data in a file
 df <- as.data.frame(data)
-names(df) <- paste0("soa", soa)
+names(df) <- paste0("FAP", soa)
 
 write.table(df, "simDataFAP.txt", sep=";", row.names=FALSE)
