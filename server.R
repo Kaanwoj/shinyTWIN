@@ -1,15 +1,9 @@
-
 library(shiny)
 library(plyr)
-<<<<<<< HEAD
 source("simulateFAP.R")
 library(xtable)
-=======
->>>>>>> 7c5abb4aad65f3de8093d42368ea59c6445bea2d
-
 
 shinyServer(function(input, output) {
-
   
   # different stimulus onsets for the non-target stimulus
   tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
@@ -18,14 +12,13 @@ shinyServer(function(input, output) {
   
   # unimodal simulation of the first stage according to the chosen distribution
   # target stimulus
-  stage1_t <- reactive({ if(input$dist == "exp")(rexp(n, rate = 1/input$mu_t))
-    else if(input$dist == "norm")(rnorm(n, mean = input$mun_t, sd = input$sd_t))
-    else (runif(n, min = input$min_t, max = input$max_t))
+  stage1_t <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_t))
+    else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_t))
   })
+    
   # non-target stimulus
-  stage1_nt <- reactive({ if(input$dist == "exp")(rexp(n, rate = 1/input$mu_nt))
-    else if(input$dist == "norm")(rnorm(n, mean = input$mun_nt, sd = input$sd_nt))
-    else (runif(n, min = input$min_nt, max =  input$max_nt))
+  stage1_nt <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_nt))
+    else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_nt))
   })
   
   # simulation of the second stage (assumed normal distribution)
@@ -41,14 +34,13 @@ shinyServer(function(input, output) {
   
   ## --- PLOT THE DISTRIBUTION OF THE FIRST STAGE RT
   output$uni_data_t <- renderPlot({
-    # exponential distribution with rate lambda = 1/mu
-    if(input$dist == "exp")
+    # exponential distribution with rate lambda = 1/mu for FAP
+    if(input$dist == "expFAP")
       (plot(dexp(x, rate = 1/input$mu_t),
             type = "l",
             lwd=3,
             ylab = "Density Function",
             xlab = "first stage (target stimulus)"))
-<<<<<<< HEAD
     # exp distribution for RSP
     else (input$dist == "expRSP")
     (plot(dexp(x, rate = 1/input$mu_t),
@@ -56,37 +48,16 @@ shinyServer(function(input, output) {
           lwd=3,
           ylab = "Density Function",
           xlab = "first stage (target stimulus)"))
-=======
-    # normal distribution
-    else if(input$dist == "norm")
-      (plot(dnorm(x, mean = input$mun_t, sd = input$sd_t),
-            type = "l",
-            lwd=3,
-            ylab = "Probability",
-            xlab = "first stage (target stimulus)"))
-    # uniform distribution
-    else{
-      # check if the given values make sense
-      validate(
-        need(input$max_t - input$min_t > 0, 
-             "Please check your input data for the target!"))
-      plot(dunif(x, min = input$min_t, max = input$max_t),
-           type = "l",
-           lwd=3,
-           ylab = "Probability",
-           xlab = "first stage (target stimulus")}
->>>>>>> 7c5abb4aad65f3de8093d42368ea59c6445bea2d
   })
   
   # do the same for the non-target distribution
   output$uni_data_nt <- renderPlot({
-    if(input$dist == "exp")
+    if(input$dist == "expFAP")
       (plot(dexp(x, rate = 1/input$mu_nt),
             type = "l",
             lwd=3,
             ylab = "Density Function",
             xlab = "first stage (non-target stimulus)"))
-<<<<<<< HEAD
     
     else (input$dist == "expRSP")
     (plot(dexp(x, rate = 1/input$mu_nt),
@@ -95,33 +66,12 @@ shinyServer(function(input, output) {
           ylab = "Density Function",
           xlab = "first stage (non-target stimulus)"))
     
-=======
-    else if(input$dist == "norm")
-      (plot(dnorm(x, mean = input$mun_nt, sd = input$sd_nt),
-            type = "l",
-            lwd=3,
-            ylab = "Probability",
-            xlab = "first stage (non-target stimulus)"))
-    else{
-      validate(
-        need(input$max_nt - input$min_nt > 0, 
-             "Please check your input data for the non-target!"))
-      plot(dunif(x, min = input$min_nt, max = input$max_nt),
-           type = "l",
-           lwd=3,
-           ylab = "Probability",
-           xlab = "first stage (non-target stimulus)")}
->>>>>>> 7c5abb4aad65f3de8093d42368ea59c6445bea2d
   })
   
   ### --- PLOT THE REACTION TIME MEANS AS FUNCTION OF THE SOA ---
   output$data <- renderPlot({
     # check if the input variables make sense for the uniform data
-    if(input$dist == "uni"){
-      validate(
-        need(input$max_nt > input$min_nt && input$max_t > input$min_t, 
-             "Please check your input data"))
-    }
+   
     
     # unimodal reaction times (first plus second stage, without integration)
     obs_t <- stage1_t() + stage2()
@@ -174,10 +124,9 @@ shinyServer(function(input, output) {
          lwd=3,
          ylim=c(0, max),
          ylab = "Reaction Times",
-         xlab = "SOA")
-    
-         legend("topright", c("Unimodal RT","Full RT"), lty=1, col=c("blue", "red"),cex=.75)
-         
+         xlab = "SOA"
+         #legend('topright',)
+         )
     par(new = T)
     plot(results$tau, results$mean_t, 
          type = "l", col = "blue", 
@@ -190,11 +139,7 @@ shinyServer(function(input, output) {
   ### PLOT THE PROBABILITY OF INTEGRATION ---
   # check the input data of the uniform distribution
   output$prob <- renderPlot({
-    if(input$dist == "uni"){
-      validate(
-        need(input$max_nt > input$min_nt && input$max_t > input$min_t, 
-             "Please check your input data"))
-    }
+   
     
     # same integration calculation as for the other plot
     for(i in 1:SOA){
@@ -233,12 +178,12 @@ shinyServer(function(input, output) {
     
   })
   
+##################### PDF of article 
   
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
   
-
   ################### Generate the Simulation 
   
   soa <- c(-200, -100, -50, 0, 50, 100, 200)
@@ -253,15 +198,11 @@ shinyServer(function(input, output) {
   
 
   ################### Download the Simulation output 
-  # data<-data.frame(data)
    
-  
-     # Fetch the appropriate data object, depending on the value
-     # of input$dataset.
-     
    
-   output$simtable <- renderUI({
-    data
+   
+   output$table <- renderTable({
+     data
    })
    
    # downloadHandler() takes two arguments, both functions.
@@ -287,4 +228,3 @@ shinyServer(function(input, output) {
    )
   
 })
-
