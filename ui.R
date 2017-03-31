@@ -129,6 +129,7 @@ ui <- shinyUI(fluidPage(
                          column(4,
                                 wellPanel(
                   
+
                                   selectInput("dist", "Distribution ",
                                               choices = c("Exponential" = "expFAP",
                                                           " " = "expRSP")),
@@ -140,7 +141,9 @@ ui <- shinyUI(fluidPage(
                                                                 max = 100,
                                                                 value = 50),
                                                     sliderInput("mu_nt",
-                                                                "Mean (non-target / stimulus 2): ",
+
+                                                                 "Mean (non-target / stimulus 2): ",
+
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50)
