@@ -190,6 +190,15 @@ server <- shinyServer(function(input, output) {
   
   # Simulation with FAP Paradigm
   sigma <- 25
+  soa <- reactive({
+    if (input$dist2 == "expFAP"){
+      soa <- c(-200,-100,-50,0,50,100,200)
+    }
+     else if (input$dist2 == "expRSP"){
+      soa <- rep(c(0,50,100,200), 2)
+     }
+  
+  })
   
    dataset <- reactive({
     if (input$dist2 == "expFAP"){
@@ -204,10 +213,12 @@ server <- shinyServer(function(input, output) {
   })
 
   
-  output$simtable <- renderTable(dataset())
+  output$simtable <- renderTable(head(dataset(), input$nrowShow))
 
-  output$plot <- renderPlot({
-      plot(colSums(dataset())/input$N)
+  output$simplot <- renderPlot({
+      plot(colSums(dataset())/input$N, ylab="Reaction time", xlab="SOA",
+           main="Mean RT for each SOA", xaxt="n")
+      axis(1, at=1:length(soa()), labels=paste0("SOA", soa()))
   })
   
   

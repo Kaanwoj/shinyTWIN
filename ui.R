@@ -28,29 +28,25 @@ ui <- shinyUI(fluidPage(
                          
                          
              mainPanel(conditionalPanel (condition = ("input.topic == 'aboutapp'"),
-                                                     p(h2("Welcome!", align = "center")), 
-                                                     br(),
-                                                     p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN), developed by
-                                                          Hans Colonius, Adele Diederich, and colleagues.", align = "center")), 
+                 p(h2("Welcome!", align = "center")), 
+                 br(),
+                 p(h5("This Shiny App helps you to learn more about the Time-Window Ingration Model (TWIN), developed by
+                      Hans Colonius, Adele Diederich, and colleagues.", align = "center")), 
 
-                                                     p(h5("It allows you to simulate and estimate the parameteres and even to upload your own data file.", align = "center")),
-                                                     p(h5("Feel free to explore the app and navigate through the tabs!", align ="center")),
-                                                     br(),
-                                                     p(h5(strong("Based on the original Shiny App by Annika Thierfelder, this app was expanded by:"), align = "center")),
-                                                     br(),
-                                                     p(h5("Aditya Dandekar", img(src="bremen.png", width = "150"), align = "center")),
-                                                     p(h5("Amalia Gomoiu", img(src="glasgow.png", width = "150"), align = "center")),
-                                                     p(h5("António Fernandes", img(src="lisbon.png", width = "200"), align = "center")),
-                                                     p(h5("Katharina Dücker", img(src="oldenburg.png", width = "110", height = "90"), align = "center")),
-                                                     p(h5("Katharina Naumann", img(src="tubingen.png", width = "150"), align = "center")),
-                                                     p(h5("Martin Ingram", img(src="glasgow.png", width = "150"), align = "center")),
-                                                     p(h5("Melanie Spindler", img(src="oldenburg.png", width = "110", height = "90"), align = "center")),
-                                                     p(h5("Silvia Lopes", img(src="lisbon.png", width = "200"), align = "center"))
-                             
-                                                     
-                                                     
+                 p(h5("It allows you to simulate and estimate the parameteres and even to upload your own data file.", align = "center")),
+                 p(h5("Feel free to explore the app and navigate through the tabs!", align ="center")),
+                 br(),
+                 p(h5(strong("Based on the original Shiny App by Annika Thierfelder, this app was expanded by:"), align = "center")),
+                 br(),
+                 p(h5("Aditya Dandekar", img(src="bremen.png", width = "150"),
+                 "Amalia Gomoiu", img(src="glasgow.png", width = "150"), align = "center")),
+                 p(h5("António Fernandes", img(src="lisbon.png", width = "200"),
+                 "Katharina Dücker", img(src="oldenburg.png", width = "110", height = "90"), align = "center")),
+                 p(h5("Katharina Naumann", img(src="tubingen.png", width = "150"),
+                 "Martin Ingram", img(src="glasgow.png", width = "150"), align = "center")),
+                 p(h5("Melanie Spindler", img(src="oldenburg.png", width = "110", height = "90"),
+                 "Silvia Lopes", img(src="lisbon.png", width = "200"), align = "center"))
                          ),
-                         
                          conditionalPanel (condition = ("input.topic == 'twinmod'"),
                                            p(h4("Crossmodal interaction is defined as the situation in which the
                                                 perception of an event as measured in terms of one modality
@@ -242,43 +238,34 @@ ui <- shinyUI(fluidPage(
               ################### Simulation tab
               
               tabPanel("Simulation", value = "Sim",
-                       fluidRow(
-                         column(12,
-                                sidebarLayout(
-              
-                              
+                       #fluidRow(
+                         #column(12,
+                            sidebarLayout(
                                 sidebarPanel(
-                                selectInput("dist2", "Chosen Paradigm ",
+                                selectInput("dist2", "Choose paradigm",
                                               choices = c("Focused Attention Paradigm" = "expFAP",
                                                          "Redundant Target Paradigm" = "expRSP")),
                                   #conditionalPanel( condition = ("input.dist == 'expFAP'"),
                                   #                  conditionalPanel( condition = ("input.dist == 'expRSP'"))),
                                 #
-                               
-                                    
-                                #
-                                    #sliderInput("soa",
-                                    #             "SOA:",
-                                    #            min = 0,
-                                    #           max = 500,
-                                    #          value = 200),
-                                    
+                                h4("First stage"),
                                     sliderInput("proc.A",
-                                                "Intensity of Auditory Stimuli:",
+                                                "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
                                                 min = 20,
                                                 max = 150,
-                                                value = 50),
+                                                value = 100),
                                     
                                     sliderInput("proc.V",
-                                                "Intensity of Visual Stimuli:",
+                                                "Visual processing time (\\(\\frac{1}{\\lambda_V}\\))",
                                                 min = 20,
                                                 max = 150,
                                                 value = 50),
                                     
+                                  h4("Second stage"),
                                     sliderInput("mu",
-                                                "Duration of 2nd stage:",
+                                              "... processing time (\\(\\mu\\))",
                                                 min = 50,
-                                                max = 200,
+                                                max = 500,
                                                 value = 100),
                                     
                                     # sliderInput("sigma",
@@ -288,13 +275,13 @@ ui <- shinyUI(fluidPage(
                                     #         value = 50),
                                     
                                     sliderInput("om",
-                                                "Width of the window:",
+                                              "Window width (\\(\\omega\\))",
                                                 min = 100,
                                                 max = 300,
                                                 value = 200),
                                     
                                     sliderInput("del",
-                                                "Amount of integration:",
+                                              "Amount of integration (\\(\\delta\\))",
                                                 min = 20,
                                                 max = 100,
                                                 value = 50),
@@ -310,49 +297,55 @@ ui <- shinyUI(fluidPage(
                                     
                                   ),
                                   mainPanel(
-                                    tableOutput("simtable"), plotOutput("plot")
-                                  )))
-                       )),
+                                    h4("Simulated Data"),
+                                    numericInput("nrowShow",
+                                                 "Number of rows displayed",
+                                                 min=1,
+                                                 max=60,
+                                                 value=10),
+                                    tableOutput("simtable"),
+                                    plotOutput("simplot")
+                                  ))
+             #              )
+             #          )
+              ),
               
               tabPanel("Estimation", value = "Est",
                        fluidRow(
                          column(4,
                                 wellPanel(
-                                  selectInput("estParadigm", "Chosen Paradigm:",
-                                              choices = c("Focused Attention Paradigm" = "fap",
-                                                          "Redundant Signal Paradigm" = "rsp")),
-                                h4("First stage"),
-                                  sliderInput("est_procV",
-                                              "Visual processing time (\\(\\frac{1}{\\lambda_V}\\))",
-                                              min = 1,
-                                              max = 100,
-                                              value = 50),
-                                  sliderInput("est_procA",
-                                              "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
-                                              min = 1,
-                                              max = 100,
-                                              value = 50),
-                                  h4("Second stage"),
-                                  sliderInput("est_mu",
-                                              "... processing time (\\(\\mu\\))",
-                                              min = 100,
-                                              max = 500,
-                                              value = 50),
-                                  sliderInput("est_omega",
-                                              "Window width (\\(\\omega\\))",
-                                              min = 1,
-                                              max = 100,
-                                              value = 50),
-                                  sliderInput("est_delta",
-                                              "Amount of integration (\\(\\delta\\))",
-                                              min = 1,
-                                              max = 100,
-                                              value = 50),
-                                  numericInput("n1", "Number Input:", min = 0, max = 1000, value = 50),
-                                  numericInput("n2", "Number Input:", min = 0, max = 1000, value = 50),
-                                  numericInput("n3", "Number Input:", min = 0, max = 1000, value = 50),
-                                  actionButton("AButton", "ActionButton"),
-                                  tags$style(HTML('#AButton{background-color:orange}')),
+                                 # selectInput("estParadigm", "Chosen Paradigm:",
+                                 #             choices = c("Focused Attention Paradigm" = "fap",
+                                 #                         "Redundant Signal Paradigm" = "rsp")),
+                                 # h4("First stage"),
+                                 # sliderInput("est_procV",
+                                 #             "Visual processing time (\\(\\frac{1}{\\lambda_V}\\))",
+                                 #             min = 1,
+                                 #             max = 100,
+                                 #             value = 50),
+                                 # sliderInput("est_procA",
+                                 #             "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
+                                 #             min = 1,
+                                 #             max = 100,
+                                 #             value = 50),
+                                 # h4("Second stage"),
+                                 # sliderInput("est_mu",
+                                 #             "... processing time (\\(\\mu\\))",
+                                 #             min = 100,
+                                 #             max = 500,
+                                 #             value = 50),
+                                 # sliderInput("est_omega",
+                                 #             "Window width (\\(\\omega\\))",
+                                 #             min = 1,
+                                 #             max = 100,
+                                 #             value = 50),
+                                 # sliderInput("est_delta",
+                                 #             "Amount of integration (\\(\\delta\\))",
+                                 #             min = 1,
+                                 #             max = 100,
+                                 #             value = 50),
+                                 #actionButton("AButton", "ActionButton"),
+                                 #tags$style(HTML('#AButton{background-color:orange}')),
                                   fileInput('file1', 'Choose file to upload',
                                             accept = c(
                                               'text/csv',
