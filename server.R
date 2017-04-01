@@ -263,7 +263,7 @@ server <- shinyServer(function(input, output) {
 
   output$estTextOut <- renderTable({
                     est <- matrix(estimates()$estimate, nrow=1)
-                    dimnames(est) <- list(NULL, c("1/lambdaV", "1/lambdaV", "mu",
+                    dimnames(est) <- list(NULL, c("1/lambdaA", "1/lambdaV", "mu",
                                                   "omega", "delta"))
                     est
   })
