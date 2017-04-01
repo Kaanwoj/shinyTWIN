@@ -66,11 +66,11 @@ estimateFAP <- function(dat, max.iter=100) {
     soa <- c(-200, -100, -50, 0, 50, 100, 200)
 
     param.start <- c(
-                     runif(1, 5, 250),   # proc.A
-                     runif(1, 5, 250),   # proc.A
-                     runif(1, 0, 1000),  # mu)
-                     runif(1, 5, 1000),  # omega)
-                     runif(1, 5, 175)   # delta
+                     rexp(1, 1/100),     # proc.A
+                     rexp(1, 1/100),     # proc.A
+                     rnorm(1, 100, 25),  # mu)
+                     rnorm(1, 200, 50),  # omega)
+                     rnorm(1, 200, 50)   # delta
                    )
 
     # observed RTs
