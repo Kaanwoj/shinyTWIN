@@ -127,26 +127,31 @@ ui <- shinyUI(fluidPage(
                                 wellPanel(
                   
 
-                                  selectInput("dist", "Distribution ",
-                                              choices = c("Exponential" = "expFAP",
-                                                          " " = "expRSP")),
+                            selectInput("dist", "Distribution ",
+                                           choices = c("Exponential" = "expFAP",
+                                                       " " = "expRSP",
+                                                       "Normal" = "normFAP",
+                                                       "Uniform" = "uniFAP"
+                                                       )
+                                                  ),
                                   
-                                  conditionalPanel( condition = ("input.dist == 'expFAP'"),
-                                                    sliderInput("mu_t",
-                                                                "Mean (target / stimulus 1): ",
+                                conditionalPanel( condition = ("input.dist == 'expFAP'"),
+                                                   
+                                                    sliderInput("mu_nt",
+
+                                                    "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
+
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50),
-                                                    sliderInput("mu_nt",
-
-                                                                 "Mean (non-target / stimulus 2): ",
-
+                                                    sliderInput("mu_t",
+                                                    "Visual processing time (\\(\\frac{1}{\\lambda_V}\\)) ",
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50)
-                                  ),
+                                 ),
                                   
-                                  conditionalPanel( condition = ("input.dist == 'expRSP'"),
+                                 conditionalPanel( condition = ("input.dist == 'expRSP'"),
                                                     sliderInput("mu_s1",
                                                                 "Mean (Stimulus 1): ",
                                                                 min = 1,
@@ -157,8 +162,8 @@ ui <- shinyUI(fluidPage(
                                                                 min = 1,
                                                                 max = 100,
                                                                 value = 50)
-                                  ),
-                                  conditionalPanel( condition = ("input.dist == 'normRSP'"),
+                                 ),
+                                  conditionalPanel( condition = ("input.dist == 'normFAP'"),
                                                     sliderInput("mun_s1",
                                                                 "Mean (Stimulus 1): ",
                                                                 min = 1,
@@ -179,8 +184,8 @@ ui <- shinyUI(fluidPage(
                                                                 min = 1, 
                                                                 max = 50,
                                                                 value = 25)
-                                  ),
-                                  conditionalPanel( condition = ("input.dist == 'uniRSP'"),
+                                 ),
+                                  conditionalPanel( condition = ("input.dist == 'uniFAP'"),
                                                     sliderInput("min_s1",
                                                                 "Minimum (Stimulus 1): ",
                                                                 min = 1,
@@ -201,24 +206,24 @@ ui <- shinyUI(fluidPage(
                                                                 min = 1,
                                                                 max = 300,
                                                                 value = 150)
-                                  ),
+                                 ),
                                   sliderInput("mu_second",
-                                              "2nd stage processing time: ",
+                                              "2nd stage processing time (\\(\\mu\\))",
                                               min = 100,
                                               max = 500,
                                               value = 200),
                                   sliderInput("sd_second",
-                                              "2nd stage standard deviation:",
+                                              "2nd stage standard deviation",
                                               min = 0,
                                               max = 100,
                                               value = 50),
                                   sliderInput("delta",
-                                              "Amount of Integration: ",
+                                              "Amount of integration (\\(\\delta\\))",
                                               min = -300,
                                               max = 300,
                                               value = 100),
                                   sliderInput("omega",
-                                              "Width of the time-window:",
+                                              "Window width (\\(\\omega\\))",
                                               min = 0,
                                               max = 500,
                                               value = 200)
@@ -238,16 +243,14 @@ ui <- shinyUI(fluidPage(
               ################### Simulation tab
               
               tabPanel("Simulation", value = "Sim",
-                       #fluidRow(
-                         #column(12,
+
                             sidebarLayout(
                                 sidebarPanel(
                                 selectInput("dist2", "Choose paradigm",
                                               choices = c("Focused Attention Paradigm" = "expFAP",
                                                          "Redundant Target Paradigm" = "expRSP")),
-                                  #conditionalPanel( condition = ("input.dist == 'expFAP'"),
-                                  #                  conditionalPanel( condition = ("input.dist == 'expRSP'"))),
-                                #
+                               
+                        
                                 h4("First stage"),
                                     sliderInput("proc.A",
                                                 "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
@@ -269,7 +272,7 @@ ui <- shinyUI(fluidPage(
                                                 value = 100),
                                     
                                     # sliderInput("sigma",
-                                    #            "Standard Deviation:",
+                                    #            "Standard Deviation",
                                     #           min = 500,
                                     #          max = 200,
                                     #         value = 50),
@@ -306,8 +309,6 @@ ui <- shinyUI(fluidPage(
                                     tableOutput("simtable"),
                                     plotOutput("simplot")
                                   ))
-             #              )
-             #          )
               ),
               
               tabPanel("Estimation", value = "Est",

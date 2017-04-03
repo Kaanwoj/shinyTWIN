@@ -1,3 +1,4 @@
+
 library(plyr)
 source("simulateFAP.R")
 source("estimateFAP.R")
@@ -33,42 +34,49 @@ server <- shinyServer(function(input, output) {
   
   # x-sequence for plotting the unimodeal distributions
   x <- seq(0,300)
+
   
-  ## --- PLOT THE DISTRIBUTION OF THE FIRST STAGE RT
-  output$uni_data_t <- renderPlot({
+  
+  ## --- PLOT THE DISTRIBUTION OF THE FIRST STAGE RT: FIRST STAGE ALWAYS EXPONENTIAL
+  output$uni_data_t <- renderPlot({ 
     # exponential distribution with rate lambda = 1/mu for FAP
-    if(input$dist == "expFAP")
-      (plot(dexp(x, rate = 1/input$mu_t),
+    plot(dexp(x, rate = 1/input$mu_t),
             type = "l",
             lwd=3,
+            col = "green",
             ylab = "Density Function",
-            xlab = "first stage (target stimulus / stimulus 1)"))
-    # exp distribution for RSP
-    else (input$dist == "expRSP")
-    (plot(dexp(x, rate = 1/input$mu_t),
-          type = "l",
-          lwd=3,
-          ylab = "Density Function",
-          xlab = "first stage (target stimulus / stimulus 1)"))
+            xlab = "First stage")
+    par(new = T)
+    plot(dexp(x, rate = 1/input$mu_nt),
+         type = "l",
+         lwd=3,
+         col = "orange",
+         ylab = "",
+         xlab = "",
+         xaxt="n",
+         yaxt="n"
+         )
   })
   
-  # do the same for the non-target distribution
-  output$uni_data_nt <- renderPlot({
-    if(input$dist == "expFAP")
-      (plot(dexp(x, rate = 1/input$mu_nt),
-            type = "l",
-            lwd=3,
-            ylab = "Density Function",
-            xlab = "first stage (non-target stimulus / stimulus 2)"))
-    
-    else (input$dist == "expRSP")
-    (plot(dexp(x, rate = 1/input$mu_nt),
-          type = "l",
-          lwd=3,
-          ylab = "Density Function",
-          xlab = "first stage (non-target stimulus / stimulus 2)"))
-    
-  })
+  # OLD GRAPH (non-target plot)
+  #output$uni_data_nt <- renderPlot({
+  #  if(input$dist == "expFAP")
+  #    (plot(dexp(x, rate = 1/input$mu_nt),
+  #          type = "l",
+  #          lwd=3,
+  #          col = "red",
+  #          ylab = "Density Function",
+  #          xlab = "first stage (non-target stimulus / stimulus 2)"))
+  #  
+  #  else (input$dist == "expRSP")
+  #  (plot(dexp(x, rate = 1/input$mu_nt),
+  #       type = "l",
+  #       lwd=3,
+  #        col = "red",
+  #        ylab = "Density Function",
+  #        xlab = "first stage (non-target stimulus / stimulus 2)"))
+  #  
+  #})
   
   ### --- PLOT THE REACTION TIME MEANS AS FUNCTION OF THE SOA ---
   output$data <- renderPlot({
