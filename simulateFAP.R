@@ -2,7 +2,7 @@
 ### Simulation ###
 ##################
 
-simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, om, del, N) {
+simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
 
   # draw random samples for processing time on stage 1 (A and V) or 2 (M)
   nsoa <- length(soa)
@@ -23,8 +23,8 @@ simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, om, del, N) {
         # window (Kandil, Diederich, & Colonius, 2014)
         # I = { A + tau < V < A + tau + omega }
       if (((soa[j] + A[i,j]) < V[i,j]) &&
-        (V[i,j] < (soa[j] + A[i,j] + om))) {
-          data[i,j] <- V[i,j] + M[i,j] - del
+        (V[i,j] < (soa[j] + A[i,j] + omega))) {
+          data[i,j] <- V[i,j] + M[i,j] - delta
       } else
           data[i,j] <- V[i,j] + M[i,j]
   }}

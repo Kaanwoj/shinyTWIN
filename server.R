@@ -211,13 +211,18 @@ server <- shinyServer(function(input, output) {
    dataset <- reactive({
     if (input$dist2 == "expFAP"){
       soa <- c(-200,-100,-50,0,50,100,200)
-     simulate.fap (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
+      simulate.fap(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
+                   mu=input$mu, sigma=sigma, omega=input$sim.omega,
+                   delta=input$sim.delta,
+                   N=input$N)
     }
-     else if (input$dist2 == "expRSP"){
-     soa <- c(0,50,100,200)
-     simulate.rtp (soa, input$proc.A, input$proc.V, input$mu, sigma, input$om, input$del, input$N)
+    else if (input$dist2 == "expRSP"){
+      soa <- c(0,50,100,200)
+      simulate.rtp(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
+                   mu=input$mu, sigma=sigma, omega=input$sim.omega,
+                   delta=input$sim.delta,
+                   N=input$N)
      }
-    
   })
 
   
