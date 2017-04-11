@@ -1,3 +1,3 @@
-source("estimateFAP")
+source("estimateFAP.R")
 dat <- read.table("simDataFAP.txt", sep=";", header=TRUE)
-estimateFAP(dat)
+est <- estimate.fap(dat)
