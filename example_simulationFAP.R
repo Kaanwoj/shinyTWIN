@@ -25,12 +25,9 @@ omega <- 200
 delta <- 50
 
 # number of observations per SOA
-N <- 40
+N <- 500
 
 data <- simulate.fap(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 
-# save data in a file
-df <- as.data.frame(data)
-names(df) <- paste0("FAP", soa)
-
-write.table(df, "simDataFAP.txt", sep=";", row.names=FALSE)
+write.table(data, "simDataFAP.txt", quote = FALSE, sep = ";", row.names =
+            FALSE)
