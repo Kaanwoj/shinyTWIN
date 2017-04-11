@@ -28,5 +28,11 @@ simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
       } else
           data[i,j] <- V[i,j] + M[i,j]
   }}
+
+  # if negative reaction times were simulated, draw a new sample
+  if (any(c(data) < 0)) {
+    data <- simulate.fap(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
+  }
+
   return(data)
 }
