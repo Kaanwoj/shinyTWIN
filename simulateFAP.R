@@ -9,7 +9,7 @@ simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
   A <- matrix(rexp(N * nsoa, rate = 1/proc.A), ncol = nsoa)
   V <- matrix(rexp(N * nsoa, rate = 1/proc.V), ncol = nsoa)
   M <- matrix(rnorm(N * nsoa, mean = mu, sd = sigma), ncol = nsoa)
-  names <- paste0("SOA(", soa, ")")
+  names <- sub("-", "neg", paste0("SOA.", soa))
   dimnames <- list(c(1:N), names)
 
   data <- matrix(nrow=N, ncol=nsoa,  dimnames= dimnames)
