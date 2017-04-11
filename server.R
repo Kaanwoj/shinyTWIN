@@ -272,15 +272,20 @@ server <- shinyServer(function(input, output) {
   )
 
   ###################### ESTIMATION ###########################
-  estimates <- reactive(estimateFAP(dataset()))
+  est.out <- reactive(estimate.fap(dataset()))
 
   output$estTextOut <- renderTable({
-                    est <- matrix(estimates()$estimate, nrow=1)
+                    est <- matrix(est.out()$est$par, nrow=1)
                     dimnames(est) <- list(NULL, c("1/lambdaA", "1/lambdaV", "mu",
                                                   "omega", "delta"))
                     est
   })
 
-  
+  output$startParamTextOut <- renderTable({
+                    par <- matrix(est.out()$param.start, nrow=1)
+                    dimnames(par) <- list(NULL, c("1/lambdaA", "1/lambdaV", "mu",
+                                                  "omega", "delta"))
+                    par
+  })
 })
 

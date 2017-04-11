@@ -46,39 +46,76 @@ predict.rt <- function(soa, param) {
 
 objective.function <- function(param, obs.m, obs.se, soa) {
 
-    # check if parameters are in bounds
-    if (param[1] < 5 || param[1] > 250 ) return(Inf)  # proc.A
-    if (param[2] < 5 || param[2] > 250 ) return(Inf)  # proc.A
-    if (param[3] < 0                   ) return(Inf)  # mu
-    if (param[4] < 5 || param[4] > 1000) return(Inf)  # omega
-    if (param[5] < 0 || param[5] > 175 ) return(Inf)  # delta
-
     pred <- predict.rt(soa, param)
 
-    sum(( (obs.m - pred) / obs.se)^2)
+    sum(( (obs.m - pred) / obs.se )^2)
 }
 
-estimateFAP <- function(dat, max.iter=100) {
+draw_start <- function(par, bounds) {
+    low <- bounds$lower[par]
+    up  <- bounds$upper[par]
 
+    value <- switch(par,
+                    proc.A = rexp(1, 1/100),
+                    proc.V = rexp(1, 1/100),
+                    mu     = rnorm(1, 100, 25),
+                    omega  = rnorm(1, 200, 25),
+                    delta  = rnorm(1, 50, 25)
+                    )
+    # todo: stop if value == NULL
+
+    # Is starting value out of bounds? Draw again!
+    if (value < low || value > up) {
+        value <- draw_start(par, bounds)
+    }
+
+    value
+}
+
+estimate.fap <- function(dat) {
+
+    # number of observations
     N <- nrow(dat)
-
-    # Probability of integration
-    soa <- c(-200, -100, -50, 0, 50, 100, 200)
-
-    param.start <- c(
-                     rexp(1, 1/50),     # proc.A
-                     rexp(1, 1/50),     # proc.A
-                     rnorm(1, 100, 25),  # mu)
-                     rnorm(1, 200, 25),  # omega)
-                     rnorm(1,  50, 25)   # delta
-                   )
 
     # observed RTs
     obs.m <- colSums(dat) / N
     obs.se <- apply(dat, 2, sd) / sqrt(N)
 
-    nlm(objective.function, param.start, obs.m = obs.m, obs.se = obs.se,
-        soa = soa, iterlim = max.iter)
+    # stimulus onset asynchonies
+    soa <- c(-200, -100, -50, 0, 50, 100, 200)
+
+    # lower and upper bounds for parameter estimates
+    bounds <- list(lower = c("proc.A" = 5,
+                             "proc.V" = 5,
+                             "mu"     = 0,
+                             "omega"  = 5,
+                             "delta"  = 0),
+                   upper = c("proc.A" = 250,
+                             "proc.V" = 250,
+                             "mu"     = Inf,
+                             "omega"  = 1000,
+                             "delta"  = 175)
+                             )
+
+    # draw starting values for parameters
+    param.start <- c(
+                     draw_start("proc.A", bounds),
+                     draw_start("proc.A", bounds),
+                     draw_start("mu", bounds),
+                     draw_start("omega", bounds),
+                     draw_start("delta", bounds)
+                    )
+
+    # estimate parameters
+    est <- optim(par = param.start, fn = objective.function,
+                  lower = bounds$lower,
+                  upper = bounds$upper,
+                  method = "L-BFGS-B",
+                  obs.m = obs.m,
+                  obs.se = obs.se, soa = soa
+                 )
+
+    list(est = est, param.start = param.start)
 }
 
 

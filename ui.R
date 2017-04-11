@@ -334,6 +334,8 @@ ui <- shinyUI(fluidPage(
         mainPanel(
           h2("Estimated values"),
           tableOutput("estTextOut"),
+          h2("Starting values for parameters"),
+          tableOutput("startParamTextOut"),
           dataTableOutput("dt1"))
     )),
 
