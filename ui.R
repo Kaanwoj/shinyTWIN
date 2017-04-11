@@ -260,6 +260,11 @@ ui <- shinyUI(fluidPage(
           selectInput("dist2", "Choose paradigm",
                       choices = c("Focused Attention Paradigm" = "expFAP",
                                   "Redundant Target Paradigm" = "expRSP")),
+          sliderInput("N",
+                      "Amount of trials:",
+                      min = 1,
+                      max = 1000,
+                      value = 500),
           h4("First stage"),
           sliderInput("proc.A",
                       "Auditory processing time (\\(\\frac{1}{\\lambda_A}\\))",
@@ -292,22 +297,19 @@ ui <- shinyUI(fluidPage(
                       min = 20,
                       max = 100,
                       value = 50),
-          sliderInput("N",
-                      "Trial Number:",
-                      min = 1,
-                      max = 1000,
-                      value = 500),
+         h5("To download your simulated data, press on the button below:"),
           downloadButton('downloadData', 'Download (CSV)')
         ),
         mainPanel(
-          h4("Simulated Data"),
+          h2("Simulated Data"),
+          plotOutput("simplot"),
           numericInput("nrowShow",
                        "Number of rows displayed",
                        min=1,
                        max=60,
                        value=10),
-          tableOutput("simtable"),
-          plotOutput("simplot")
+          tableOutput("simtable")
+       
     ))),
 
     ######################
