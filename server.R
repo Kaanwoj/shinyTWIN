@@ -1,4 +1,4 @@
-
+library(ggplot2)
 library(plyr)
 source("simulateFAP.R")
 source("estimateFAP.R")
@@ -33,50 +33,24 @@ server <- shinyServer(function(input, output) {
                         ncol = SOA)
   
   # x-sequence for plotting the unimodeal distributions
+  
   x <- seq(0,300)
-
   
   
   ## --- PLOT THE DISTRIBUTION OF THE FIRST STAGE RT: FIRST STAGE ALWAYS EXPONENTIAL
   output$uni_data_t <- renderPlot({ 
-    # exponential distribution with rate lambda = 1/mu for FAP
-    plot(dexp(x, rate = 1/input$mu_t),
-            type = "l",
-            lwd=3,
-            col = "green",
-            ylab = "Density Function",
-            xlab = "First stage")
-    par(new = T)
-    plot(dexp(x, rate = 1/input$mu_nt),
-         type = "l",
-         lwd=3,
-         col = "orange",
-         ylab = "",
-         xlab = "",
-         xaxt="n",
-         yaxt="n"
-         )
+
+    ggplot(data.frame(x=seq(0,300)),aes(x=x)) + 
+      stat_function(fun=dexp,geom = "line",size=1, col= "blue",args = (mean=1/input$mu_nt)) + 
+      stat_function(fun=dexp,geom = "line",size=1,col= "red", args = (mean=1/input$mu_t)) +
+     labs(title = "Distribution of 1st stage processing",
+           x = "Time (ms)",
+           y = "Density function")
   })
   
-  # OLD GRAPH (non-target plot)
-  #output$uni_data_nt <- renderPlot({
-  #  if(input$dist == "expFAP")
-  #    (plot(dexp(x, rate = 1/input$mu_nt),
-  #          type = "l",
-  #          lwd=3,
-  #          col = "red",
-  #          ylab = "Density Function",
-  #          xlab = "first stage (non-target stimulus / stimulus 2)"))
-  #  
-  #  else (input$dist == "expRSP")
-  #  (plot(dexp(x, rate = 1/input$mu_nt),
-  #       type = "l",
-  #       lwd=3,
-  #        col = "red",
-  #        ylab = "Density Function",
-  #        xlab = "first stage (non-target stimulus / stimulus 2)"))
-  #  
-  #})
+  
+  
+ 
   
   ### --- PLOT THE REACTION TIME MEANS AS FUNCTION OF THE SOA ---
   output$data <- renderPlot({
@@ -127,23 +101,17 @@ server <- shinyServer(function(input, output) {
     
     # maximum value of the data frame (as threshold for the plot)
     max <- max(mean_t, means) + 50
-    
-    # plot the means against the SOA values
-    plot(results$tau, results$means, 
-         type = "b", col = "red", 
-         lwd=3,
-         ylim=c(0, max),
-         ylab = "Reaction Times",
-         xlab = "SOA"
-         #legend('topright',)
-    )
-    par(new = T)
-    plot(results$tau, results$mean_t, 
-         type = "l", col = "blue", 
-         lwd=3,
-         ylim = c(0, max),
-         ylab = " ",
-         xlab = " ")
+  
+  
+  # plot the means against the SOA values
+  ggplot(data = results) + 
+    geom_line( aes(tau, means), color = "red", size = 1) + 
+    geom_line (aes(tau, mean_t), color = "blue", size = 1) + 
+    labs(x = "Stimulus-onset asynchrony \n(SOA)",
+         y = "Reaction Times (ms)",
+         title ="Mean Reaction Times for the unimodal \nand bimodal task condition") +
+    ylim(c(0,max))
+  
   })
   
   ### PLOT THE PROBABILITY OF INTEGRATION ---
@@ -170,15 +138,15 @@ server <- shinyServer(function(input, output) {
     
     # plot the results
     if(input$dist == "unif" && (input$max_t < input$min_t || input$max_nt < input$min_nt))
-      (plot())
-    else(plot(results$tau, 
-              results$prob_value, 
-              type = "b", 
-              lwd=3,
-              col = "blue",
-              ylab = "Probability of Integration",
-              xlab = "SOA"))
+      (ggplot())
+    else(
+      ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue") + 
+        labs(title="Integration function",
+             x = "SOA",
+             y = "Probability of integration")
+    )
   })
+  
   
   output$dt1 <- renderDataTable({
     infile <- input$file1
@@ -229,11 +197,10 @@ server <- shinyServer(function(input, output) {
   output$simtable <- renderTable(head(dataset(), input$nrowShow))
 
   output$simplot <- renderPlot({
-      plot(colSums(dataset())/input$N, ylab="Reaction time", xlab="SOA",
-           main="Mean RT for each SOA", xaxt="n")
-      axis(1, at=1:length(soa()), labels=paste0("SOA", soa()))
+      plot(colSums(dataset())/input$N, ylab="Reaction time (ms)", xlab="Stimulus-onset asynchrony (SOA)",
+         main="Mean RT for each SOA", xaxt="n")
+      axis(1, at=1:length(soa()), labels=soa())
   })
-  
   
   
   ################### Download the Simulation output 
