@@ -45,7 +45,9 @@ server <- shinyServer(function(input, output) {
       stat_function(fun=dexp,geom = "line",size=1,col= "red", args = (mean=1/input$mu_t)) +
      labs(title = "Distribution of 1st stage processing",
            x = "Time (ms)",
-           y = "Density function")
+           y = "Density function") + 
+    theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
+           margin = margin(10, 0, 10, 0)))
   })
   
   
@@ -110,7 +112,10 @@ server <- shinyServer(function(input, output) {
     labs(x = "Stimulus-onset asynchrony \n(SOA)",
          y = "Reaction Times (ms)",
          title ="Mean Reaction Times for the unimodal \nand bimodal task condition") +
-    ylim(c(0,max))
+    ylim(c(0,max))+ 
+    theme(plot.title = element_text(size=16, face="bold", hjust = 0.5, 
+     margin = margin(10, 0, 10, 0)))
+  
   
   })
   
@@ -140,10 +145,12 @@ server <- shinyServer(function(input, output) {
     if(input$dist == "unif" && (input$max_t < input$min_t || input$max_nt < input$min_nt))
       (ggplot())
     else(
-      ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue") + 
-        labs(title="Integration function",
+      ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue")
+        + labs(title="Integration function",
              x = "SOA",
              y = "Probability of integration")
+      + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
+                                        margin = margin(10, 0, 10, 0)))
     )
   })
   
