@@ -243,10 +243,22 @@ ui <- shinyUI(fluidPage(
         fluidRow(
           column(6,
             plotOutput("uni_data_t"),
-            plotOutput("uni_data_nt")),
+            plotOutput("prob")),
           column(6,
             plotOutput("data"),
-            plotOutput("prob"))
+ ########### Parameters Tab Description #########
+            br(),
+            strong("1)"),
+            p("The topleft graphs shows the exponential distribution of the intensity measure lambda for both", 
+            span("target (visual)", style = "color:red"), "and", span("non-target (auditory) stimuli", style = "color:blue")),
+            br(),
+            strong("2)"),
+            p("The topright graph shows the mean RTs of the different SOAs for both the", span("unimodal", style = "color:blue"), "and", span("bimodal", style = "color:red"), "task condition. \n
+              A decrease in RTs in the bimodal task condition compared to the unimodal condition implies fascilitation."),
+            br(),
+            strong("3)"),
+            p("The bottom graph displays the probability of integration depending on the length of the SOA.")
+           )
     )))),
 
     ######################
@@ -298,7 +310,7 @@ ui <- shinyUI(fluidPage(
                       max = 100,
                       value = 50),
          h5("To download your simulated data, press on the button below:"),
-          downloadButton('downloadData', 'Download (CSV)')
+          downloadButton('downloadData', 'Download (CSV)', style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
         ),
         mainPanel(
           h2("Simulated Data"),
