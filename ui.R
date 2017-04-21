@@ -310,7 +310,7 @@ ui <- shinyUI(fluidPage(
                       max = 100,
                       value = 50),
          h5("To download your simulated data, press on the button below:"),
-          downloadButton('downloadData', 'Download (CSV)', style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
+          downloadButton('downloadData', 'Download (CSV)')
         ),
         mainPanel(
           h2("Simulated Data"),
