@@ -206,30 +206,30 @@ server <- shinyServer(function(input, output) {
      }
   })
 
-  
+
   output$simtable <- renderTable(head(dataset(), input$nrowShow))
 
   output$simplot <- renderPlot({
-      plot(colSums(dataset())/input$N, ylab="Reaction time (ms)", xlab="Stimulus-onset asynchrony (SOA)",
-         main="Mean RT for each SOA", xaxt="n")
+      boxplot(dataset(), ylab="Reaction time (ms)", xlab="Stimulus-onset asynchrony (SOA)",
+         main="Distribution of reaction times for each SOA", xaxt="n")
       axis(1, at=1:length(soa()), labels=soa())
   })
-  
-  
+
+
   ################### Download the Simulation output 
-  
+
   #output$table <- renderTable({
   #data
   #}) 
-  
+
   # downloadHandler() takes two arguments, both functions.
   # The content function is passed a filename as an argument, and
   #   it should write out data to that filename.
   output$downloadData <- downloadHandler(
-    
+
     # This function returns a string which tells the client
     # browser what name to use when saving the file.
-    
+
     filename = function() {
       #paste(input$dataset, input$filetype, sep = ".")
       paste("dat-", Sys.Date(), ".csv", sep="")
