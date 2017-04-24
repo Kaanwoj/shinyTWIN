@@ -173,26 +173,32 @@ server <- shinyServer(function(input, output) {
   
   # Simulation with FAP Paradigm
   sigma <- 25
+
+  
   soa <- reactive({
     if (input$dist2 == "expFAP"){
-      soa <- c(-200,-100,-50,0,50,100,200)
+      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added 
+     # soa <- c(-200,-100,-50,0,50,100,200)
     }
      else if (input$dist2 == "expRSP"){
-      soa <- rep(c(0,50,100,200), 2)
+       soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2)  ### added
+      #soa <- rep(c(0,50,100,200), 2)
      }
   
   })
   
    dataset <- reactive({
     if (input$dist2 == "expFAP"){
-      soa <- c(-200,-100,-50,0,50,100,200)
+      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added
+      #soa <- c(-200,-100,-50,0,50,100,200)
       simulate.fap(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
                    mu=input$mu, sigma=sigma, omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
     }
     else if (input$dist2 == "expRSP"){
-      soa <- c(0,50,100,200)
+      soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2) ### added
+      #soa <- c(0,50,100,200)
       simulate.rtp(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
                    mu=input$mu, sigma=sigma, omega=input$sim.omega,
                    delta=input$sim.delta,

@@ -272,6 +272,11 @@ ui <- shinyUI(fluidPage(
           selectInput("dist2", "Choose paradigm",
                       choices = c("Focused Attention Paradigm" = "expFAP",
                                   "Redundant Target Paradigm" = "expRSP")),
+          textInput("soa.in","Please specify your SOAs (comma delimited)", ""),
+          h6("or use the default values"), 
+          h6("FAP: -200,-100,-50,0,50,100,200"), 
+          h6("RTP: 0,50,100,200,0,50,100,200"),
+          
           sliderInput("N",
                       "Amount of trials:",
                       min = 1,
