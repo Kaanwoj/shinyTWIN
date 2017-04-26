@@ -46,6 +46,7 @@ server <- shinyServer(function(input, output) {
      labs(title = "Distribution of 1st stage processing",
            x = "Time (ms)",
            y = "Density function") + 
+   theme(aspect.ratio=0.75) +
     theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
            margin = margin(10, 0, 10, 0)))
   })
@@ -112,7 +113,8 @@ server <- shinyServer(function(input, output) {
     labs(x = "Stimulus-onset asynchrony \n(SOA)",
          y = "Reaction Times (ms)",
          title ="Mean Reaction Times for the unimodal \nand bimodal task condition") +
-    ylim(c(0,max))+ 
+    ylim(c(0,max))+
+    theme(aspect.ratio=0.75)+
     theme(plot.title = element_text(size=16, face="bold", hjust = 0.5, 
      margin = margin(10, 0, 10, 0)))
   
@@ -149,6 +151,7 @@ server <- shinyServer(function(input, output) {
         + labs(title="Integration function",
              x = "SOA",
              y = "Probability of integration")
+      + theme(aspect.ratio=0.75)
       + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
                                         margin = margin(10, 0, 10, 0)))
     )
@@ -175,7 +178,8 @@ server <- shinyServer(function(input, output) {
   sigma <- 25
 
   
-  soa <- reactive({
+  soa <-reactive({
+  
     if (input$dist2 == "expFAP"){
       soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added 
      # soa <- c(-200,-100,-50,0,50,100,200)
@@ -184,7 +188,7 @@ server <- shinyServer(function(input, output) {
        soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2)  ### added
       #soa <- rep(c(0,50,100,200), 2)
      }
-  
+    
   })
   
    dataset <- reactive({
@@ -207,13 +211,22 @@ server <- shinyServer(function(input, output) {
   })
 
 
-  output$simtable <- renderTable(head(dataset(), input$nrowShow))
+  output$simtable <- renderTable({
+    input$go
+    isolate(
+    head(dataset(), input$nrowShow)
+    )
+    })
 
   output$simplot <- renderPlot({
+    input$go
+    isolate(
       boxplot(dataset(), ylab="Reaction time (ms)", xlab="Stimulus-onset asynchrony (SOA)",
-         main="Distribution of reaction times for each SOA", xaxt="n")
-      axis(1, at=1:length(soa()), labels=soa())
+         main="Distribution of reaction times for each SOA", xaxt="n"))
+      axis(1, at=1:length(soa()), labels=soa()
+      )
   })
+  
 
 
   ################### Download the Simulation output 

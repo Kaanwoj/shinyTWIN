@@ -26,7 +26,6 @@ ui <- shinyUI(fluidPage(
           selectInput("topic", "Select the topic:",
                       choices = c("About this app" = "aboutapp",
                                   "The TWIN model" = "twinmod",
-                                  "Parameters" = "param",
                                   "Model equations" = "equ"
           )),
           a("See to TWIN publication (Kandil, Diederich & Colonius, 2014)",
@@ -104,19 +103,6 @@ ui <- shinyUI(fluidPage(
               the stimulus. However, the participant is asked to respond to
               a stimulus of any modality detected first."),
             p(img(src="rtp.jpeg", width = "500", align = "center"))
-          ),
-
-          conditionalPanel(condition = ("input.topic == 'param'"),
-            h4("Intensity of the auditory stimuli"),
-            img(src="lamba.jpeg", width = "50"),
-            h4("Intensity of the visual stimuli"),
-            img(src="lambv.jpeg", width = "50"),
-            h4("Processing time for the second stage"),
-            img(src="u.jpeg", width = "40"),
-            h4("Width of the time window of integration"),
-            img(src="w.jpeg", width = "40"),
-            h4("Effect size / Amount of integration"),
-            img(src="delta.jpeg", width = "40")
           ),
 
           conditionalPanel(condition = ("input.topic == 'equ'"),
@@ -249,8 +235,8 @@ ui <- shinyUI(fluidPage(
  ########### Parameters Tab Description #########
             br(),
             strong("1)"),
-            p("The topleft graphs shows the exponential distribution of the intensity measure lambda for both", 
-            span("target (visual)", style = "color:red"), "and", span("non-target (auditory) stimuli", style = "color:blue")),
+            p("The topleft graph shows the exponential distribution of the intensity measure lambda for both", 
+            span("visual (target)", style = "color:red"), "and", span("auditory (non-target) stimuli", style = "color:blue")),
             br(),
             strong("2)"),
             p("The topright graph shows the mean RTs of the different SOAs for both the", span("unimodal", style = "color:blue"), "and", span("bimodal", style = "color:red"), "task condition. \n
@@ -276,6 +262,8 @@ ui <- shinyUI(fluidPage(
           h6("or use the default values"), 
           h6("FAP: -200,-100,-50,0,50,100,200"), 
           h6("RTP: 0,50,100,200,0,50,100,200"),
+          h5("Press the button below to start the computations"),
+          actionButton("go", "Go"),
           
           sliderInput("N",
                       "Amount of trials:",
