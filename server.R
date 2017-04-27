@@ -187,35 +187,27 @@ server <- shinyServer(function(input, output) {
               default.soa)
   })
 
-  soa <-reactive({
-
-    if (input$dist2 == "expFAP"){
-      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added 
-     # soa <- c(-200,-100,-50,0,50,100,200)
-    } else if (input$dist2 == "expRSP"){
-       soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2)  ### added
-      #soa <- rep(c(0,50,100,200), 2)
-     }
-
-  })
-
-   dataset <- eventReactive(input$sim_button, {
+  soa <- eventReactive(input$sim_button, {
     if (input$dist2 == "expFAP"){
       soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
-      #soa <- c(-200,-100,-50,0,50,100,200)
-      simulate.fap(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
+    } else if (input$dist2 == "expRSP"){
+      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
+    }
+  })
+
+  dataset <- eventReactive(input$sim_button, {
+    if (input$dist2 == "expFAP"){
+      simulate.fap(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
                    mu=input$mu, sigma=sigma, omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
     }
     else if (input$dist2 == "expRSP"){
-      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
-      #soa <- c(0,50,100,200)
-      simulate.rtp(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
+      simulate.rtp(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
                    mu=input$mu, sigma=sigma, omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
-     }
+    }
   })
 
   output$simtable <- renderTable({
@@ -223,11 +215,11 @@ server <- shinyServer(function(input, output) {
     })
 
   output$simplot <- renderPlot({
-      if (input$dist2 == "expFAP"){
+      if (isolate(input$dist2) == "expFAP"){
         boxplot(dataset(), ylab="reaction time (ms)",
                 xlab="stimulus-onset asynchrony (soa)", main="", xaxt="n")
         axis(1, at=1:length(soa()), labels=soa())
-      } else if (input$dist2 == "expRSP"){
+      } else if (isolate(input$dist2) == "expRSP"){
         par(mfrow=c(1,2))
         boxplot(dataset()[ , grep("aud", colnames(dataset()))],
                 ylab="reaction time (ms)", xlab="stimulus-onset asynchrony (soa)",
