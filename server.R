@@ -171,10 +171,10 @@ server <- shinyServer(function(input, output) {
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
-  
+
   ################### Generate the Simulation 
-  
-  # Simulation with FAP Paradigm
+
+  # Simulation with FAP or RTP Paradigm
   sigma <- 25
 
   output$soa_input <- renderUI({
@@ -199,7 +199,7 @@ server <- shinyServer(function(input, output) {
 
   })
 
-   dataset <- reactive({
+   dataset <- eventReactive(input$sim_button, {
     if (input$dist2 == "expFAP"){
       soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
       #soa <- c(-200,-100,-50,0,50,100,200)
@@ -218,17 +218,11 @@ server <- shinyServer(function(input, output) {
      }
   })
 
-
   output$simtable <- renderTable({
-    input$go
-    isolate(
       head(dataset(), input$nrowShow)
-    )
     })
 
   output$simplot <- renderPlot({
-    input$go
-    isolate(
       if (input$dist2 == "expFAP"){
         boxplot(dataset(), ylab="reaction time (ms)",
                 xlab="stimulus-onset asynchrony (soa)", main="", xaxt="n")
@@ -244,7 +238,6 @@ server <- shinyServer(function(input, output) {
                 main="visual target", xaxt="n")
         axis(1, at=1:length(soa()), labels=soa())
       }
-    )
   })
 
 

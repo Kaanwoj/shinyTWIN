@@ -288,7 +288,7 @@ ui <- shinyUI(fluidPage(
           fluidRow(
             column(3,
               h4("3. Simulate data"),
-              actionButton("go", "Simulate!")),
+              actionButton("sim_button", "Simulate!")),
             column(9,
               h4("(4.) To download your simulated data, press on the button below"),
               downloadButton('downloadData', 'Download (.csv)'))
@@ -301,7 +301,6 @@ ui <- shinyUI(fluidPage(
                        "Number of rows displayed",
                        min=1, max=60, value=10),
           tableOutput("simtable")
-       
     ))),
 
     ######################
