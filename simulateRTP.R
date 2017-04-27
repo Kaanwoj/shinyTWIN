@@ -44,6 +44,5 @@ simulate.rtp <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
 
   data <- cbind(auditory = data.a, visual = data.v)
 
-
-  return(cbind(auditory = data.a, visual = data.v))
+  return(data)
 }
