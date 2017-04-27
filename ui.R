@@ -307,12 +307,12 @@ ui <- shinyUI(fluidPage(
         ),
         mainPanel(
           h2("Simulated Data"),
+          h4("Boxplots of reaction times for each SOA"),
           plotOutput("simplot"),
+          h4("Table of reaction times for each SOA"),
           numericInput("nrowShow",
                        "Number of rows displayed",
-                       min=1,
-                       max=60,
-                       value=10),
+                       min=1, max=60, value=10),
           tableOutput("simtable")
        
     ))),

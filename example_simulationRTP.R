@@ -8,7 +8,6 @@ source("simulateRTP.R")
 # parameter values
 # stimulus onset asynchrony
 soa <- c(0, 50, 100, 200)
-nsoa <- length(soa)
 
 # processing time of visual/auditory stimulus on stage 1
 proc.A <- 100       # = 1/lambdaA
