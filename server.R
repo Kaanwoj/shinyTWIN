@@ -16,12 +16,14 @@ server <- shinyServer(function(input, output) {
   # unimodal simulation of the first stage according to the chosen distribution
   # target stimulus
   stage1_t <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_t))
-    else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_t))
+    else if (input$dist == "normFAP")(rnorm(n,mean = input$mun_s1, sd = input$sd_s1))
+    else (runif(n,min= input$min_s1, max = input$max_s1))
   })
   
   # non-target stimulus
   stage1_nt <- reactive({ if(input$dist == "expFAP")(rexp(n, rate = 1/input$mu_nt))
-    else (input$dist == "expRSP")(rexp(n, rate = 1/input$mu_nt))
+    else if (input$dist == "normFAP")(rnorm(n, mean = input$mun_s2, sd = input$sd_s2))
+    else (runif(n, min = input$min_s2, max = input$max_s2))
   })
   
   # simulation of the second stage (assumed normal distribution)
@@ -39,7 +41,9 @@ server <- shinyServer(function(input, output) {
   
   ## --- PLOT THE DISTRIBUTION OF THE FIRST STAGE RT: FIRST STAGE ALWAYS EXPONENTIAL
   output$uni_data_t <- renderPlot({ 
-
+    
+    if (input$dist == "expFAP")
+      
     ggplot(data.frame(x=seq(0,300)),aes(x=x)) + 
       stat_function(fun=dexp,geom = "line",size=1, col= "blue",args = (mean=1/input$mu_nt)) + 
       stat_function(fun=dexp,geom = "line",size=1,col= "red", args = (mean=1/input$mu_t)) +
@@ -49,6 +53,37 @@ server <- shinyServer(function(input, output) {
    theme(aspect.ratio=0.75) +
     theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
            margin = margin(10, 0, 10, 0)))
+    
+    else if (input$dist == "normFAP")
+      ggplot(data.frame(x=seq(0,300)),aes(x=x)) + 
+      stat_function(fun=dnorm,geom = "line",size=1, col= "blue",args = list(mean=input$mun_s1, sd = input$sd_s1)) + 
+      stat_function(fun=dnorm,geom = "line",size=1,col= "red", args = list(mean=input$mun_s2, sd = input$sd_s2)) +
+      labs(title = "Distribution of 1st stage processing",
+           x = "Time (ms)",
+           y = "Density function") + 
+      theme(aspect.ratio=0.75) +
+      theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
+                                      margin = margin(10, 0, 10, 0)))
+      else {
+        # check if given values make sense
+        validate(
+          need(input$max_s1 - input$min_s1 > 0,
+               "Please check your input data for the first stimulus!"),
+          need(input$max_s2 - input$min_s2 > 0, "Please check your input data for the second stimulus!")
+        )
+          ggplot(data.frame(x=seq(0,300)),aes(x=x)) + 
+            stat_function(fun=dunif,geom = "line",size=1, col= "blue",args = list(min=input$min_s1, max = input$max_s1)) + 
+            stat_function(fun=dunif,geom = "line",size=1,col= "red", args = list(min=input$min_s2, max = input$max_s2)) +
+            labs(title = "Distribution of 1st stage processing",
+                 x = "Time (ms)",
+                 y = "Density function") + 
+            theme(aspect.ratio=0.75) +
+            theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
+                                            margin = margin(10, 0, 10, 0)))
+        
+      }
+    
+    
   })
   
   
@@ -144,8 +179,9 @@ server <- shinyServer(function(input, output) {
     results <- data.frame(tau, prob_value)
     
     # plot the results
-    if(input$dist == "unif" && (input$max_t < input$min_t || input$max_nt < input$min_nt))
-      (ggplot())
+    if(input$dist == "uniFAP" && (input$max_s1 < input$min_s1 || input$max_s2 < input$min_s2))
+      ggplot()  # plot nothing if it doesnt make sense
+
     else(
       ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue")
         + labs(title="Integration function",
