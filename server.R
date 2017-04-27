@@ -177,14 +177,22 @@ server <- shinyServer(function(input, output) {
   # Simulation with FAP Paradigm
   sigma <- 25
 
-  
+  output$soa_input <- renderUI({
+    if (input$dist2 == "expFAP"){
+      default.soa <- "-200,-100,-50,0,50,100,200"
+    } else if (input$dist2 == "expRSP"){
+      default.soa <- "0,50,100,200"
+    }
+    textInput("soa.in","Stimulus onset asynchronies (SOAs, comma delimited)",
+              default.soa)
+  })
+
   soa <-reactive({
-  
+
     if (input$dist2 == "expFAP"){
       soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added 
      # soa <- c(-200,-100,-50,0,50,100,200)
-    }
-     else if (input$dist2 == "expRSP"){
+    } else if (input$dist2 == "expRSP"){
        soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2)  ### added
       #soa <- rep(c(0,50,100,200), 2)
      }
