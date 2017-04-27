@@ -207,65 +207,70 @@ server <- shinyServer(function(input, output) {
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
-  
+
   ################### Generate the Simulation 
-  
-  # Simulation with FAP Paradigm
+
+  # Simulation with FAP or RTP Paradigm
   sigma <- 25
 
-  
-  soa <-reactive({
-  
+  output$soa_input <- renderUI({
     if (input$dist2 == "expFAP"){
-      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added 
-     # soa <- c(-200,-100,-50,0,50,100,200)
+      default.soa <- "-200,-100,-50,0,50,100,200"
+    } else if (input$dist2 == "expRSP"){
+      default.soa <- "0,50,100,200"
     }
-     else if (input$dist2 == "expRSP"){
-       soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2)  ### added
-      #soa <- rep(c(0,50,100,200), 2)
-     }
-    
+    textInput("soa.in","Stimulus onset asynchronies (SOAs, comma delimited)",
+              default.soa)
   })
-  
-   dataset <- reactive({
+
+  soa <- eventReactive(input$sim_button, {
     if (input$dist2 == "expFAP"){
-      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))  ### added
-      #soa <- c(-200,-100,-50,0,50,100,200)
-      simulate.fap(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
+      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
+    } else if (input$dist2 == "expRSP"){
+      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
+    }
+  })
+
+  dataset <- eventReactive(input$sim_button, {
+    if (input$dist2 == "expFAP"){
+      simulate.fap(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
                    mu=input$mu, sigma=sigma, omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
     }
     else if (input$dist2 == "expRSP"){
-      soa <- rep(as.numeric(unlist(strsplit(input$soa.in, ","))),2) ### added
-      #soa <- c(0,50,100,200)
-      simulate.rtp(soa=soa, proc.A=input$proc.A, proc.V=input$proc.V,
+      simulate.rtp(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
                    mu=input$mu, sigma=sigma, omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
-     }
+    }
   })
 
-
   output$simtable <- renderTable({
-    input$go
-    isolate(
-    head(dataset(), input$nrowShow)
-    )
+      head(dataset(), input$nrowShow)
     })
 
   output$simplot <- renderPlot({
-    input$go
-    isolate(
-      boxplot(dataset(), ylab="Reaction time (ms)", xlab="Stimulus-onset asynchrony (SOA)",
-         main="Distribution of reaction times for each SOA", xaxt="n"))
-      axis(1, at=1:length(soa()), labels=soa()
-      )
+      if (isolate(input$dist2) == "expFAP"){
+        boxplot(dataset(), ylab="reaction time (ms)",
+                xlab="stimulus-onset asynchrony (soa)", main="", xaxt="n")
+        axis(1, at=1:length(soa()), labels=soa())
+      } else if (isolate(input$dist2) == "expRSP"){
+        par(mfrow=c(1,2))
+        boxplot(dataset()[ , grep("aud", colnames(dataset()))],
+                ylab="reaction time (ms)", xlab="stimulus-onset asynchrony (soa)",
+                main="auditory target", xaxt="n")
+        axis(1, at=1:length(soa()), labels=soa())
+        boxplot(dataset()[ , grep("vis", colnames(dataset()))],
+                ylab="reaction time (ms)", xlab="stimulus-onset asynchrony (soa)",
+                main="visual target", xaxt="n")
+        axis(1, at=1:length(soa()), labels=soa())
+      }
   })
-  
 
 
-  ################### Download the Simulation output 
+
+  ################### Download the Simulation output
 
   #output$table <- renderTable({
   #data

@@ -8,7 +8,6 @@ source("simulateRTP.R")
 # parameter values
 # stimulus onset asynchrony
 soa <- c(0, 50, 100, 200)
-nsoa <- length(soa)
 
 # processing time of visual/auditory stimulus on stage 1
 proc.A <- 100       # = 1/lambdaA
@@ -28,16 +27,3 @@ delta <- 50
 N <- 40
 
 data <- simulate.rtp(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
-
-# save auditory data in a file
-df.a <- as.data.frame(data.a)
-names(df.a) <- paste0("RTPa", soa)
-
-write.table(df.a, "simDataRTPa.txt", sep=";", row.names=FALSE)
-
-## save visual data in file
-df.v <- as.data.frame(data.v)
-names(df.v) <- paste0("RTPv", soa)
-
-write.table(df.v, "simDataRTPv.txt", sep=";", row.names=FALSE)
-
