@@ -211,7 +211,9 @@ server <- shinyServer(function(input, output) {
   ################### Generate the Simulation 
 
   # Simulation with FAP or RTP Paradigm
-  sigma <- 25
+  sigma <- reactive({
+      input$mu / 5
+  })
 
   output$soa_input <- renderUI({
     if (input$dist2 == "expFAP"){
@@ -234,13 +236,13 @@ server <- shinyServer(function(input, output) {
   dataset <- eventReactive(input$sim_button, {
     if (input$dist2 == "expFAP"){
       simulate.fap(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
-                   mu=input$mu, sigma=sigma, omega=input$sim.omega,
+                   mu=input$mu, sigma=sigma(), omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
     }
     else if (input$dist2 == "expRSP"){
       simulate.rtp(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
-                   mu=input$mu, sigma=sigma, omega=input$sim.omega,
+                   mu=input$mu, sigma=sigma(), omega=input$sim.omega,
                    delta=input$sim.delta,
                    N=input$N)
     }
