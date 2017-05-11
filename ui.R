@@ -273,7 +273,9 @@ ui <- shinyUI(fluidPage(
           h4("Second stage"),
           sliderInput("mu",
                       "... processing time (\\(\\mu\\))",
-                      min = 50, max = 500, value = 100),
+                      min = 100, max = 500, value = 200),
+          p("The standard deviation of the second stage processing time is
+            fixed to \\(^\\mu/_5\\)."),
          #sliderInput("sigma",
          #            "Standard Deviation",
          #            min = 500, max = 200, value = 50),
