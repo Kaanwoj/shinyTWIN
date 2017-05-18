@@ -3,6 +3,7 @@ library(plyr)
 source("simulateFAP.R")
 source("estimateFAP.R")
 source("simulateRTP.R")
+source("plotHelpers.R")
 library(xtable)
 
 server <- shinyServer(function(input, output) {
@@ -308,12 +309,55 @@ server <- shinyServer(function(input, output) {
   )
 
   ###################### ESTIMATION ###########################
-  est.out <- reactive(estimate.fap(dataset()))
+
+  output$data_input <- renderUI({
+      if (input$whichDataEst == "sim") {
+          # actionButton("resim_button", "Re-simulate!")
+      } else {
+          fileInput('file1', 'Choose file to upload (not yet possible)',
+          accept = c(
+            'text/csv',
+            'text/comma-separated-values',
+            'text/tab-separated-values',
+            'text/plain',
+            '.csv',
+            '.tsv'))
+      }
+  })
+
+  # newdataset <- eventReactive(input$resim_button, {
+  #   if (input$dist2 == "expFAP"){
+  #     simulate.fap(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
+  #                  mu=input$mu, sigma=sigma(), omega=input$sim.omega,
+  #                  delta=input$sim.delta,
+  #                  N=input$N)
+  #   }
+  #   else if (input$dist2 == "expRSP"){
+  #     simulate.rtp(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
+  #                  mu=input$mu, sigma=sigma(), omega=input$sim.omega,
+  #                  delta=input$sim.delta,
+  #                  N=input$N)
+  #   }
+  # })
+
+  est.out <- eventReactive(input$est_button, {
+                # if(is.null(newdataset())) {
+                #     print("null")
+                #     data <- dataset()
+                # } else {
+                #     print("not null")
+                #     data <- newdataset()
+                # }
+
+                    switch(input$whichDataEst,
+                           sim    = estimate.fap(dataset()),
+                           upload = NULL)
+  })
 
   output$estTextOut <- renderTable({
                     est <- matrix(est.out()$est$par, nrow=1)
-                    dimnames(est) <- list(NULL, c("1/lambdaA", "1/lambdaV", "mu",
-                                                  "omega", "delta"))
+                    dimnames(est) <- list(NULL, c("1/lambdaA", "1/lambdaV",
+                                                  "mu", "omega", "delta"))
                     est
   })
 
@@ -322,6 +366,10 @@ server <- shinyServer(function(input, output) {
                     dimnames(par) <- list(NULL, c("1/lambdaA", "1/lambdaV", "mu",
                                                   "omega", "delta"))
                     par
+  })
+
+  output$plotEstPred <- renderPlot({
+                plotEstPred(dataset(), est.out())
   })
 })
 

@@ -312,21 +312,20 @@ ui <- shinyUI(fluidPage(
     tabPanel("Estimation", value = "Est",
       sidebarLayout(
         sidebarPanel(
-          fileInput('file1', 'Choose file to upload',
-                    accept = c(
-                      'text/csv',
-                      'text/comma-separated-values',
-                      'text/tab-separated-values',
-                      'text/plain',
-                      '.csv',
-                      '.tsv')
-          ),
+          radioButtons("whichDataEst",
+                       "1. Choose data for parameter estimation",
+                       c("Simulated data (from tab before)" = "sim",
+                         "Upload data" = "upload")),
+          uiOutput("data_input"),
           a("See publication on TWIN estimation (Kandil, Diederich & Colonius,
             2014)",
           href="http://jov.arvojournals.org/article.aspx?articleid=2193864",
           target="_blank")
         ),
         mainPanel(
+          h4("2. Estimate parameters"),
+          actionButton("est_button", "Estimate!"),
+          plotOutput("plotEstPred"),
           h2("Estimated values"),
           tableOutput("estTextOut"),
           h2("Starting values for parameters"),
