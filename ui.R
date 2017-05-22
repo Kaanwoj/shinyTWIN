@@ -325,13 +325,16 @@ ui <- shinyUI(fluidPage(
         mainPanel(
           h4("2. Estimate parameters"),
           actionButton("est_button", "Estimate!"),
-          plotOutput("plotEstPred"),
-          h2("Estimated values"),
-          tableOutput("estTextOut"),
-          h2("Starting values for parameters"),
-          tableOutput("startParamTextOut"),
-          dataTableOutput("dt1"))
-    )),
+
+          fluidRow(
+            column(5,
+              h2("Parameter values"),
+              tableOutput("estTextOut"),
+            column(7,
+              h2("Predicted and observed reaction times"),
+              plotOutput("plotEstPred"))
+          )
+    ))),
 
     # Custom Colored Items
     tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0

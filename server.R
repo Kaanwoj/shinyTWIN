@@ -193,18 +193,16 @@ server <- shinyServer(function(input, output) {
                                         margin = margin(10, 0, 10, 0)))
     )
   })
-  
-  
+
   output$dt1 <- renderDataTable({
     infile <- input$file1
     if(is.null(infile))
       return(NULL)
     read.csv(infile$datapath, header = TRUE)
-    
   })
-  
+
   ##################### PDF of article 
-  
+
   output$frame <- renderUI({
     tags$iframe(src="http://jov.arvojournals.org/article.aspx?articleid=2193864.pdf", height=600, width=535)
   })
@@ -355,18 +353,19 @@ server <- shinyServer(function(input, output) {
   })
 
   output$estTextOut <- renderTable({
-                    est <- matrix(est.out()$est$par, nrow=1)
-                    dimnames(est) <- list(NULL, c("1/lambdaA", "1/lambdaV",
-                                                  "mu", "omega", "delta"))
-                    est
-  })
+                    tab <- rbind(est.out()$est$par, est.out()$param.start,
+                                 c(proc.A=input$proc.A, proc.V=input$proc.V,
+                                   mu=input$mu, omega=input$sim.omega,
+                                   delta=input$sim.delta))
 
-  output$startParamTextOut <- renderTable({
-                    par <- matrix(est.out()$param.start, nrow=1)
-                    dimnames(par) <- list(NULL, c("1/lambdaA", "1/lambdaV", "mu",
-                                                  "omega", "delta"))
-                    par
-  })
+                    dimnames(tab) <- list(c("estimated value", "start value",
+                                            "true value"),
+                                          c("1&#8260&#955<sub>A</sub>",
+                                            "1&#8260&#955<sub>B</sub>",
+                                            "&#956",
+                                            "&#969", "&#948"))
+                    tab
+  }, rownames=TRUE, sanitize.text.function=function(x) x)
 
   output$plotEstPred <- renderPlot({
                 plotEstPred(dataset(), est.out())
