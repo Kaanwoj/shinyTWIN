@@ -1,14 +1,14 @@
 library(shiny)
 
 ui <- shinyUI(fluidPage(
-    withMathJax(),
+  withMathJax(),
   # Application title
   fluidRow(
     column(6,
-      img(src = "tquant100.png", align = "left"))),
-  br(),
+      img(src="tquant100.png", align="left", width="300"))),
+
   headerPanel(h1("The Time-Window of INtegration Model (TWIN)",
-                 align = "center")),
+                 align = "center"), windowTitle="shinyTWIN"),
 
   h4("Focused Attention Paradigm & Redundant Signals Paradigm",
      align = "center"),
@@ -20,106 +20,102 @@ ui <- shinyUI(fluidPage(
     ########################
 
     tabPanel("Introduction", value = "intro",
-
-      sidebarLayout(
-        sidebarPanel(
-          selectInput("topic", "Select the topic:",
-                      choices = c("About this app" = "aboutapp",
-                                  "The TWIN model" = "twinmod",
-                                  "Model equations" = "equ"
-          )),
-          a("See to TWIN publication (Kandil, Diederich & Colonius, 2014)",
-            href="http://jov.arvojournals.org/article.aspx?articleid=2193864",
-            target="_blank")
-        ),
-
-        mainPanel(
-          conditionalPanel(condition = ("input.topic == 'aboutapp'"),
-            h2("Welcome!", align = "center"),
-            br(),
-            p("This Shiny App helps you to learn more about the Time-Window
-              Ingration Model (TWIN), developed by Hans Colonius, Adele
-              Diederich, and colleagues.", align = "center"),
-            p("It allows you to simulate and estimate the parameteres and even
-              to upload your own data file.", align = "center"),
-            p("Feel free to explore the app and navigate through the tabs!",
-              align ="center"),
-            br(),
-            h5(strong("This Shiny app is based on the app by Annika
-                      Thierfelder, and was extended by:"), align = "center"),
-            br(),
-            fluidRow(
-              column(3, "Aditya Dandekar", br(),
-                     img(src="bremen.png", width = "150")),
-              column(3, "Amalia Gomoiu", br(),
-                     img(src="glasgow.png", width = "150")),
-              column(3, "António Fernandes", br(),
-                     img(src="lisbon.png", width = "200")),
-              column(3, "Katharina Dücker", br(),
-                     img(src="oldenburg.png", width = "110", height = "90"))
-              ),
-            fluidRow(
-              column(3, "Katharina Naumann", br(),
-                     img(src="tubingen.png", width = "150")),
-              column(3, "Martin Ingram", br(),
-                     img(src="glasgow.png", width = "150")),
-              column(3, "Melanie Spindler", br(),
-                     img(src="oldenburg.png", width = "110", height = "90")),
-              column(3, "Silvia Lopes", br(),
-                     img(src="lisbon.png", width = "200"))
-            )),
-
-          conditionalPanel(condition = ("input.topic == 'twinmod'"),
-            p("Crossmodal interaction is defined as the situation in which the
-              perception of an event as measured in terms of one modality is
-              changed in some way by the concurrent stimulation of one or more
-              other sensory modalities (Welch & Warren, 1986)."),
-            p("Multisensory integration is defined as the (neural) mechanism
-              underlying crossmodal interaction."),
-            p("The Time-Window of Integration Model (TWIN) postulates that a
-              crossmodal stimulus triggers a race mechanism among the
-              activations in very early, peripheral sensory pathways. This
-              first stage is followed by a compound stage of converging
-              subprocesses that comprise neural integration of the input and
-              preparation of a response. The second stage is defined by
-              default: It includes all subsequent processes that are not part
-              of the peripheral processes in the first stage (Diederich,
-              Colonius, & Kandil, 2016)."),
-            p(img(src="modeltwin.png", width = "550"), align = "center"),
-            p("At the behavioral level, multisensory integration translates
-              itself into faster reaction times, higher detection
-              probabilities, and improved discrimination."),
-            p("At the neural level, multisensory integration translates itself
-              into an increased total number of responses, as well as shorter
-              response latencies."),
-            p("In the Focused Attention Paradigm (FAP), two or more stimuli are
-              presented simultaneously or with a short delay between the
-              stimuli. The participant is asked to respond as quickly as
-              possible to a stimulus of a pre-defined modality (target) and
-              ignore the other stimulus (non-target modality)."),
-            p(img(src="fap.jpeg", width = "500", align = "center")),
-            p("In the Redundant Signals Paradigm (RSP), two or more stimuli
-              are also presented simultanously or with a short delay between
-              the stimulus. However, the participant is asked to respond to
-              a stimulus of any modality detected first."),
-            p(img(src="rtp.jpeg", width = "500", align = "center"))
+        h2("Welcome!", align = "center"),
+        br(),
+        p("This Shiny App helps you to learn more about the Time-Window
+          Ingration Model (TWIN), developed by Hans Colonius, Adele
+          Diederich, and colleagues", align = "center",
+        a("(Colonius & Diederich, 2004).",
+          href="https://www.uni-oldenburg.de/fileadmin/user_upload/psycho/ag/kogn/colonius/Jcogn.pdf",
+          target="_blank")),
+        p("It allows you to simulate and estimate the parameteres and even
+          to upload your own data file.", align = "center"),
+        p("Feel free to explore the app and navigate through the tabs!",
+          align ="center"),
+        br(),
+        h5(strong("This Shiny app is based on the app by Annika
+                  Thierfelder, and was extended by:"), align = "center"),
+        br(),
+        fluidRow(
+          column(3, "Aditya Dandekar", br(),
+                 img(src="bremen.png", width = "150")),
+          column(3, "Amalia Gomoiu", br(),
+                 img(src="glasgow.png", width = "150")),
+          column(3, "António Fernandes", br(),
+                 img(src="lisbon.png", width = "200")),
+          column(3, "Katharina Dücker", br(),
+                 img(src="oldenburg.png", width = "110", height = "90"))
           ),
+        fluidRow(
+          column(3, "Katharina Naumann", br(),
+                 img(src="tubingen.png", width = "150")),
+          column(3, "Martin Ingram", br(),
+                 img(src="glasgow.png", width = "150")),
+          column(3, "Melanie Spindler", br(),
+                 img(src="oldenburg.png", width = "110", height = "90")),
+          column(3, "Silvia Lopes", br(),
+                 img(src="lisbon.png", width = "200"))
+        )
+    ),
 
-          conditionalPanel(condition = ("input.topic == 'equ'"),
-            h4("Requirement for multisensory integration"),
-            img(src="itw.jpeg", width = "300"),
-            h4("Mean reaction times in the unimodal and bimodal conditions"),
-            img(src="rts.jpeg", width = "300"),
-            h4("Observable reaction time following the logic of the model"),
-            img(src="rt.jpeg", width = "400"),
-            h4("Objective function"),
-            img(src="objfun.jpeg", width = "300"),
-            br(),
-            h4("Three cases for the probability of integration P(I)"),
-            img(src="p1.jpeg", width = "400", align = "left"),
-            img(src="p2.jpeg", width = "400", align = "left"),
-            img(src="p3.jpeg", width = "400", align = "left")
-    )))),
+    ##########################
+    ### The TWIN Model Tab ###
+    ##########################
+
+    tabPanel("The TWIN Model", value="twinmod",
+
+        h2("Model Description"),
+
+        p("Crossmodal interaction is defined as the situation in which the
+          perception of an event as measured in terms of one modality is
+          changed in some way by the concurrent stimulation of one or more
+          other sensory modalities (Welch & Warren, 1986)."),
+        p("Multisensory integration is defined as the (neural) mechanism
+          underlying crossmodal interaction."),
+        p("The Time-Window of Integration Model (TWIN) postulates that a
+          crossmodal stimulus triggers a race mechanism among the
+          activations in very early, peripheral sensory pathways. This
+          first stage is followed by a compound stage of converging
+          subprocesses that comprise neural integration of the input and
+          preparation of a response. The second stage is defined by
+          default: It includes all subsequent processes that are not part
+          of the peripheral processes in the first stage (Diederich,
+          Colonius, & Kandil, 2016)."),
+        p(img(src="modeltwin.png", width = "550"), align = "center"),
+        p("At the behavioral level, multisensory integration translates
+          itself into faster reaction times, higher detection
+          probabilities, and improved discrimination."),
+        p("At the neural level, multisensory integration translates itself
+          into an increased total number of responses, as well as shorter
+          response latencies."),
+        p("In the Focused Attention Paradigm (FAP), two or more stimuli are
+          presented simultaneously or with a short delay between the stimuli.
+          The participant is asked to respond as quickly as possible to a
+          stimulus of a pre-defined modality (target) and ignore the other
+          stimulus (non-target modality)."),
+        p(img(src="fap.jpeg", width = "500", align = "center")),
+        p("In the Redundant Signals Paradigm (RSP), two or more stimuli
+          are also presented simultanously or with a short delay between
+          the stimulus. However, the participant is asked to respond to
+          a stimulus of any modality detected first."),
+        p(img(src="rtp.jpeg", width = "500", align = "center")),
+
+        h2("Model Equations"),
+
+        h4("Requirement for multisensory integration"),
+        img(src="itw.jpeg", width = "300"),
+        h4("Mean reaction times in the unimodal and bimodal conditions"),
+        img(src="rts.jpeg", width = "300"),
+        h4("Observable reaction time following the logic of the model"),
+        img(src="rt.jpeg", width = "400"),
+        h4("Objective function"),
+        img(src="objfun.jpeg", width = "300"),
+        br(),
+        h4("Three cases for the probability of integration P(I)"),
+        img(src="p1.jpeg", width = "400", align = "left"),
+        img(src="p2.jpeg", width = "400", align = "left"),
+        img(src="p3.jpeg", width = "400", align = "left")
+      ),
 
     ######################
     ### Parameters Tab ###
@@ -330,6 +326,7 @@ ui <- shinyUI(fluidPage(
             column(5,
               h2("Parameter values"),
               tableOutput("estTextOut"),
+              dataTableOutput("dt1")),
             column(7,
               h2("Predicted and observed reaction times"),
               plotOutput("plotEstPred"))
