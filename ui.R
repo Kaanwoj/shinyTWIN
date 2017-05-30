@@ -22,7 +22,7 @@ ui <- shinyUI(fluidPage(
     tabPanel("Introduction", value = "intro",
              h2("Welcome!", align = "center"),
              br(),
-             p("This Shiny App helps you to learn more about the Time-Window
+             p("This Shiny App helps you to learn more about the Time-Window of
                Integration Model (TWIN), developed by Hans Colonius, Adele
                Diederich, and colleagues", align = "center",
                a("(Colonius & Diederich, 2004).",
@@ -30,7 +30,7 @@ ui <- shinyUI(fluidPage(
                  target="_blank")),
              p("It allows you to simulate and estimate the model parameters either from 
                virtual data or from your own datafile.", align = "center"),
-             p("If you have any questions or remarks, please send an email to XXXXXXXXXXX",
+             p("If you have any questions or remarks, please contact us via --ADD EMAIL ADRESS HERE--",
                align ="center"),
              br(),
              h5(strong("This Shiny app is based on the app by Annika
@@ -69,10 +69,7 @@ ui <- shinyUI(fluidPage(
                  selectInput("topic", "Select the topic:",
                              choices = c("The TWIN model" = "twinmod",
                                          "Focused Attention Paradigm" = "fap",
-                                         "Redundant Target Paradigm" = "rtp")),
-                 a("See to TWIN publication (Kandil, Diederich & Colonius, 2014)",
-                   href="http://jov.arvojournals.org/article.aspx?articleid=2193864",
-                   target="_blank")
+                                         "Redundant Target Paradigm" = "rtp"))
                ),
                
                mainPanel(
@@ -80,11 +77,11 @@ ui <- shinyUI(fluidPage(
                                   
                                   h2("Theoretical Background"),
                                   p("Multisensory interaction is defined as the (neural) mechanism underlying crossmodal interaction. 
-                                    Crossmodal interaction describes a situation in which the perception of a stimulus or eventof a given modality is in some way influenced
-                                    by the presence of one or more stimuli of othersensory modalities. On the behavioral level, multisensory integration is characterized by 
+                                    Crossmodal interaction describes a situation in which the perception of a stimulus or event of a given modality is in some way influenced
+                                    by the presence of one or more stimuli of other sensory modalities. On the behavioral level, multisensory integration is characterized by 
                                     faster reaction times, higher detection probabilities and improved discrimination. 
-                                    On the neural level,it is observed in form of an increased number of total responses as well as shorter response latencies.(Diederich,
-                                    Colonius, & Kandil, 2016)."),
+                                    On the neural level, it is observed in form of an increased number of total responses as well as shorter response latencies."),
+                                  a("(Diederich, Colonius, & Kandil, 2016)",href = "http://link.springer.com/article/10.1007%2Fs00221-016-4609-5", target = "_blank"),
                                   p(img(src="modeltwin.png", width = "550"), align = "center"),
                                   p("In tasks measuring multisensory integration, participants are asked to respond to a cross-modal set of stimuli - usually visual and auditive stimuli -, 
                                     that are presented simultaneously or at certain interstimulus intervals. The task is then either to respond to a target stimulus of acertain modality 
@@ -99,7 +96,7 @@ ui <- shinyUI(fluidPage(
                                     postulates that multisensory integration can only occur if the processes of the first stage all terminate within a given time window (the time window of integration).
                                     "),
                                   p("Then, the amount of interaction is defined in the", em("Assumption of Temporal Separability"), "where an increase or decrease of second-stage processing time is a function of crossmodal stimulus features but does
-                                    not depend on the presentation asynchrony (SOA) of the stimuli."),
+                                    not depend on the stimulus-onset asynchrony (SOA) of the stimuli."),
                                   p(img(src="fap.jpeg", width = "500", align = "center")),
                                   p(img(src="rtp.jpeg", width = "500", align = "center"))
                                   
@@ -121,34 +118,34 @@ ui <- shinyUI(fluidPage(
                                                 f_A(t) = \\lambda_{A}e^{-\\lambda_{A}t}
                                                 \\end{align}$$
                                                 for \\(t \\geq 0\\), and \\(f_V(t) = f_A(t) \\equiv 0\\) for \\(t < 0.\\) The corresponding distribution functions are \\(F_V(t)\\) and  \\(F_A(t)\\), respectively. 
-                                                The model can therefore be rewritten as:")),
-                                  withMathJax(p("$$\\begin{align}
+                                                The model can therefore be rewritten as:"),
+                                  p("$$\\begin{align}
                                                 P(I_{\\tau\\omega}) &= Pr(A + \\tau < V < A + \\tau + \\omega) \\\\
                                                 &= \\int_{0}^{\\infty} \\! f_A(x)\\{F_V(x + \\tau + \\omega) \\\\ 
                                                 &- F_V(x+\\tau)\\}\\,\\mathrm{d}x.
                                                 \\end{align}$$"
-                                  )),
-                                  withMathJax(p("Thus, the integration function for \\(P(I)\\) depends on the three cases for the sign of \\(\\omega\\) + \\(\\tau\\):")),
-                                  withMathJax(p("(i) \\(\\tau\\) < \\(\\tau\\) + \\(\\omega\\) < 0", align = "center",
+                                  ),
+                                  p("Thus, the integration function for \\(P(I)\\) depends on the three cases for the sign of \\(\\omega\\) + \\(\\tau\\):"),
+                                  p("(i) \\(\\tau\\) < \\(\\tau\\) + \\(\\omega\\) < 0", align = "center",
                                                 "$$\\begin{align}
                                                 P(I_{\\tau,\\omega}) &= \\int_{-\\tau-\\omega}^{-\\tau} \\! \\lambda_{A}e^{-\\lambda_{A}x}{1-e^{-\\lambda_V(x+\\tau+\\omega)}} \\, \\mathrm{d}x \\\\
                                                 &-\\int_{-\\tau}^{\\infty} \\! \\lambda_{A}e^{-\\lambda_{A}x}{e^{-\\lambda_V(x+\\tau)} - e^{-\\lambda_V(x+\\tau+\\omega)}} \\, \\mathrm{d}x \\\\
                                                 &= \\frac{\\lambda_V}{\\lambda_V+\\lambda_A} e^{\\lambda_A\\tau}(-1 + e^{\\lambda_A\\omega});
                                                 \\end{align}$$
-                                                ")),
-                                  withMathJax(p("(ii)  \\(\\tau\\) < 0 < \\(\\tau\\) + \\(\\omega\\)", align = "center")),
-                                  withMathJax(p("$$\\begin{align}
+                                                "),
+                                  p("(ii)  \\(\\tau\\) < 0 < \\(\\tau\\) + \\(\\omega\\)", align = "center"),
+                                  p("$$\\begin{align}
                                                 P(I_{\\tau,\\omega})  &= \\int_{0}^{-\\tau} \\! \\lambda_{A}e^{-\\lambda_{A}x}\\{1-e^{-\\lambda_V(x+\\tau+\\omega)}\\} \\, \\mathrm{d}x \\\\
                                                 &+ \\int_{-\\tau}^{\\infty} \\! \\lambda_{A}e^{-\\lambda_{A}x}\\{e^{-\\lambda_V(x+\\tau)} - e^{-\\lambda_V(x+\\tau+\\omega)}\\} \\, \\mathrm{d}x \\\\
                                                 &= \\frac{1}{\\lambda_V+\\lambda_A} \\{\\lambda_A(1-e^{-\\lambda_V(\\omega+\\tau)})+ \\lambda_V(1-e^{\\lambda_A\\tau})\\};
-                                                \\end{align}$$")),
-                                  withMathJax(p("(iii) \\(0 < \\tau < \\tau + \\omega\\)", align = "center")),
-                                  withMathJax(p("$$\\begin{align}
+                                                \\end{align}$$"),
+                                  p("(iii) \\(0 < \\tau < \\tau + \\omega\\)", align = "center"),
+                                  p("$$\\begin{align}
                                                 P(I_{\\tau,\\omega}) &= \\int_{0}^{\\infty} \\! \\lambda_{A}e^{-\\lambda_{A}x}\\{e^{-\\lambda_V(x+\\tau)}-e^{-\\lambda_V(x+\\tau+\\omega)}\\} \\mathrm{d}x \\\\
                                                 &= \\frac{\\lambda_A}{\\lambda_V+\\lambda_A} \\{e^{-\\lambda_V(\\tau)}-e^{-\\lambda_V(\\omega+\\tau)}.
-                                                \\end{align}$$")),
+                                                \\end{align}$$"),
                                   h4("Reaction time analysis"),
-                                  withMathJax(p("Reaction times are evaluated for the unimodal condition to compare against the crossmodal condition.
+                                  p("Reaction times are evaluated for the unimodal condition to compare against the crossmodal condition.
                                                 Let \\(M1\\) and \\(M2\\) denote the random processing time for stage 1 and 2, so that the overall processing time of the crossmodal reaction time becomes
                                                 $$RT_{VA} = M1 + M2$$.
                                                 Expected reaction times for the unimodal condition: 
@@ -159,18 +156,55 @@ ui <- shinyUI(fluidPage(
                                                 $$\\begin{align}
                                                 E[RT_{VA}] = \\tfrac{1}{\\lambda_V} + \\mu - P(I) \\cdot \\Delta 
                                                 \\end{align}$$
-                                                where \\(\\mu\\) is the mean processing time of stage two."))
+                                                where \\(\\mu\\) is the mean processing time of stage two."),
+                                  h4("The Objective Function"),
+                                  p("For the estimation, the parameters were generated by minimizing the \\(\\chi^2\\)  statistic:
+                                                $$\\begin{align}
+                                                \\chi^2 = \\sum_{\\text{all conditions}}[\\frac{\\text{mean}[RT_{gen}]-[RT_{pred}]}{\\text{standard error}[RT_{gen}]}]^2
+                                                \\end{align}$$
+                                                Thereby, the following boundaries were set for the parameters:
+                                            ")),
+                                  uiOutput('matrix')
                                   ),
                  
                  conditionalPanel(condition = ("input.topic == 'rtp'"),
                                   h2("The Redundant Target Paradigm (RTP)"),
-                                  withMathJax(p("For RTP, the following condition for multisensory integration $$I_{RTP} = {max(V,A + \\tau) < min(V,A + \\tau) + \\omega}$$ 
-                                                with the probability of Integration \\(P(I)\\) holds.
-                                                ")),
+                                  withMathJax(p("In the Redundant Target/ Signals Paradigm, the participant is instructed to respond to the first stimulus, regardless of the modality.  "),
+                                  p("For RTP, the condition for multisensory integration $$I_{RTP} = {max(V,A + \\tau) < min(V,A + \\tau) + \\omega}$$ 
+                                                with the probability of Integration \\(P(I)\\) holds. 
+                                                "),
                                   h4("Probability of Integration"),
-                                  p("Probalility of Integration for cases, in which the visual stimulus is presented first (e.g., SOAs of 0, 50 and 100 ms)....
-                                    Probalility of Integration for cases, in which the auditory stimulus is presented first (e.g., SOAs of -100, -50 and 0 ms)...")
-                                  
+                              tags$ol(tags$li(
+                                  p("The Probalility of Integration for cases, in which the", strong("visual"), "stimulus is presented first (e.g., SOAs of 0, 50 and 100 ms) depending on the 
+                                  signs of \\(\\omega\\) + \\(\\tau\\):"),
+                                  p("(i) ", align = "center"),
+                                  p("$$\\begin{align}
+                                  P(I) = 
+                                  \\end{align}$$"),
+                                  p("(ii)", align = "center"),
+                                  p("$$\\begin{align}
+                                  P(I) = 
+                                    \\end{align}$$"),
+                                  p("(iii)", align = "center"),
+                                  p("$$\\begin{align}
+                                  P(I) = 
+                                    \\end{align}$$")),
+                              tags$li(   
+                              p("The Probalility of Integration for cases, in which the", strong("auditory"), "stimulus is presented first (e.g., SOAs of -100, -50 and 0 ms):"),
+                              p("(i) ", align = "center"),
+                              p("$$\\begin{align}
+                                P(I) = 
+                                \\end{align}$$"),
+                              p("(ii)", align = "center"),
+                              p("$$\\begin{align}
+                                P(I) = 
+                                \\end{align}$$"),
+                              p("(iii)", align = "center"),
+                              p("$$\\begin{align}
+                                P(I) = 
+                                \\end{align}$$")
+                              ))
+                              )
                                   )))),
 
     ######################
