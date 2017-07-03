@@ -289,19 +289,19 @@ server <- shinyServer(function(input, output) {
       #paste(input$dataset, input$filetype, sep = ".")
       paste("dat-", Sys.Date(), ".csv", sep="")
     },
-    
+
     # This function should write data to a file given to it by
     # the argument 'file'.
-    
-    
+
+
     content = function(file) {
-      
+
       #sep <- switch(input$filetype, "csv" = ",", "tsv" = "\t")
-      
+
       #write.table(data, file, sep = sep,
       # row.names = FALSE)
-      
-      
+
+
       write.csv(dataset(), file)
     }
   )
