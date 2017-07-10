@@ -6,12 +6,30 @@ source("simulateRTP.R")
 source("plotHelpers.R")
 library(xtable)
 
-server <- shinyServer(function(input, output) {
+server <- shinyServer(function(input, output,session) {
   
   # different stimulus onsets for the non-target stimulus
   tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
   SOA <- length(tau)
   n <- 1000 # number of simulated observations
+  
+  ### Intro Tag: Action Buttons that redirect you to the corresponding tab
+  observeEvent(input$parambutton, {
+    updateNavbarPage(session, "page", 
+                     selected = "Para")
+  })
+  
+  observeEvent(input$simbutton, {
+    updateNavbarPage(session, "page", 
+                     selected = "Sim")
+  })
+  
+  observeEvent(input$estbutton, {
+    updateNavbarPage(session, "page", 
+                     selected = "Est")
+  })
+  
+  ####
   
   
   # unimodal simulation of the first stage according to the chosen distribution
