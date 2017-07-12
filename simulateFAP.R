@@ -13,7 +13,6 @@ simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
   dimnames <- list(c(1:N), names)
 
   data <- matrix(nrow=N, ncol=nsoa,  dimnames= dimnames)
-  bool <- matrix(FALSE, nrow=N, ncol=nsoa,  dimnames= dimnames)
 
   for (i in 1:N) {
     for(j in 1:nsoa) {
@@ -26,7 +25,6 @@ simulate.fap <- function(soa, proc.A, proc.V, mu, sigma, omega, delta, N) {
       if (((soa[j] + A[i,j]) < V[i,j]) &&
         (V[i,j] < (soa[j] + A[i,j] + omega))) {
           data[i,j] <- V[i,j] + M[i,j] - delta
-          bool[i,j] <- TRUE
       } else
           data[i,j] <- V[i,j] + M[i,j]
   }}
