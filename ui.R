@@ -11,12 +11,14 @@ shinyUI(
                                 href="https://www.uni-oldenburg.de/fileadmin/user_upload/psycho/ag/kogn/colonius/Jcogn.pdf", target="_blank")),
                             p("It allows you to simulate and estimate the model parameters either from 
                               virtual data or from your own datafile.", align = "center"),
-                            actionButton("parambutton", type = "button", strong("Parameters"),icon("area-chart"),
-                                           style = "background-color: #4CAF50"),
-                            actionButton("simbutton", strong("Simulation"), icon("dashboard"),
-                                         style="background-color: #f44336"),
-                            actionButton("estbutton", strong("Estimation"), icon("paper-plane"),
-                                         style="background-color: #337ab7"),
+                            # define action buttons, using raw html. Redirecting doesnt work in CSS because of reasons. ;)
+                            actionButton("parambutton",HTML("<strong>Parameters</strong><br><p> 
+                                          To play around and visualize <br> the model parameters</p>"),icon("area-chart"),
+                                           style = "background-color: #5fdc5f", width="300px"),
+                            actionButton("simbutton", HTML("<strong>Simulation</strong> <br><p>To simulate virtual data using different <br> start parameters and SOAs</p>"), icon("dashboard"),
+                                         style="background-color: #ed3f40",width="300px"),
+                            actionButton("estbutton", HTML("<strong>Estimation</strong> <br> <p>To estimate the parameters either from <br> previously created data (Simulation), <br> or your own data</p>"), icon("paper-plane"),
+                                         style="background-color: #2f84ff", width="300px"),
                               # adding footer: <div class="footer">Footer text</div>
                               tags$div(class = "footer", tags$p("Contact: ---ADD EMAIL HERE---"), a(icon("github"),"Github", href ="https://github.com/Kaanwoj/shinyTWIN"))
                          ),
@@ -28,7 +30,7 @@ shinyUI(
                       In this experiment, we assume that the visual stimulus is the target modality, and the auditory stimulus is the non-target modality.
                       Let \\(I\\) denote the event that multisensory integration occurs. For FAP, the condition for multisensory integration is defined as  $$I_{FAP} = {A + \\tau < V < A + \\tau + \\omega}$$ with the probability of integration \\(P(I)\\).
                       Here, \\(\\tau\\) denotes the stimulus-onset asynchrony (SOA), which is determined by the experimental setup, and \\(\\omega\\) as the window width of integration, the time window, in which integration may occur.
-                      A positive \\(\\tau\\) value thus indicates that that the visual stimulus is presented before the auditory, and a negative \\(\\tau\\) values indicates the reverse presentation order. In theory, \\(V\\) is always presented at \\(t = 0\\)."),
+                      A positive \\(\\tau\\) value thus indicates that that the visual stimulus is presented before the auditory, and a negative \\(\\tau\\) value indicates the reverse presentation order. In theory, \\(V\\) is always presented at \\(t = 0\\)."),
         h4("The Probability of Integration"),
         p("The probability of integration can be described as a function of SOA and window width:  
           Seeing that the peripheral processing time for the visual (\\(V\\)) and auditory (\\(A\\)) stimulus are assumed to be exponentially distributed and statistically independent (as they refer to very early sensory processing), 
@@ -274,7 +276,7 @@ shinyUI(
                    tabPanel("Estimation", value = "Est",
                             sidebarLayout(
                               sidebarPanel(
-                                radioButtons("whichDataEst","1. Choose data for parameter estimation",
+                                radioButtons("whichDataEst",h4("1. Choose data for parameter estimation"),
                                              c("Simulated data (from tab before)" = "sim",
                                                "Upload data" = "upload")),
                                 uiOutput("data_input"),
@@ -287,16 +289,16 @@ shinyUI(
                                 actionButton("est_button", "Estimate!"),
                                 fluidRow(
                                   column(5,
-                                         h2("Parameter values"),
+                                         h4("Parameter values"),
                                          tableOutput("estTextOut"),
                                          dataTableOutput("dt1")),
                                   column(7,
-                                         h2("Predicted and observed reaction times"),
+                                         h4("Predicted and observed reaction times"),
                                          plotOutput("plotEstPred")))
                               ))),
     
           tabPanel("Team", value = "Team",
-                   h5(strong("This Shiny app is based on the app by Annika Thierfelder, was extended by:"), align = "center"),
+                   h5(strong("This Shiny app is based on the previous app by Annika Thierfelder, and was extended by:"), align = "center"),
                    br(),
                    fluidRow(
                      column(3, "Aditya Dandekar", br(),
@@ -319,7 +321,7 @@ shinyUI(
                             img(src="lisbon.png", width = "200"))
                    ),
                    br(),
-                   h5(strong("under supervision by Hans Colonius ....."),align = "center")),
+                   h5(strong("under supervision by Prof. Dr. Hans Colonius of the University of Oldenburg, Germany."),align = "center")),
                    
                    # Custom Colored Items
                    tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0
