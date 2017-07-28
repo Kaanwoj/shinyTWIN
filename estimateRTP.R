@@ -11,7 +11,7 @@ source("estimationHelpers.R")
 # column.names: column names of data matrix
 # value:
 # numeric vector of predicted reaction times
-predict.rt <- function(par, column.names) {
+predict.rt.rtp <- function(par, column.names) {
 
     lambdaA <- 1/par[1]
     lambdaV <- 1/par[2]
@@ -67,10 +67,10 @@ predict.rt <- function(par, column.names) {
 }
 
 
-objective.function <- function(par, obs.m, obs.se, column.names) {
+objective.function.rtp <- function(par, obs.m, obs.se, column.names) {
 
 
-    pred <- predict.rt(par, column.names=colnames(data))
+    pred <- predict.rt.rtp(par, column.names)
 
     sum(( (obs.m - pred) / obs.se)^2)
 }
@@ -107,13 +107,13 @@ estimate.rtp <- function(dat) {
                     )
 
    # estimate parameters
-    est <- optim(par = param.start, fn = objective.function,
+    est <- optim(par = param.start, fn = objective.function.rtp,
                   lower = bounds$lower,
                   upper = bounds$upper,
                   method = "L-BFGS-B",
                   obs.m = obs.m,
                   obs.se = obs.se,
-                  column.names=colnames(dat)
+                  column.names = colnames(dat)
                  )
 
     list(est = est, param.start = param.start)

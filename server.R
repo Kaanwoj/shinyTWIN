@@ -3,6 +3,7 @@ library(plyr)
 source("simulateFAP.R")
 source("estimateFAP.R")
 source("simulateRTP.R")
+source("estimateRTP.R")
 source("plotHelpers.R")
 library(xtable)
 
@@ -357,6 +358,7 @@ server <- shinyServer(function(input, output,session) {
   # })
 
   est.out <- eventReactive(input$est_button, {
+
                 # if(is.null(newdataset())) {
                 #     print("null")
                 #     data <- dataset()
@@ -365,9 +367,9 @@ server <- shinyServer(function(input, output,session) {
                 #     data <- newdataset()
                 # }
 
-                    switch(input$whichDataEst,
-                           sim    = estimate.fap(dataset()),
-                           upload = NULL)
+                switch(input$whichDataEst,
+                       sim = estimate.fap(dataset()),
+                       upload = NULL)
   })
 
   output$estTextOut <- renderTable({
@@ -386,7 +388,7 @@ server <- shinyServer(function(input, output,session) {
   }, rownames=TRUE, sanitize.text.function=function(x) x)
 
   output$plotEstPred <- renderPlot({
-                plotEstPred(dataset(), est.out())
+                plotEstPred.fap(dataset(), est.out())
   })
 })
 

@@ -268,15 +268,18 @@ shinyUI(
                                              min=1, max=60, value=10),
                                 tableOutput("simtable")
                               ))),
-                   
+
                    ######################
                    ### Estimation Tab ###
                    ######################
-                   
+
                    tabPanel("Estimation", value = "Est",
                             sidebarLayout(
                               sidebarPanel(
-                                radioButtons("whichDataEst",h4("1. Choose data for parameter estimation"),
+                                selectInput("paradigm.est", h4("1. Choose paradigm"),
+                                            choices = c("Focused Attention Paradigm" = "expFAP",
+                                                        "Redundant Target Paradigm" = "expRSP")),
+                                radioButtons("whichDataEst",h4("2. Choose data for parameter estimation"),
                                              c("Simulated data (from tab before)" = "sim",
                                                "Upload data" = "upload")),
                                 uiOutput("data_input"),
