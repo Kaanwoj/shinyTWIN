@@ -1,10 +1,11 @@
-##################
-### Test cases ###
-##################
+###################
+### Example RTP ###
+###################
+
+source("simulateRTP.R")
+source("estimateRTP")
 
 ### RTP simulation
-source("simulateRTP.R")
-
 # parameter values
 # stimulus onset asynchrony
 soa <- c(0, 50, 100, 200)
@@ -27,3 +28,6 @@ delta <- 50
 N <- 40
 
 data <- simulate.rtp(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
+
+### RTP estimation
+estimateRTP(data)
