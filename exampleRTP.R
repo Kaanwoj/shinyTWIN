@@ -3,7 +3,7 @@
 ###################
 
 source("simulateRTP.R")
-source("estimateRTP")
+source("estimateRTP.R")
 
 ### RTP simulation
 # parameter values
@@ -30,4 +30,4 @@ N <- 40
 data <- simulate.rtp(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 
 ### RTP estimation
-estimateRTP(data)
+estimate.rtp(data)
