@@ -261,7 +261,6 @@ shinyUI(
                                          h4("4. To download your simulated data, press on the button below"),
                                          downloadButton('downloadData', 'Download (.csv)'))),
                                 h3("Simulated Data"),
-                                textOutput("simWhichParadigm"),
                                 h4("Boxplots of reaction times for each SOA"),
                                 plotOutput("simplot"),
                                 h4("Table of reaction times for each SOA"),
@@ -277,7 +276,7 @@ shinyUI(
                    tabPanel("Estimation", value = "Est",
                             sidebarLayout(
                               sidebarPanel(
-                                radioButtons("whichDataEst",h4("2. Choose data for parameter estimation"),
+                                radioButtons("whichDataEst", h4("1. Choose data for parameter estimation"),
                                              c("Simulated data (from tab before)" = "sim",
                                                "Upload data" = "upload")),
                                 uiOutput("data_input"),
@@ -288,16 +287,13 @@ shinyUI(
                               mainPanel(
                                 h4("2. Estimate parameters"),
                                 actionButton("est_button", "Estimate!"),
-                                fluidRow(
-                                  column(5,
                                          h4("Parameter values"),
                                          tableOutput("estTextOut"),
-                                         dataTableOutput("dt1")),
-                                  column(7,
+                                         dataTableOutput("dt1"),
                                          h4("Predicted and observed reaction times"),
-                                         plotOutput("plotEstPred")))
+                                         plotOutput("plotEstPred")
                               ))),
-    
+
           tabPanel("Team", value = "Team",
                    h5(strong("This Shiny app is based on the previous app by Annika Thierfelder, and was extended by:"), align = "center"),
                    br(),
