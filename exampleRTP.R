@@ -30,4 +30,4 @@ N <- 40
 data <- simulate.rtp(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 
 ### RTP estimation
-est <- estimate.rtp(data)
+est <- estimate.rtp(data, paradigm = "rtp")

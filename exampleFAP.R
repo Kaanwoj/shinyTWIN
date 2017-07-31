@@ -3,7 +3,7 @@
 ##################
 
 source("simulateFAP.R")
-source("estimateFAP.R")
+source("estimate.R")
 source("plotHelpers.R")
 
 ### FAP simulation
@@ -31,6 +31,6 @@ N <- 500
 data <- simulate.fap(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 
 ## FAP estimation
-est <- estimate.fap(data)
+est <- estimate(data, paradigm = "fap")
 
-plotEstPred(data, est)
+plotEstPred.fap(data, est)

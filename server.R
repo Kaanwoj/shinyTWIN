@@ -1,9 +1,8 @@
 library(ggplot2)
 library(plyr)
 source("simulateFAP.R")
-source("estimateFAP.R")
 source("simulateRTP.R")
-source("estimateRTP.R")
+source("estimate.R")
 source("plotHelpers.R")
 library(xtable)
 
@@ -349,10 +348,12 @@ server <- shinyServer(function(input, output,session) {
                 switch(input$whichDataEst,
                        sim = {
                             if (dataset()$paradigm == "fap") {
-                                out <- estimate.fap(dataset()$data)
+                                out <- estimate(dataset()$data,
+                                                paradigm=dataset()$paradigm)
 
                             } else if (dataset()$paradigm == "rtp") {
-                                out <- estimate.rtp(dataset()$data)
+                                out <- estimate(dataset()$data,
+                                                    paradigm=dataset()$paradigm)
                             }
                             out
                        },

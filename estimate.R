@@ -4,13 +4,53 @@
 
 source("estimationHelpers.R")
 
-# predicted RTs
+# Predict mean reaction times for focused attention paradigm
+predict.rt.fap <- function(par, column.names) {
 
-# parameter:
-# par: numeric vector of model parameters
-# column.names: column names of data matrix
-# value:
-# numeric vector of predicted reaction times
+    lambdaA <- 1/par[1]     # lambdaA
+    lambdaV <- 1/par[2]     # lambdaV
+    mu      <-   par[3]     # mu
+    omega   <-   par[4]     # omega
+    delta   <-   par[5]     # delta
+
+    soa <- as.numeric(sub("neg", "-", sub("SOA.", "", column.names)))
+
+    pred <- numeric(length(soa))
+
+    for (i in seq_along(soa)) {
+
+        tau <- soa[i]
+
+        # formula (2) in Kandil et al. (2014)
+        # case 1: tau < tau + omega < 0
+        if ((tau <= 0) && (tau + omega < 0)) {
+            P.I <- (lambdaV / (lambdaV + lambdaA)) * exp(lambdaA * tau) *
+                   (-1 + exp(lambdaA * omega))
+        }
+        # case 2: tau < 0 < tau + omega (should be tau <= 0)
+        #         add tau + omega = 0, to include that case here, case 3 would
+        #         return Inf
+        else if (tau + omega == 0) {
+            P.I <- 0
+        }
+        else if ((tau <= 0) && (tau + omega > 0)) {
+            P.I <- 1 / (lambdaV + lambdaA) *
+                   ( lambdaA * (1 - exp(-lambdaV * (omega + tau))) +
+                     lambdaV * (1 - exp(lambdaA * tau)) )
+        }
+        # case 3: 0 < tau < tau + omega
+        else {
+            P.I <- (lambdaA / (lambdaV + lambdaA)) *
+                   (exp(-lambdaV * tau) - exp(-lambdaV * (omega + tau)))
+        }
+        pred[i] <- 1/lambdaV + mu - delta * P.I
+    }
+
+    pred
+}
+
+
+# Predict mean reaction times for redundant target paradigm
 predict.rt.rtp <- function(par, column.names) {
 
     lambdaA <- 1/par[1]
@@ -63,19 +103,23 @@ predict.rt.rtp <- function(par, column.names) {
 
     names(pred) <- column.names
 
-    return(pred)
+    pred
 }
 
+# Least Squares objective function
+objective.function <- function(par, obs.m, obs.se, column.names, paradigm) {
 
-objective.function.rtp <- function(par, obs.m, obs.se, column.names) {
+    if (paradigm == "fap") {
+        pred <- predict.rt.fap(par, column.names)
+    } else if (paradigm == "rtp") {
+        pred <- predict.rt.rtp(par, column.names)
+    }
 
-
-    pred <- predict.rt.rtp(par, column.names)
-
-    sum(( (obs.m - pred) / obs.se)^2)
+    sum(( (obs.m - pred) / obs.se )^2)
 }
 
-estimate.rtp <- function(dat) {
+# Estimation function calling optimizer (optim())
+estimate <- function(dat, paradigm) {
 
     # number of observations
     N <- nrow(dat)
@@ -106,18 +150,13 @@ estimate.rtp <- function(dat) {
                      draw_start("delta", bounds)
                     )
 
-   # estimate parameters
-    est <- optim(par = param.start, fn = objective.function.rtp,
-                  lower = bounds$lower,
-                  upper = bounds$upper,
-                  method = "L-BFGS-B",
-                  obs.m = obs.m,
-                  obs.se = obs.se,
-                  column.names = colnames(dat)
+    # estimate parameters
+    est <- optim(par = param.start, fn = objective.function,
+                 lower = bounds$lower, upper = bounds$upper,
+                 method = "L-BFGS-B",
+                 obs.m = obs.m, obs.se = obs.se,
+                 column.names = colnames(dat), paradigm = paradigm
                  )
 
     list(est = est, param.start = param.start)
 }
-
-
-
