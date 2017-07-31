@@ -245,9 +245,9 @@ server <- shinyServer(function(input, output,session) {
 
   soa <- eventReactive(input$sim_button, {
     if (input$dist2 == "expFAP"){
-      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
+      soa <- sort(as.numeric(unlist(strsplit(input$soa.in, ","))))
     } else if (input$dist2 == "expRSP"){
-      soa <- as.numeric(unlist(strsplit(input$soa.in, ",")))
+      soa <- sort(as.numeric(unlist(strsplit(input$soa.in, ","))))
     }
   })
 
@@ -266,10 +266,6 @@ server <- shinyServer(function(input, output,session) {
                                 delta=input$sim.delta, N=input$N),
             paradigm = "rtp")
     }
-  })
-
-  output$simWhichParadigm <- renderText({
-    dataset()$paradigm
   })
 
   output$simtable <- renderTable({
