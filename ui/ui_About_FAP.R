@@ -1,0 +1,99 @@
+tabPanel("Focused Attention Paradigm (FAP)", value = "fap",
+    h2("The Focused Attention Paradigm (FAP)"),
+    withMathJax(p("In the Focused Attention Paradigm, one stimulus modality is
+                  pre-defined as the target stimulus to respond to. The other
+                  stimulus is called the non-target stimulus. In this
+                  experiment, we assume that the visual stimulus is the target
+                  modality, and the auditory stimulus is the non-target
+                  modality.
+                  Let \\(I\\) denote the event that multisensory integration
+                  occurs. For FAP, the condition for multisensory integration
+                  is defined as  $$I_{FAP} = {A + \\tau < V < A + \\tau +
+                      \\omega}$$ with the probability of integration
+                  \\(P(I)\\). Here, \\(\\tau\\) denotes the stimulus-onset
+                  asynchrony (SOA), which is determined by the experimental
+                  setup, and \\(\\omega\\) as the window width of integration,
+                  the time window, in which integration may occur. A positive
+                  \\(\\tau\\) value thus indicates that that the visual
+                  stimulus is presented before the auditory, and a negative
+                  \\(\\tau\\) value indicates the reverse presentation order.
+                  In theory, \\(V\\) is always presented at \\(t = 0\\)."),
+    h4("The Probability of Integration"),
+    p("The probability of integration can be described as a function of SOA and
+      window width:
+      Seeing that the peripheral processing time for the visual (\\(V\\)) and
+      auditory (\\(A\\)) stimulus are assumed to be exponentially distributed
+      and statistically independent (as they refer to very early sensory
+      processing), with parameters \\(\\lambda_V\\) and \\(\\lambda_A\\) and
+      expected values of \\(1/\\lambda_V\\) and \\(1/\\lambda_A\\),
+      $$\\begin{align}
+      f_V(t) = \\lambda_{V}e^{-\\lambda_{V}t} \\\\
+      f_A(t) = \\lambda_{A}e^{-\\lambda_{A}t}
+      \\end{align}$$
+      for \\(t \\geq 0\\), and \\(f_V(t) = f_A(t) \\equiv 0\\) for \\(t < 0.\\)
+      The corresponding distribution functions are \\(F_V(t)\\) and
+      \\(F_A(t)\\), respectively.
+      The model can therefore be rewritten as:"),
+    p("$$\\begin{align}
+      P(I_{\\tau\\omega}) &= Pr(A + \\tau < V < A + \\tau + \\omega) \\\\
+                          &= \\int_{0}^{\\infty} \\! f_A(x)\\{F_V(x + \\tau + \\omega)
+                          - F_V(x+\\tau)\\}\\,\\mathrm{d}x.
+      \\end{align}$$"),
+    p("Thus, the integration function for \\(P(I)\\) depends on the three cases
+      for the sign of \\(\\omega\\) + \\(\\tau\\):"),
+    p("(i) \\(\\tau\\) < \\(\\tau\\) + \\(\\omega\\) < 0",
+      "$$\\begin{align}
+      P(I_{\\tau,\\omega}) &= \\int_{-\\tau-\\omega}^{-\\tau} \\!
+      \\lambda_{A}e^{-\\lambda_{A}x}{1-e^{-\\lambda_V(x+\\tau+\\omega)}} \\,
+      \\mathrm{d}x -\\int_{-\\tau}^{\\infty} \\!
+      \\lambda_{A}e^{-\\lambda_{A}x}{e^{-\\lambda_V(x+\\tau)} -
+        e^{-\\lambda_V(x+\\tau+\\omega)}} \\, \\mathrm{d}x \\\\
+      &= \\frac{\\lambda_V}{\\lambda_V+\\lambda_A} e^{\\lambda_A\\tau} (-1 +
+        e^{\\lambda_A\\omega});
+      \\end{align}$$"),
+    p("(ii)  \\(\\tau\\) < 0 < \\(\\tau\\) + \\(\\omega\\)",
+      "$$\\begin{align}
+      P(I_{\\tau,\\omega})  &= \\int_{0}^{-\\tau} \\!
+      \\lambda_{A}e^{-\\lambda_{A}x}\\{1-e^{-\\lambda_V(x+\\tau+\\omega)}\\}
+      \\, \\mathrm{d}x + \\int_{-\\tau}^{\\infty} \\!
+      \\lambda_{A}e^{-\\lambda_{A}x}\\{e^{-\\lambda_V(x+\\tau)} -
+          e^{-\\lambda_V(x+\\tau+\\omega)}\\} \\, \\mathrm{d}x \\\\
+      &= \\frac{1}{\\lambda_V+\\lambda_A}
+      \\{\\lambda_A(1-e^{-\\lambda_V(\\omega+\\tau)})+
+          \\lambda_V(1-e^{\\lambda_A\\tau})\\};
+      \\end{align}$$"),
+    p("(iii) \\(0 < \\tau < \\tau + \\omega\\)",
+      "$$\\begin{align}
+      P(I_{\\tau,\\omega}) &= \\int_{0}^{\\infty} \\!
+      \\lambda_{A}e^{-\\lambda_{A}x}\\{e^{-\\lambda_V(x+\\tau)} -
+        e^{-\\lambda_V(x+\\tau+\\omega)}\\}
+      \\mathrm{d}x \\\\
+      &= \\frac{\\lambda_A}{\\lambda_V+\\lambda_A}
+      \\{e^{-\\lambda_V(\\tau)}-e^{-\\lambda_V(\\omega+\\tau)}.
+      \\end{align}$$"),
+    h4("Reaction time analysis"),
+    p("Reaction times are evaluated for the unimodal condition to compare
+      against the crossmodal condition.
+      Let \\(M1\\) and \\(M2\\) denote the random processing time for stage 1
+      and 2, so that the overall processing time of the crossmodal reaction
+      time becomes
+      $$RT_{VA} = M1 + M2$$.
+      Expected reaction times for the unimodal condition:
+      $$\\begin{align}
+      E[RT_V] = \\tfrac{1}{\\lambda_V} + \\mu
+      \\end{align}$$
+      Expected Reaction times for the crossmodal condition:
+      $$\\begin{align}
+      E[RT_{VA}] = \\tfrac{1}{\\lambda_V} + \\mu - P(I) \\cdot \\Delta
+      \\end{align}$$
+      where \\(\\mu\\) is the mean processing time of stage two."),
+    h4("The Objective Function"),
+    p("For the estimation, the parameters were generated by minimizing the
+      \\(\\chi^2\\) statistic:
+      $$\\begin{align}
+      \\chi^2 = \\sum_{\\text{all
+      conditions}}[\\frac{\\text{mean}[RT_{gen}]-[RT_{pred}]}{\\text{standard
+                   error}[RT_{gen}]}]^2
+      \\end{align}$$
+      Thereby, the following boundaries were set for the parameters:")
+))
