@@ -253,35 +253,41 @@ server <- shinyServer(function(input, output,session) {
 
   dataset <- eventReactive(input$sim_button, {
     if (input$dist2 == "expFAP"){
-      simulate.fap(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
-                   mu=input$mu, sigma=sigma(), omega=input$sim.omega,
-                   delta=input$sim.delta,
-                   N=input$N)
+      list(data = simulate.fap(soa=soa(), proc.A=input$proc.A,
+                               proc.V=input$proc.V, mu=input$mu, sigma=sigma(),
+                               omega=input$sim.omega, delta=input$sim.delta,
+                               N=input$N),
+           paradigm = "fap")
     }
     else if (input$dist2 == "expRSP"){
-      simulate.rtp(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
-                   mu=input$mu, sigma=sigma(), omega=input$sim.omega,
-                   delta=input$sim.delta,
-                   N=input$N)
+      list(data = simulate.rtp(soa=soa(), proc.A=input$proc.A,
+                                proc.V=input$proc.V, mu=input$mu,
+                                sigma=sigma(), omega=input$sim.omega,
+                                delta=input$sim.delta, N=input$N),
+            paradigm = "rtp")
     }
   })
 
+  output$simWhichParadigm <- renderText({
+    dataset()$paradigm
+  })
+
   output$simtable <- renderTable({
-      head(dataset(), input$nrowShow)
+      head(dataset()$data, input$nrowShow)
     })
 
   output$simplot <- renderPlot({
-      if (isolate(input$dist2) == "expFAP"){
-        boxplot(dataset(), ylab="reaction time (ms)",
+      if (dataset()$paradigm == "fap") {
+        boxplot(dataset()$data, ylab="reaction time (ms)",
                 xlab="stimulus-onset asynchrony (soa)", main="", xaxt="n")
         axis(1, at=1:length(soa()), labels=soa())
-      } else if (isolate(input$dist2) == "expRSP"){
+      } else if (dataset()$paradigm == "rtp"){
         par(mfrow=c(1,2))
-        boxplot(dataset()[ , grep("aud", colnames(dataset()))],
+        boxplot(dataset()$data[ , grep("aud", colnames(dataset()$data))],
                 ylab="reaction time (ms)", xlab="stimulus-onset asynchrony (soa)",
                 main="auditory target", xaxt="n")
         axis(1, at=1:length(soa()), labels=soa())
-        boxplot(dataset()[ , grep("vis", colnames(dataset()))],
+        boxplot(dataset()$data[ , grep("vis", colnames(dataset()$data))],
                 ylab="reaction time (ms)", xlab="stimulus-onset asynchrony (soa)",
                 main="visual target", xaxt="n")
         axis(1, at=1:length(soa()), labels=soa())
@@ -321,7 +327,7 @@ server <- shinyServer(function(input, output,session) {
       # row.names = FALSE)
 
 
-      write.csv(dataset(), file)
+      write.csv(dataset()$data, file)
     }
   )
 
@@ -342,33 +348,18 @@ server <- shinyServer(function(input, output,session) {
       }
   })
 
-  # newdataset <- eventReactive(input$resim_button, {
-  #   if (input$dist2 == "expFAP"){
-  #     simulate.fap(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
-  #                  mu=input$mu, sigma=sigma(), omega=input$sim.omega,
-  #                  delta=input$sim.delta,
-  #                  N=input$N)
-  #   }
-  #   else if (input$dist2 == "expRSP"){
-  #     simulate.rtp(soa=soa(), proc.A=input$proc.A, proc.V=input$proc.V,
-  #                  mu=input$mu, sigma=sigma(), omega=input$sim.omega,
-  #                  delta=input$sim.delta,
-  #                  N=input$N)
-  #   }
-  # })
-
   est.out <- eventReactive(input$est_button, {
 
-                # if(is.null(newdataset())) {
-                #     print("null")
-                #     data <- dataset()
-                # } else {
-                #     print("not null")
-                #     data <- newdataset()
-                # }
-
                 switch(input$whichDataEst,
-                       sim = estimate.fap(dataset()),
+                       sim = {
+                            if (dataset()$paradigm == "fap") {
+                                out <- estimate.fap(dataset()$data)
+
+                            } else if (dataset()$paradigm == "rtp") {
+                                out <- estimate.rtp(dataset()$data)
+                            }
+                            out
+                       },
                        upload = NULL)
   })
 
@@ -388,7 +379,11 @@ server <- shinyServer(function(input, output,session) {
   }, rownames=TRUE, sanitize.text.function=function(x) x)
 
   output$plotEstPred <- renderPlot({
-                plotEstPred.fap(dataset(), est.out())
+                    if (isolate(dataset()$paradigm) == "fap") {
+                        plotEstPred.fap(isolate(dataset()$data), est.out())
+                    } else if (isolate(dataset()$paradigm) == "rtp") {
+                        plotEstPred.rtp(isolate(dataset()$data), est.out())
+                    }
   })
 })
 

@@ -261,6 +261,7 @@ shinyUI(
                                          h4("4. To download your simulated data, press on the button below"),
                                          downloadButton('downloadData', 'Download (.csv)'))),
                                 h3("Simulated Data"),
+                                textOutput("simWhichParadigm"),
                                 h4("Boxplots of reaction times for each SOA"),
                                 plotOutput("simplot"),
                                 h4("Table of reaction times for each SOA"),
@@ -276,9 +277,6 @@ shinyUI(
                    tabPanel("Estimation", value = "Est",
                             sidebarLayout(
                               sidebarPanel(
-                                selectInput("paradigm.est", h4("1. Choose paradigm"),
-                                            choices = c("Focused Attention Paradigm" = "expFAP",
-                                                        "Redundant Target Paradigm" = "expRSP")),
                                 radioButtons("whichDataEst",h4("2. Choose data for parameter estimation"),
                                              c("Simulated data (from tab before)" = "sim",
                                                "Upload data" = "upload")),
