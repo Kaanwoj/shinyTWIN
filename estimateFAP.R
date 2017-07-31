@@ -48,7 +48,7 @@ predict.rt <- function(par, column.names) {
     return(pred)
 }
 
-objective.function <- function(param, obs.m, obs.se, column.names) {
+objective.function <- function(par, obs.m, obs.se, column.names) {
 
     pred <- predict.rt(par, column.names)
 

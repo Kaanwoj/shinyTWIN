@@ -4,7 +4,7 @@ plotEstPred.fap <- function(data, est) {
     soa <- as.numeric(sub("neg", "-", sub("SOA.", "", colnames(data))))
 
     # predict RTs from estimations
-    pred <- predict.rt(soa, param = est$est$par)
+    pred <- predict.rt(par = est$est$par, column.names = colnames(data))
 
     # mean and SE of observed reaction times
     obs <- colMeans(data)
