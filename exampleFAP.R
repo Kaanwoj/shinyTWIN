@@ -2,13 +2,14 @@
 ### Test cases ###
 ##################
 
-### FAP simulation
 source("simulateFAP.R")
+source("estimateFAP.R")
+source("plotHelpers.R")
 
+### FAP simulation
 # parameter values
 # stimulus onset asynchrony
 soa <- c(-200, -100, -50, 0, 50, 100, 200)
-
 
 # processing time of visual/auditory stimulus on stage 1
 proc.A <- 100       # = 1/lambdaA
@@ -29,5 +30,7 @@ N <- 500
 
 data <- simulate.fap(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 
-write.table(data, "simDataFAP.txt", quote = FALSE, sep = ";", row.names =
-            FALSE)
+## FAP estimation
+est <- estimate.fap(data)
+
+plotEstPred(data, est)

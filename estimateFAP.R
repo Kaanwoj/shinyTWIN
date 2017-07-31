@@ -5,13 +5,15 @@
 source("estimationHelpers.R")
 
 # formula (2) in Kandil et al. (2014)
-predict.rt <- function(soa, param) {
+predict.rt <- function(par, column.names) {
 
-    lambdaA <- 1/param[1]     # lambdaA
-    lambdaV <- 1/param[2]     # lambdaV
-    mu      <-   param[3]     # mu
-    omega   <-   param[4]     # omega
-    delta   <-   param[5]     # delta
+    lambdaA <- 1/par[1]     # lambdaA
+    lambdaV <- 1/par[2]     # lambdaV
+    mu      <-   par[3]     # mu
+    omega   <-   par[4]     # omega
+    delta   <-   par[5]     # delta
+
+    soa <- as.numeric(sub("neg", "-", sub("SOA.", "", column.names)))
 
     pred <- numeric(length(soa))
 
@@ -46,9 +48,9 @@ predict.rt <- function(soa, param) {
     return(pred)
 }
 
-objective.function <- function(param, obs.m, obs.se, soa) {
+objective.function <- function(param, obs.m, obs.se, column.names) {
 
-    pred <- predict.rt(soa, param)
+    pred <- predict.rt(par, column.names)
 
     sum(( (obs.m - pred) / obs.se )^2)
 }
@@ -64,7 +66,7 @@ estimate.fap <- function(dat) {
 
     # stimulus onset asynchonies
     # todo: remove hard coding of soa
-    soa <- c(-200, -100, -50, 0, 50, 100, 200)
+    # soa <- c(-200, -100, -50, 0, 50, 100, 200)
 
     # lower and upper bounds for parameter estimates
     bounds <- list(lower = c("proc.A" = 5,
@@ -94,7 +96,8 @@ estimate.fap <- function(dat) {
                   upper = bounds$upper,
                   method = "L-BFGS-B",
                   obs.m = obs.m,
-                  obs.se = obs.se, soa = soa
+                  obs.se = obs.se,
+                  column.names = colnames(dat)
                  )
 
     list(est = est, param.start = param.start)
