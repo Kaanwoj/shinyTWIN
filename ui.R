@@ -215,29 +215,5 @@ shinyUI(
           plotOutput("plotEstPred")
     ))),
 
-    source(file.path("ui", "ui_Team.R"), local = TRUE)$value,
-
-    # Custom Colored Items
-    tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0
-                    .irs-bar {background: #000090}")),
-    tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1
-                    .irs-bar {background: #000070}")),
-    tags$style(HTML(".js-irs-2 .irs-single, .js-irs-2 .irs-bar-edge, .js-irs-2
-                    .irs-bar {background: #000090}")),
-    tags$style(HTML(".js-irs-3 .irs-single, .js-irs-3 .irs-bar-edge, .js-irs-3
-                    .irs-bar {background: #000070}")),
-    tags$style(HTML(".js-irs-4 .irs-single, .js-irs-4 .irs-bar-edge, .js-irs-4
-                    .irs-bar {background: #000090}")),
-    tags$style(HTML(".js-irs-5 .irs-single, .js-irs-5 .irs-bar-edge, .js-irs-5
-                    .irs-bar {background: #000070}")),
-    tags$style(HTML(".js-irs-6 .irs-single, .js-irs-6 .irs-bar-edge, .js-irs-6
-                    .irs-bar {background: #000090}")),
-    tags$style(HTML(".js-irs-7 .irs-single, .js-irs-7 .irs-bar-edge, .js-irs-7
-                    .irs-bar {background: #000070}")),
-    tags$style(HTML(".js-irs-8 .irs-single, .js-irs-8 .irs-bar-edge, .js-irs-8
-                    .irs-bar {background: #000070}")),
-    tags$style(HTML(".js-irs-9 .irs-single, .js-irs-9 .irs-bar-edge, .js-irs-9
-                    .irs-bar {background: #000070}")),
-    tags$style(HTML(".js-irs-10 .irs-single, .js-irs-10 .irs-bar-edge,
-                    .js-irs-10 .irs-bar {background: #000070}"))
+    source(file.path("ui", "ui_Team.R"), local = TRUE)$value
 ))
