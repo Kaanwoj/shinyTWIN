@@ -1,3 +1,6 @@
+### Estimation Tab Plots ###
+
+# Plot predicted and observed RTs for FAP
 plotEstPred.fap <- function(data, est) {
 
     # get SOA's
@@ -30,6 +33,7 @@ plotEstPred.fap <- function(data, est) {
 }
 
 
+# Plot predicted and observed RTs for RTP
 plotEstPred.rtp <- function(data, est) {
 
     # get SOA's
