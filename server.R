@@ -302,40 +302,30 @@ server <- shinyServer(function(input, output, session) {
     # This function should write data to a file given to it by
     # the argument 'file'.
     content = function(file) {
-      write.csv(dataset()$data, file)
+        write.table(dataset()$data, file, quote = FALSE, sep = ";",
+                  row.names = FALSE)
     }
   )
 
   ###################### ESTIMATION ###########################
 
-  output$data_input <- renderUI({
-    if (input$whichDataEst == "sim") {
-      # actionButton("resim_button", "Re-simulate!")
-    } else {
-      fileInput('file1', 'Choose file to upload (not yet possible)',
-      accept = c(
-        'text/csv',
-        'text/comma-separated-values',
-        'text/tab-separated-values',
-        'text/plain',
-        '.csv',
-        '.tsv'))
-    }
+  # Upload data file
+  dataUpload <- reactive({
+    inFile <- input$file1
+    if (is.null(inFile)) return(NULL)
+    list(
+         data = read.table(inFile$datapath, header= TRUE, sep = ";"),
+         paradigm = input$paradigmUpload)
+  })
+
+  datasetEst <- reactive({
+    if (input$whichDataEst == "sim") dataset()
+    else dataUpload()
   })
 
   # Estimate parameters according to paradigm
   est.out <- eventReactive(input$est_button, {
-    switch(input$whichDataEst,
-      sim = {
-        if (dataset()$paradigm == "fap") {
-            out <- estimate(dataset()$data, paradigm=dataset()$paradigm)
-
-        } else if (dataset()$paradigm == "rtp") {
-            out <- estimate(dataset()$data, paradigm=dataset()$paradigm)
-        }
-        out
-      },
-      upload = NULL)
+    estimate(datasetEst()$data, paradigm=datasetEst()$paradigm)
   })
 
   # Show parameter estimates
@@ -353,19 +343,11 @@ server <- shinyServer(function(input, output, session) {
 
   # Plot predicted and observed RTs as a function of SOA
   output$plotEstPred <- renderPlot({
-    if (isolate(dataset()$paradigm) == "fap") {
-        plotEstPred.fap(isolate(dataset()$data), est.out())
-    } else if (isolate(dataset()$paradigm) == "rtp") {
-        plotEstPred.rtp(isolate(dataset()$data), est.out())
+    if (isolate(datasetEst()$paradigm) == "fap") {
+        plotEstPred.fap(isolate(datasetEst()$data), est.out())
+    } else if (isolate(datasetEst()$paradigm) == "rtp") {
+        plotEstPred.rtp(isolate(datasetEst()$data), est.out())
     }
   })
-
-  #output$dt1 <- renderDataTable({
-  #  infile <- input$file1
-  #  if(is.null(infile))
-  #    return(NULL)
-  #  read.csv(infile$datapath, header = TRUE)
-  #})
-
 })
 
