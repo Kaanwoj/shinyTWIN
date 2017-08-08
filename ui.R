@@ -181,13 +181,16 @@ shinyUI(
                       below"),
                    downloadButton('downloadData', 'Download (.csv)'))),
             h3("Simulated Data"),
-            h4("Boxplots of reaction times for each SOA"),
-            plotOutput("simplot"),
-            h4("Table of reaction times for each SOA"),
-            numericInput("nrowShow","Number of rows displayed",
-                         min=1, max=60, value=10),
-            tableOutput("simtable")
-    ))),
+            tabsetPanel(
+              tabPanel("Plot",
+                h4("Boxplots of reaction times for each SOA"),
+                plotOutput("simplot")),
+              tabPanel("Table",
+                h4("Table of reaction times for each SOA"),
+                numericInput("nrowShow","Number of rows displayed",
+                             min=1, max=60, value=10),
+                tableOutput("simtable"))
+    )))),
 
     ######################
     ### Estimation Tab ###
@@ -202,7 +205,7 @@ shinyUI(
                                               "Upload data" = "upload")),
           conditionalPanel(
             condition = "input.whichDataEst == 'upload'",
-              fileInput('file1', 'Choose file to upload (not yet possible)',
+              fileInput('file1', 'Choose file to upload',
                         accept = c('text/csv', 'text/comma-separated-values', '.csv')),
               radioButtons("paradigmUpload", "Which paradigm was used?",
                              c("Focused Attention" = "fap",
