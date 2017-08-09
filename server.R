@@ -65,18 +65,18 @@ server <- shinyServer(function(input, output, session) {
                                       margin = margin(10, 0, 10, 0)))
     } else {
 
-      # check if given values make sense
+    # check if given values make sense (kept it in here because we need an interval. Gives error message )
       validate(
-        need(input$max_s1 - input$min_s1 > 0,
+        need(input$range_s1[2] - input$range_s1[1] > 0,
              "Please check your input data for the first stimulus!"),
-        need(input$max_s2 - input$min_s2 > 0,
+        need(input$range_s2[2] - input$range_s2[1] > 0,
              "Please check your input data for the second stimulus!")
       )
       ggplot(data.frame(x=seq(0,300)),aes(x=x)) + 
         stat_function(fun=dunif, geom = "line", size=1, col= "blue", args =
-                      list(min=input$min_s1, max = input$max_s1)) +
+                      list(min=input$range_s1[1], max = input$range_s1[2])) +
         stat_function(fun=dunif, geom = "line", size=1, col= "red", args =
-                      list(min=input$min_s2, max = input$max_s2)) +
+                      list(min=input$range_s2[1], max = input$range_s2[2])) +
         labs(title = "Distribution of 1st stage processing",
              x = "Time (ms)", y = "Density function") +
         theme(aspect.ratio=0.75) +
@@ -98,7 +98,7 @@ server <- shinyServer(function(input, output, session) {
     if (input$distPar == "expFAP") (rexp(n, rate = 1/input$mu_t))
     else if (input$distPar == "normFAP") (rnorm(n, mean = input$mun_s1, sd =
                                              input$sd_s1))
-    else (runif(n, min = input$min_s1, max = input$max_s1))
+    else (runif(n, min = input$range_s1[1], max = input$range_s1[2]))
   })
 
   # non-target stimulus
@@ -106,7 +106,7 @@ server <- shinyServer(function(input, output, session) {
     if (input$distPar == "expFAP") (rexp(n, rate = 1/input$mu_nt))
     else if (input$distPar == "normFAP") (rnorm(n, mean = input$mun_s2, sd =
                                              input$sd_s2))
-    else (runif(n, min = input$min_s2, max = input$max_s2))
+    else (runif(n, min = input$range_s2[1], max = input$range_s2[2]))
   })
 
   # Simulation of the second stage (assumed normal distribution)
@@ -201,8 +201,8 @@ server <- shinyServer(function(input, output, session) {
     results <- data.frame(tau, prob_value)
 
     # plot the results
-    if (input$distPar == "uniFAP" && (input$max_s1 < input$min_s1 || input$max_s2 < input$min_s2))
-      ggplot()  # plot nothing if it doesnt make sense
+    if (input$distPar == "uniFAP" && (input$range_s1[2] == input$range_s1[1] || input$range_s2[2] == input$range_s2[1]))
+      ggplot()  # plot nothing if it doesnt make sense (they didnt tick an interval, but a single number)
 
     else(
       ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue")

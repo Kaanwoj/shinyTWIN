@@ -22,12 +22,12 @@ shinyUI(
         # because of reasons. ;)
       actionButton("parambutton",HTML("<strong>Parameters</strong><br><p> To
                                       play around and visualize <br> the model
-                                      parameters</p>"),icon("area-chart"),
+                                      parameters in <br> the Focused Attention Paradigm </p>"),icon("area-chart"),
                                       style = "background-color: #5fdc5f",
                                       width="300px"),
       actionButton("simbutton", HTML("<strong>Simulation</strong> <br><p>To
                                      simulate virtual data using different <br>
-                                     start parameters and SOAs</p>"),
+                                     start parameters and SOAs for both <br> Paradigms</p>"),
                                      icon("dashboard"),
                                      style="background-color:
                                      #ed3f40",width="300px"),
@@ -84,14 +84,10 @@ shinyUI(
             sliderInput("sd_s2","Standard Deviation (Stimulus 2):",
                         min = 1, max = 50, value = 25)),
           conditionalPanel( condition = ("input.distPar == 'uniFAP'"),
-            sliderInput("min_s1","Minimum (Stimulus 1):",
-                        min = 1, max = 300, value = 50),
-            sliderInput("max_s1","Maximum (Stimulus 1):",
-                        min = 1, max = 300, value = 150),
-            sliderInput("min_s2","Minimum (Stimulus 2): ",
-                        min = 1, max = 300, value = 50),
-            sliderInput("max_s2","Maximum (Stimulus 2):",
-                        min = 1, max = 300, value = 150)),
+            sliderInput("range_s1","Range (Stimulus 1):",
+                        min = 1, max = 300, value = c(50,150)),
+            sliderInput("range_s2","Range (Stimulus 2): ",
+                        min = 1, max = 300, value = c(50,150))),
             sliderInput("mu_second","2nd stage processing time (\\(\\mu\\))",
                         min = 100, max = 500, value = 200),
             sliderInput("sd_second","2nd stage standard deviation",
