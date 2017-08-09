@@ -309,13 +309,37 @@ server <- shinyServer(function(input, output, session) {
 
   ###################### ESTIMATION ###########################
 
+  correct_colnames <- function(column.names, paradigm) {
+    if (paradigm == "rtp") {
+      first.stimulus <- unlist(strsplit(column.names[i], "SOA."))[1]
+      tau <- as.numeric(unlist(strsplit(column.names[i], "SOA.")))[2]
+      if ((first.stimulus == "aud" | first.stimulus == "vis") &
+           !is.na(tau)) {
+        NULL
+      } else {
+      "Did you choose the right paradigm? Column names must be in the form of
+      'audSOA.0'. See column names in Simulation tab."}
+    } else if (paradigm == "fap") {
+      soa <- as.numeric(sub("neg", "-", sub("SOA.", "", column.names)))
+      if (!any(is.na(soa))) {
+        NULL
+      } else {
+      "Did you choose the right paradigm? Column names must be in the form of
+      'SOA.neg50' or 'SOA.50'. See column names in Simulation tab."}
+      }
+  }
+
   # Upload data file
   dataUpload <- reactive({
     inFile <- input$file1
     if (is.null(inFile)) return(NULL)
-    list(
-         data = read.table(inFile$datapath, header= TRUE, sep = ";"),
-         paradigm = input$paradigmUpload)
+    out <- list(
+      data = read.table(inFile$datapath, header= TRUE, sep = ";"),
+      paradigm = input$paradigmUpload)
+    validate(
+      correct_colnames(colnames(out$data), out$paradigm)
+    )
+    out
   })
 
   datasetEst <- reactive({

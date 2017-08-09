@@ -69,7 +69,7 @@ predict.rt.rtp <- function(par, column.names) {
         if (first.stimulus == "aud") {
             lambda.first <- lambdaA
             lambda.second <- lambdaV
-        } else {
+        } else if (first.stimulus == "vis") {
             lambda.first <- lambdaV
             lambda.second <- lambdaA
         }
