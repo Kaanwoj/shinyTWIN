@@ -1,19 +1,21 @@
 tabPanel("Focused Attention Paradigm (FAP)", value = "fap",
-    h2("The Focused Attention Paradigm (FAP)"),
-    p("In the Focused Attention Paradigm, one stimulus modality is pre-defined
-      as the target stimulus to respond to. The other stimulus is called the
-      non-target stimulus. In this experiment, we assume that the visual
-      stimulus is the target modality, and the auditory stimulus is the
-      non-target modality. Let \\(I\\) denote the event that multisensory
-      integration occurs. For FAP, the condition for multisensory integration
-      is defined as  $$I_{FAP} = \\{A + \\tau < V < A + \\tau + \\omega\\}$$ with
-      the probability of integration \\(P(I)\\). Here, \\(\\omega\\) denotes
-      the window width of integration, the time window, in which integration
-      may occur. \\(\\tau\\) denotes the stimulus-onset asynchrony (SOA), which
-      is determined by the experimental setup. \\(V\\) is always presented at
-      \\(\\tau = 0\\). Thus, a positive \\(\\tau\\) value indicates that that
-      the visual stimulus is presented before the auditory, and a negative
-      \\(\\tau\\) value indicates the reverse presentation order."),
+    mainPanel( h2("The Focused Attention Paradigm (FAP)"),
+               p("In the Focused Attention Paradigm, one stimulus modality is pre-defined
+                 as the target stimulus to respond to. The other stimulus is called the
+                 non-target stimulus. In this experiment, we assume that the visual
+                 stimulus is the target modality, and the auditory stimulus is the
+                 non-target modality. Let \\(I\\) denote the event that multisensory
+                 integration occurs. For FAP, the condition for multisensory integration
+                 is defined as  $$I_{FAP} = \\{A + \\tau < V < A + \\tau + \\omega\\}$$ with
+                 the probability of integration \\(P(I)\\). Here, \\(\\omega\\) denotes
+                 the window width of integration, the time window, in which integration
+                 may occur. \\(\\tau\\) denotes the stimulus-onset asynchrony (SOA), which
+                 is determined by the experimental setup. \\(V\\) is always presented at
+                 \\(\\tau = 0\\). Thus, a positive \\(\\tau\\) value indicates that that
+                 the visual stimulus is presented before the auditory, and a negative
+                 \\(\\tau\\) value indicates the reverse presentation order."),
+      tabsetPanel(
+    tabPanel("Probability of Integration",
     h4("The Probability of Integration"),
     p("The probability of integration can be calculated for a specific SOA and
       window width (\\(P(I_{\\tau, \\omega}))\\).
@@ -66,7 +68,8 @@ tabPanel("Focused Attention Paradigm (FAP)", value = "fap",
       \\, \\mathrm{d}x \\\\
       &= \\frac{\\lambda_A}{\\lambda_V+\\lambda_A}
       \\{e^{-\\lambda_V(\\tau)}-e^{-\\lambda_V(\\omega+\\tau)}.
-      \\end{align}$$"),
+      \\end{align}$$")),
+    tabPanel("Reaction Times",
     h4("Reaction time analysis"),
     p("Reaction times are evaluated for the unimodal condition to compare
       against the crossmodal condition.
@@ -82,7 +85,8 @@ tabPanel("Focused Attention Paradigm (FAP)", value = "fap",
       $$\\begin{align}
       E[RT_{VA}] = \\tfrac{1}{\\lambda_V} + \\mu - P(I) \\cdot \\Delta
       \\end{align}$$
-      where \\(\\mu\\) is the mean processing time of stage two."),
+      where \\(\\mu\\) is the mean processing time of stage two.")),
+    tabPanel("Objective Function",
     h4("The Objective Function"),
     p("Parameters are estimated by minimizing the
       \\(\\chi^2\\) statistic:
@@ -92,4 +96,5 @@ tabPanel("Focused Attention Paradigm (FAP)", value = "fap",
                    error}[RT_{gen}]}]^2
       \\end{align}$$
       Thereby, the following boundaries were set for the parameters:")
+    )))
 )
