@@ -208,6 +208,10 @@ shinyUI(
                                "Redundant Target" = "rtp")))),
         mainPanel(
           h4("2. Estimate parameters"),
+          tags$div(class = "help-tip",
+                   tags$p("To estimate the parameters from your simulation, please go to the 
+                          Simulation Tab and simulate the data first. You can also upload your own datafile (.csv), 
+                          then you don't need to do the simulation first.")),
           actionButton("est_button", "Estimate!"),
           h4("Parameter values"),
           tableOutput("estTextOut"),
