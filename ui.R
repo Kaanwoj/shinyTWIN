@@ -216,7 +216,7 @@ shinyUI(
           h4("Parameter values"),
           tableOutput("estTextOut"),
           h4("Predicted and observed reaction times"),
-          plotOutput("plotEstPred")
+          plotOutput("plotPredObs")
     ))),
 
     source(file.path("ui", "ui_Team.R"), local = TRUE)$value

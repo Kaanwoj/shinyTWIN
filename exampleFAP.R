@@ -33,4 +33,4 @@ data <- simulate.fap(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 ## FAP estimation
 est <- estimate(data, paradigm = "fap")
 
-plotEstPred.fap(data, est)
+plotPredObs.fap(data, est)

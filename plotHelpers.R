@@ -1,7 +1,7 @@
 ### Estimation Tab Plots ###
 
 # Plot predicted and observed RTs for FAP
-plotEstPred.fap <- function(data, est) {
+plotPredObs.fap <- function(data, est) {
 
     # get SOA's
     soa <- as.numeric(sub("neg", "-", sub("SOA.", "", colnames(data))))
@@ -34,7 +34,7 @@ plotEstPred.fap <- function(data, est) {
 
 
 # Plot predicted and observed RTs for RTP
-plotEstPred.rtp <- function(data, est) {
+plotPredObs.rtp <- function(data, est) {
 
     # get SOA's
     soa <- as.numeric(unlist(regmatches(colnames(data),

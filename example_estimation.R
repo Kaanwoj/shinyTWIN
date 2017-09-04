@@ -5,4 +5,4 @@ data <- read.table("simDataFAP.txt", sep=";", header=TRUE)
 
 est <- estimate.fap(data)
 
-plotEstPred(data, est)
+plotPredObs(data, est)

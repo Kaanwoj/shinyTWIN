@@ -251,14 +251,22 @@ server <- shinyServer(function(input, output, session) {
                                proc.V=input$proc.V, mu=input$mu, sigma=sigma(),
                                omega=input$sim.omega, delta=input$sim.delta,
                                N=input$N),
-           paradigm = "fap")
+           paradigm = "fap",
+           trueValues = c(proc.A=input$proc.A, proc.V=input$proc.V,
+                          mu=input$mu, omega=input$sim.omega,
+                          delta=input$sim.delta)
+           )
     }
     else if (input$paradigmSim == "rtp") {
       list(data = simulate.rtp(soa=soa(), proc.A=input$proc.A,
                                 proc.V=input$proc.V, mu=input$mu,
                                 sigma=sigma(), omega=input$sim.omega,
                                 delta=input$sim.delta, N=input$N),
-            paradigm = "rtp")
+           paradigm = "rtp",
+           trueValues = c(proc.A=input$proc.A, proc.V=input$proc.V,
+                          mu=input$mu, omega=input$sim.omega,
+                          delta=input$sim.delta)
+        )
     }
   })
 
@@ -355,8 +363,7 @@ server <- shinyServer(function(input, output, session) {
   # Show parameter estimates
   output$estTextOut <- renderTable({
     tab <- rbind(est.out()$est$par, est.out()$param.start,
-                 c(proc.A=input$proc.A, proc.V=input$proc.V, mu=input$mu,
-                   omega=input$sim.omega, delta=input$sim.delta))
+                 isolate(dataset()$trueValues))
 
     dimnames(tab) <- list(c("estimated value", "start value", "true value"),
                           c("1&#8260&#955<sub>A</sub>",
@@ -366,12 +373,16 @@ server <- shinyServer(function(input, output, session) {
   }, rownames=TRUE, sanitize.text.function=function(x) x)
 
   # Plot predicted and observed RTs as a function of SOA
-  output$plotEstPred <- renderPlot({
-    if (isolate(datasetEst()$paradigm) == "fap") {
-        plotEstPred.fap(isolate(datasetEst()$data), est.out())
-    } else if (isolate(datasetEst()$paradigm) == "rtp") {
-        plotEstPred.rtp(isolate(datasetEst()$data), est.out())
+  predObsPlot <- eventReactive(input$est_button, {
+    if (dataset()$paradigm == "fap") {
+        plotPredObs.fap(dataset()$data, est.out())
+    } else if (dataset()$paradigm == "rtp") {
+        plotPredObs.rtp(dataset()$data, est.out())
     }
+  })
+
+  output$plotPredObs <- renderPlot({
+      predObsPlot()
   })
 })
 

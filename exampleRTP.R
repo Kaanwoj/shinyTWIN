@@ -33,7 +33,7 @@ data <- simulate.rtp(soa, proc.A, proc.V, mu, sigma, omega, delta, N)
 ### RTP estimation
 est <- estimate(data, paradigm = "rtp")
 
-plotEstPred.rtp(data, est)
+plotPredObs.rtp(data, est)
 
 # check if predictions are alright
 pred <- predict.rt.rtp(c(proc.A, proc.V, mu, omega, delta), colnames(data))
