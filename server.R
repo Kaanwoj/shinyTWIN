@@ -356,7 +356,7 @@ server <- shinyServer(function(input, output, session) {
     out <- list(
       data = data,
       paradigm = input$paradigmUpload,
-      trueValues = rep("?", 5))
+      trueValues = FALSE)
 
     validate(correct_colnames(colnames(out$data), out$paradigm))
     out
@@ -381,14 +381,20 @@ server <- shinyServer(function(input, output, session) {
 
   # Show parameter estimates
   estTab <- eventReactive(input$est_button, {
-      tab <- rbind(round(est.out()$est$par, digits=2),
-                   round(est.out()$param.start, digits=2),
+    est <- est.out()
+      tab <- rbind(round(est$est$par, digits=2),
+                   round(est$param.start, digits=2),
                    datasetEst()$trueValues)
 
       dimnames(tab) <- list(c("estimated value", "start value", "true value"),
                             c("1&#8260&#955<sub>A</sub>",
                               "1&#8260&#955<sub>B</sub>", "&#956", "&#969",
                               "&#948"))
+
+    if (datasetEst()$trueValues == FALSE) {
+        tab <- tab[1:2,]
+    }
+
       tab
   })
 
