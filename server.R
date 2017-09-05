@@ -319,40 +319,59 @@ server <- shinyServer(function(input, output, session) {
 
   correct_colnames <- function(column.names, paradigm) {
     if (paradigm == "rtp") {
-      first.stimulus <- unlist(strsplit(column.names[i], "SOA."))[1]
-      tau <- as.numeric(unlist(strsplit(column.names[i], "SOA.")))[2]
+      first.stimulus <- unlist(strsplit(column.names, "SOA."))[1]
+      suppressWarnings(
+        # as.numeric introduces NA, this warning is suppressed
+        tau <- as.numeric(unlist(strsplit(column.names, "SOA.")))[2])
       if ((first.stimulus == "aud" | first.stimulus == "vis") &
            !is.na(tau)) {
         NULL
       } else {
-      "Did you choose the right paradigm? Column names must be in the form of
-      'audSOA.0'. See column names in Simulation tab."}
+        "Did you choose the right paradigm? Column names must be in the form of
+        'audSOA.0'. See column names in Simulation tab."
+      }
     } else if (paradigm == "fap") {
-      soa <- as.numeric(sub("neg", "-", sub("SOA.", "", column.names)))
+      suppressWarnings(
+        soa <- as.numeric(sub("neg", "-", sub("SOA.", "", column.names))))
+        # as.numeric creates NA, this warning is suppressed
       if (!any(is.na(soa))) {
         NULL
       } else {
-      "Did you choose the right paradigm? Column names must be in the form of
-      'SOA.neg50' or 'SOA.50'. See column names in Simulation tab."}
+        "Did you choose the right paradigm? Column names must be in the form of
+        'SOA.neg50' or 'SOA.50'. See column names in Simulation tab."
       }
+    }
   }
 
   # Upload data file
   dataUpload <- reactive({
     inFile <- input$file1
     if (is.null(inFile)) return(NULL)
+    # read in file
+    validate(need(tryCatch(
+      data <- read.table(inFile$datapath, header=TRUE, sep=";"),
+      error=function(e) {}, warning=function(w) {}),
+      "File could not be read in. Make sure it meets the requirements."))
+
     out <- list(
-      data = read.table(inFile$datapath, header= TRUE, sep = ";"),
-      paradigm = input$paradigmUpload)
-    validate(
-      correct_colnames(colnames(out$data), out$paradigm)
-    )
+      data = data,
+      paradigm = input$paradigmUpload,
+      trueValues = rep("?", 5))
+
+    validate(correct_colnames(colnames(out$data), out$paradigm))
     out
   })
 
   datasetEst <- reactive({
-    if (input$whichDataEst == "sim") dataset()
-    else dataUpload()
+    if (input$whichDataEst == "sim") {
+      # why does this not show?
+      validate(need(dataset(), "Simulate data first"))
+      dataset()
+    }
+    else {
+      validate(need(dataUpload(), "Upload data first"))
+      dataUpload()
+    }
   })
 
   # Estimate parameters according to paradigm
@@ -361,28 +380,34 @@ server <- shinyServer(function(input, output, session) {
   })
 
   # Show parameter estimates
-  output$estTextOut <- renderTable({
-    tab <- rbind(est.out()$est$par, est.out()$param.start,
-                 isolate(dataset()$trueValues))
+  estTab <- eventReactive(input$est_button, {
+      tab <- rbind(round(est.out()$est$par, digits=2),
+                   round(est.out()$param.start, digits=2),
+                   datasetEst()$trueValues)
 
-    dimnames(tab) <- list(c("estimated value", "start value", "true value"),
-                          c("1&#8260&#955<sub>A</sub>",
-                            "1&#8260&#955<sub>B</sub>", "&#956", "&#969",
-                            "&#948"))
-    tab
+      dimnames(tab) <- list(c("estimated value", "start value", "true value"),
+                            c("1&#8260&#955<sub>A</sub>",
+                              "1&#8260&#955<sub>B</sub>", "&#956", "&#969",
+                              "&#948"))
+      tab
+  })
+
+  output$estTextOut <- renderTable({
+      estTab()
   }, rownames=TRUE, sanitize.text.function=function(x) x)
 
   # Plot predicted and observed RTs as a function of SOA
   predObsPlot <- eventReactive(input$est_button, {
-    if (dataset()$paradigm == "fap") {
-        plotPredObs.fap(dataset()$data, est.out())
-    } else if (dataset()$paradigm == "rtp") {
-        plotPredObs.rtp(dataset()$data, est.out())
+    est <- est.out()
+    if (datasetEst()$paradigm == "fap") {
+        plotPredObs.fap(datasetEst()$data, est)
+    } else if (datasetEst()$paradigm == "rtp") {
+        plotPredObs.rtp(datasetEst()$data, est)
     }
-  })
+    })
 
   output$plotPredObs <- renderPlot({
-      predObsPlot()
+    predObsPlot()
   })
 })
 
