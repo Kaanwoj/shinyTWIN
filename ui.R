@@ -200,6 +200,10 @@ shinyUI(
                        c("Simulated data (from tab before)" = "sim",
                                               "Upload data" = "upload")),
           conditionalPanel(
+            p('The file must contain a header in the first line giving
+              information about the durations of SOA. The data in the file must be
+              semicolon-separated (;). See the table in the Simulation tab.',
+              style = "color: gray; font-size: 12px; font-style: italic;"),
             condition = "input.whichDataEst == 'upload'",
               fileInput('file1', 'Choose file to upload',
                         accept = c('text/csv', 'text/comma-separated-values', '.csv')),
