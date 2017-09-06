@@ -10,39 +10,39 @@ shinyUI(
 
     tabPanel("Introduction", value = "intro",
       withMathJax(),
-      h2("The Time-Window of INtegration Model (TWIN)", align = "center"),
-      p("This Shiny App helps you to learn more about the Time-Window of
+      h2("The Time-Window of Integration Model (TWIN)", align = "center"),
+      p("This Shiny App helps you to learn about the Time-Window of
         Integration Model (TWIN), developed by Hans Colonius, Adele Diederich,
         and colleagues", align = "center",
         a("(Colonius & Diederich, 2004).",
           href="https://www.uni-oldenburg.de/fileadmin/user_upload/psycho/ag/kogn/colonius/Jcogn.pdf", target="_blank")),
-      p("It allows you to simulate and estimate the model parameters either
-        from virtual data or from your own datafile.", align = "center"),
+      p("It allows you to visualize model predictions, simulate data, and
+        estimate the model parameters either from simulated data or from your
+        own datafile.", align = "center"),
       # define action buttons, using raw html. Redirecting doesnt work in CSS
         # because of reasons. ;)
-      actionButton("parambutton",HTML("<strong>Parameters</strong><br><p> To
-                                      play around and visualize <br> the model
-                                      parameters in <br> the Focused Attention Paradigm </p>"),icon("area-chart"),
-                                      style = "background-color: #5fdc5f",
-                                      width="300px"),
-      actionButton("simbutton", HTML("<strong>Simulation</strong> <br><p>To
-                                     simulate virtual data using different <br>
-                                     start parameters and SOAs for both <br> Paradigms</p>"),
-                                     icon("dashboard"),
-                                     style="background-color:
-                                     #ed3f40",width="300px"),
-      actionButton("estbutton", HTML("<strong>Estimation</strong> <br> <p>To
-                                     estimate the parameters either from <br>
-                                     previously created data (Simulation), <br>
-                                     or your own data</p>"),
-                                     icon("paper-plane"),
-                                     style="background-color: #2f84ff",
-                                     width="300px"),
+      actionButton("parambutton",
+        HTML("<strong>Parameters</strong><br><p> To play around and visualize
+             <br> the model parameters in <br> the Focused Attention Paradigm
+             </p>"),icon("area-chart"), style = "background-color: #5fdc5f",
+             width="300px"),
+      actionButton("simbutton",
+        HTML("<strong>Simulation</strong> <br><p>To simulate virtual data using
+             different <br> start parameters and SOAs for both <br>
+             Paradigms</p>"), icon("dashboard"), style="background-color:
+             #ed3f40",width="300px"),
+      actionButton("estbutton",
+        HTML("<strong>Estimation</strong> <br> <p>To estimate the parameters
+             either from <br> previously created data (Simulation), <br> or
+             your own data</p>"), icon("paper-plane"), style="background-color:
+             #2f84ff", width="300px"),
         # adding footer: <div class="footer">Footer text</div>
         tags$div(class = "footer", tags$p("Contact: ---ADD EMAIL HERE---"),
                  a(icon("github"),"Github",
                    href ="https://github.com/Kaanwoj/shinyTWIN"))
     ),
+
+      source(file.path("ui", "ui_Theory.R"), local = TRUE)$value,
 
     #################
     ### About Tab ###
@@ -201,8 +201,8 @@ shinyUI(
                                               "Upload data" = "upload")),
           conditionalPanel(
             p('The file must contain a header in the first line giving
-              information about the durations of SOA. The data in the file must be
-              semicolon-separated (;). See the table in the Simulation tab.',
+              information about the durations of SOA. See the table in the
+              Simulation tab. The data in the file must be semicolon-separated (;).',
               style = "color: gray; font-size: 12px; font-style: italic;"),
             condition = "input.whichDataEst == 'upload'",
               fileInput('file1', 'Choose file to upload',
