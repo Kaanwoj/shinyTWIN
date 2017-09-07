@@ -6,12 +6,12 @@ tabPanel("Theory", value = "Theory",
         withTags({
           div(class="panel-group",
             div(class="panel panel-default",
-              div(class="panel-heading", "Bi-modal condition:"),
+              div(class="panel-heading", "Crossmodal condition:"),
               div(class="panel-body",
                 "Two (or more) stimuli are presented on different modalities
                 simultaneously or with a short delay between the stimuli.")),
             div(class="panel panel-default",
-              div(class="panel-heading", "Uni-modal condition:"),
+              div(class="panel-heading", "Unimodal condition:"),
               div(class="panel-body",
                 "One stimulus is presented on one modality."))
         )}),
@@ -93,8 +93,108 @@ tabPanel("Theory", value = "Theory",
                 crossmodal stimulus features, but it does not depend on the
                 presentation asynchrony (SOA) of the stimuli.")))
     )})),
-    tabPanel("Reaction Times"),
-    tabPanel("Parameter Distributions"),
+    tabPanel("Reaction Times",
+      p("The total reaction time in the crossmodal condition (\\(RT_{VA})\\) is
+        the sum of the processing times on stage 1 and stage 2. Let \\(M1\\)
+        and \\(M2\\) denote two random variables that refer to the first and
+        second stage processing times, so that the overall reaction time
+        becomes $$RT_{VA} = M_1 + M_2.$$"),
+      tags$ul(
+        tags$li("\\(I\\) is the event that multisensory integration occurs, with
+          probability \\(P(I)\\)."),
+        tags$li("\\(E[M_2|\\neg I]\\) is the expected stage 2 processing time
+                conditioned on multisensory integration not occuring."),
+        tags$li("\\(\\Delta\\) is the size of the crossmodal interaction
+                effect.")),
+      withTags({
+        div(class="panel-group",
+          div(class="panel panel-default",
+            div(class="panel-heading", "Expected reaction times for the crossmodal
+                condition:"),
+            div(class="panel-body",
+                p("$$E[RT_{VA}] = E[M_1] + E[M_2|\\neg I] - P(I) \\cdot
+                                                                \\Delta$$"),
+                a(href="#rtcross", class="btn", 'data-toggle'="collapse",
+                  "See derivation"),
+                div(id="rtcross", class="collapse",
+                  p("$$\\begin{align}
+                    E[RT_{VA}] &= E[M_1] + E[M_2] \\\\
+                                &= E[M_1] + P(I) \\cdot E[M_2|I] + (1-P(I))
+                                   \\cdot E[M_2|\\neg I] \\\\
+                                &= E[M_1] + E[M_2|\\neg I] - P(I) \\cdot
+                                   (E[M_2|\\neg I] - E[M_2|I]) \\\\
+                                &= E[M_1] + E[M_2|\\neg I] - P(I) \\cdot \\Delta
+                  \\end{align}$$
+                  with \\(\\Delta \\equiv E[M_2|\\neg I] - E[M_2|I]\\)")
+                )
+            )),
+          div(class="panel panel-default",
+            div(class="panel-heading", "Expected reaction times for the
+                unimodal conditions:"),
+            div(class="panel-body",
+                p("$$E[RT_{V}] = E[V] + E[M_2|\\neg I]$$"),
+              p("")))
+      )})
+    ),
+    tabPanel("Random Variable Distributions",
+      h3("First Stage"),
+      p("Random variable \\(M_1\\) refers to the peripheral processing time
+        on stage 1. For the processing times for the visual and the
+        acoustic stimulus, ", strong("V and A denote the two statistically
+        independent, exponentially distributed random variables.")),
+      a(href="#densityfirst", 'data-toggle'="collapse",
+        "See density function"),
+      div(id="densityfirst", class="collapse",
+        p("The density function is then
+        $$f_{\\lambda}(t) =
+            \\begin{cases}
+            \\lambda e^{-\\lambda t} & \\quad \\text{if } t>0 \\\\
+            0 & \\quad \\text{if } t\\leq 0,
+            \\end{cases}$$
+        with \\(\\lambda > 0\\) and specific values \\(\\lambda \\equiv
+        \\lambda_V\\) and \\(\\lambda \\equiv \\lambda_A\\) for visual and
+        auditory modality.")),
+      h3("Second Stage"),
+      p("Random variable \\(M_2\\) refers to the processing time on stage to
+        and is assumed to be ", strong("normally distributed"), "with mean
+        \\(\\mu - \\Delta\\) in the crossmodal condition and mean \\(\\mu\\) in
+        the unimodal condition."),
+      h3("Expected Reaction Times"),
+      withTags({
+        div(class="panel-group",
+          div(class="panel panel-default",
+            div(class="panel-heading", "Expected reaction times for the crossmodal
+                condition:"),
+            div(class="panel-body",
+              fluidRow(
+                column(6,
+                  withTags({
+                    div(class="panel panel-default",
+                      div(class="panel-heading", "Focused Attention Paradigm (FAP)"),
+                      div(class="panel-body",
+                        p("$$ E[RT_{VA}] = \\tfrac{1}{\\lambda_V}
+                          + \\mu - P(I_{FAP}) \\cdot \\Delta$$")
+                        ))
+                })),
+                column(6,
+                  withTags({
+                    div(class="panel panel-default",
+                      div(class="panel-heading", "Redundant Target Paradigm (RTP)"),
+                      div(class="panel-body",
+                        p("$$E[RT_{VA}] = E[min(V,A)] + \\mu - P(I_{RTP})
+                          \\cdot \\Delta$$")
+                        ))
+                }))
+              )
+            )),
+          div(class="panel panel-default",
+            div(class="panel-heading", "Expected reaction times for the
+                unimodal condition:"),
+            div(class="panel-body",
+              p("$$\\begin{align} E[RT_V] = \\tfrac{1}{\\lambda_V} + \\mu
+                \\end{align}$$")))
+      )})
+    ),
     tabPanel("Probability of Integration")
 
 
