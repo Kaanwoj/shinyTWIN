@@ -9,7 +9,8 @@ tabPanel("Theory", value = "Theory",
               div(class="panel-heading", "Crossmodal condition:"),
               div(class="panel-body",
                 "Two (or more) stimuli are presented on different modalities
-                simultaneously or with a short delay between the stimuli.")),
+                simultaneously or with a short delay (stimulus-onset
+                asynchrony) between the stimuli.")),
             div(class="panel panel-default",
               div(class="panel-heading", "Unimodal condition:"),
               div(class="panel-body",
@@ -47,12 +48,12 @@ tabPanel("Theory", value = "Theory",
       img(src="TWIN.png", width = "60%"), br(),
       withTags({
         # Panel Collapse Accordion
-        div(class="panel-group", id="accordion",
+        div(class="panel-group", id="accordionAssumptions",
         # First Stage Assumption
           div(class="panel panel-default",
             div(class="panel-heading",
               h4(class="panel-title",
-                a('data-toggle'="collapse", 'data-parent'="#accordion",
+                a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse1", "First Stage Assumption"))),
             div(id="collapse1", class="panel-collapse collapse in",
               div(class="panel-body",
@@ -63,7 +64,7 @@ tabPanel("Theory", value = "Theory",
           div(class="panel panel-default",
             div(class="panel-heading",
               h4(class="panel-title",
-                a('data-toggle'="collapse", 'data-parent'="#accordion",
+                a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse2", "Second Stage Assumption"))),
             div(id="collapse2", class="panel-collapse collapse",
               div(class="panel-body",
@@ -73,7 +74,7 @@ tabPanel("Theory", value = "Theory",
           div(class="panel panel-default",
             div(class="panel-heading",
               h4(class="panel-title",
-                a('data-toggle'="collapse", 'data-parent'="#accordion",
+                a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse3", "Time-Window of Integration Assumption"))),
             div(id="collapse3", class="panel-collapse collapse",
               div(class="panel-body",
@@ -84,7 +85,7 @@ tabPanel("Theory", value = "Theory",
           div(class="panel panel-default",
             div(class="panel-heading",
               h4(class="panel-title",
-                a('data-toggle'="collapse", 'data-parent'="#accordion",
+                a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse4", "Assumption of Temporal Separability"))),
             div(id="collapse4", class="panel-collapse collapse",
               div(class="panel-body",
@@ -143,17 +144,16 @@ tabPanel("Theory", value = "Theory",
         acoustic stimulus, ", strong("V and A denote the two statistically
         independent, exponentially distributed random variables.")),
       a(href="#densityfirst", 'data-toggle'="collapse",
-        "See density function"),
+        "See density functions"),
       div(id="densityfirst", class="collapse",
-        p("The density function is then
-        $$f_{\\lambda}(t) =
-            \\begin{cases}
-            \\lambda e^{-\\lambda t} & \\quad \\text{if } t>0 \\\\
-            0 & \\quad \\text{if } t\\leq 0,
-            \\end{cases}$$
-        with \\(\\lambda > 0\\) and specific values \\(\\lambda \\equiv
-        \\lambda_V\\) and \\(\\lambda \\equiv \\lambda_A\\) for visual and
-        auditory modality.")),
+        p("The density functions are then
+        $$\\begin{align}
+        f_V(t) = \\lambda_{V}e^{-\\lambda_{V}t} \\\\
+        f_A(t) = \\lambda_{A}e^{-\\lambda_{A}t}
+        \\end{align}$$
+        for \\(t \\geq 0\\), and \\(f_V(t) = f_A(t) \\equiv 0\\) for \\(t<0.\\)
+        The corresponding distribution functions are
+        \\(F_V(t)\\) and \\(F_A(t)\\), respectively.")),
       h3("Second Stage"),
       p("Random variable \\(M_2\\) refers to the processing time on stage to
         and is assumed to be ", strong("normally distributed"), "with mean
@@ -195,7 +195,141 @@ tabPanel("Theory", value = "Theory",
                 \\end{align}$$")))
       )})
     ),
-    tabPanel("Probability of Integration")
-
-
+    tabPanel("Probability of Integration",
+      p("The occurrence of multisensory integration depends on the first stage
+        processing times \\(V\\) and \\(A\\), the stimulus onset asynchrony
+        (SOA, denoted by \\(\\tau\\)), and the width of the
+        Time-Window of Integration, denoted by \\(\\omega\\)."),
+      p("The SOA is defined such that the visual stimulus is always presented
+        at \\(\\tau = 0\\). Thus, \\(\\tau > 0\\) indicates that that the
+        visual stimulus is presented before the auditory, and \\(\\tau < 0\\)
+        indicates the reverse presentation order."),
+      p("For the different paradigms, the event of multisensory integration
+        is be defined somewhat differently."),
+      withTags({
+        # Panel Collapse Accordion
+        div(class="panel-group", id="accordionPI",
+        # FAP
+          div(class="panel panel-default",
+            div(class="panel-heading",
+              h4(class="panel-title",
+                a('data-toggle'="collapse", 'data-parent'="#accordionPI",
+                  href="#collapseFAP", "Focused Attention Paradigm"))),
+            div(id="collapseFAP", class="panel-collapse collapse in",
+              div(class="panel-body",
+                p("For FAP, the event of multisensory integration
+                   is defined as
+                  $$I_{FAP} = \\{A + \\tau < V < A + \\tau + \\omega\\}.$$
+                  The probability of integration can therefore be calculated as
+                  $$\\begin{align}
+                      P(I_{\\tau, \\omega}) &= P(A + \\tau < V < A + \\tau +
+                                                  \\omega) \\\\
+                                            &= \\int_{0}^{\\infty} \\!
+                                            f_A(x)\\{F_V(x + \\tau + \\omega) -
+                                                F_V(x+\\tau)\\}\\,\\mathrm{d}x
+                  \\end{align}$$
+                  where the solutions of the integral depend on the sign of
+                  \\(\\omega\\) + \\(\\tau\\).",
+                  a(href="#pifap", 'data-toggle'="collapse",
+                    "See solutions of the integral."),
+                  div(id="pifap", class="collapse",
+                    p("(i) \\(\\tau\\) < \\(\\tau\\) + \\(\\omega\\) < 0
+                      $$\\begin{align}
+                        P(I_{\\tau,\\omega}) &= \\int_{-\\tau-\\omega}^{-\\tau} \\!
+                      \\lambda_{A}e^{-\\lambda_{A}x}{1-e^{-\\lambda_V(x+\\tau+\\omega)}}
+                      \\, \\mathrm{d}x -\\int_{-\\tau}^{\\infty} \\!
+                      \\lambda_{A}e^{-\\lambda_{A}x}{e^{-\\lambda_V(x+\\tau)} -
+                        e^{-\\lambda_V(x+\\tau+\\omega)}} \\, \\mathrm{d}x \\\\
+                      &= \\frac{\\lambda_V}{\\lambda_V+\\lambda_A}
+                      e^{\\lambda_A\\tau} (-1 + e^{\\lambda_A\\omega});
+                      \\end{align}$$",
+                      "(ii)  \\(\\tau\\) < 0 < \\(\\tau\\) + \\(\\omega\\)
+                      $$\\begin{align}
+                        P(I_{\\tau,\\omega})  &= \\int_{0}^{-\\tau} \\!
+                        \\lambda_{A}e^{-\\lambda_{A}x}\\{1-e^{-\\lambda_V(x+\\tau+\\omega)}\\}
+                        \\, \\mathrm{d}x + \\int_{-\\tau}^{\\infty} \\!
+                        \\lambda_{A}e^{-\\lambda_{A}x}\\{e^{-\\lambda_V(x+\\tau)} -
+                            e^{-\\lambda_V(x+\\tau+\\omega)}\\} \\, \\mathrm{d}x \\\\
+                        &= \\frac{1}{\\lambda_V+\\lambda_A}
+                        \\{\\lambda_A(1-e^{-\\lambda_V(\\omega+\\tau)})+
+                            \\lambda_V(1-e^{\\lambda_A\\tau})\\};
+                      \\end{align}$$",
+                      "(iii) \\(0 < \\tau < \\tau + \\omega\\)
+                      $$\\begin{align}
+                        P(I_{\\tau,\\omega}) &= \\int_{0}^{\\infty} \\!
+                        \\lambda_{A}e^{-\\lambda_{A}x}\\{e^{-\\lambda_V(x+\\tau)} -
+                          e^{-\\lambda_V(x+\\tau+\\omega)}\\}
+                        \\, \\mathrm{d}x \\\\
+                        &= \\frac{\\lambda_A}{\\lambda_V+\\lambda_A}
+                        \\{e^{-\\lambda_V(\\tau)}-e^{-\\lambda_V(\\omega+\\tau)}.
+                      \\end{align}$$")
+            )))
+          )),
+        # RTP
+          div(class="panel panel-default",
+            div(class="panel-heading",
+              h4(class="panel-title",
+                a('data-toggle'="collapse", 'data-parent'="#accordionPI",
+                  href="#collapseRTP", "Redundant Target Paradigm"))),
+            div(id="collapseRTP", class="panel-collapse collapse",
+              div(class="panel-body",
+                p("For RTP, multisensory integration occurs only in two events,
+                  which are united in $$I_{RTP} = \\{A + \\tau < V < A + \\tau
+                  + \\omega\\} \\cup \\{V < A + \\tau < V + \\omega\\},$$",
+                  "The probability of integration \\(P(I_{RTP})\\) is computed
+                  as the sum of the probabilities of the two events above,
+                  \\(P(I_{RTP}) = p_1 + p_2\\). In the first case, the",
+                  strong("acoustic stimulus wins"), "the race in the first
+                  stage: $$p_1 = P(A + \\tau < V < A + \\tau + \\omega) =
+                      \\int_0^{\\infty}\\{F_V(a + \\tau + \\omega) - F_V(a +
+                                                                         \\tau)\\}
+                  \\,\\mathrm{d}F_A(a).$$ In the second case the",
+                  strong("visual stimulus wins"), ": $$p_2 = P(V < A + \\tau <
+                  V + \\omega) = \\int_0^{\\infty}\\{F_A(v + \\omega - \\tau) -
+                  F_A(v - \\tau)\\} \\,\\mathrm{d}F_V(v).$$ The values of these
+                  integrals depend on signs of \\(\\tau\\) and \\(\\omega\\) +
+                  \\(\\tau\\).",
+                  a(href="#pirtp", 'data-toggle'="collapse",
+                    "See solutions of the integrals."),
+                  div(id="pirtp", class="collapse",
+                    tags$ul(
+                      tags$li("For \\(\\tau < 0\\) (which means the",
+                              strong("acoustic stimulus is presented first),"),
+                        "$$p_1 = \\begin{cases}
+                            \\frac{\\lambda_V}{\\lambda_V + \\lambda_A}
+                        \\left\\{\\exp(\\lambda_A(\\tau + \\omega)) -
+                            \\exp(\\lambda_A \\tau)\\right\\} & \\quad
+                        \\text{if } \\tau + \\omega < 0,\\\\
+                            \\frac{\\lambda_A}{\\lambda_V + \\lambda_A}
+                        \\left\\{1 - \\exp(-\\lambda_V(\\tau +
+                                                       \\omega))\\right\\} +
+                              \\frac{\\lambda_V}{\\lambda_V + \\lambda_A}
+                          \\left\\{1 - \\exp(\\lambda_A \\tau)\\right\\} &
+                              \\quad \\text{if } \\tau < 0 < \\tau + \\omega,
+                        \\end{cases}$$
+                        and
+                        $$p_2 = \\frac{\\lambda_V}{\\lambda_V + \\lambda_A}
+                        \\left\\{ \\exp(\\lambda_A \\tau) -
+                            \\exp(-\\lambda_A(\\omega - \\tau))\\right\\}.$$"),
+                      tags$li("For \\(\\tau > 0\\) (which means the",
+                              strong("visual stimulus is presented first),"),
+                        "$$p_1 = \\frac{\\lambda_A}{\\lambda_V + \\lambda_A}
+                        \\left\\{ \\exp(-\\lambda_V \\tau) -
+                            \\exp(-\\lambda_V(\\omega + \\tau))\\right\\},$$
+                        and
+                        $$p_2 = \\begin{cases}
+                            \\frac{\\lambda_A}{\\lambda_V + \\lambda_A}
+                        \\left\\{\\exp(\\lambda_V(\\omega - \\tau)) -
+                            \\exp(-\\lambda_V \\tau)\\right\\} & \\quad
+                        \\text{if } \\tau > \\omega,\\\\
+                            \\frac{\\lambda_A}{\\lambda_V + \\lambda_A}
+                        \\left\\{1 - \\exp(-\\lambda_V \\tau)\\right\\} +
+                            \\frac{\\lambda_V}{\\lambda_V + \\lambda_A}
+                        \\left\\{1 - \\exp(-\\lambda_A(\\omega -
+                                                       \\tau))\\right\\} &
+                              \\quad \\text{if } \\tau < \\omega.
+                        \\end{cases}$$")
+                  ))
+            )))
+    ))}))
 ))
