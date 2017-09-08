@@ -331,5 +331,30 @@ tabPanel("Theory", value = "Theory",
                         \\end{cases}$$")
                   ))
             )))
-    ))}))
+    ))})),
+    "Parameter Estimation",
+    tabPanel("Minimal Least Squares",
+      h4("Minimal Least Squares: The Objective Function"),
+      p("Parameters are estimated by minimizing the
+        \\(\\chi^2\\) statistic:
+        $$\\begin{align}
+          \\chi^2 = \\sum_{\\text{all
+          conditions}}[\\frac{\\text{mean}[RT_{obs}]-[RT_{pred}]}{\\text{standard
+                     error}[RT_{obs}]}]^2
+        \\end{align},$$
+        with \\(RT_{obs}\\) and \\(RT_{pred}\\) are the observed and predicted
+        reaction times, respectively."),
+      p("The following boundaries are set for the parameters:"),
+      fluidRow(
+        column(4, offset=4,
+          withTags({
+            table(width="50%", class="table table-striped table-condensed",
+              tr(th("Parameter"), th("Upper Bound"), th("Lower Bound")),
+              tr(td("\\(\\frac{1}{\\lambda_A}\\)"), td("5"), td("250")),
+              tr(td("\\(\\frac{1}{\\lambda_V}\\)"), td("5"), td("250")),
+              tr(td("\\(\\mu\\)"), td("0"), td("Inf")),
+              tr(td("\\(\\omega\\)"), td("5"), td("1000")),
+              tr(td("\\(\\Delta\\)"), td("0"), td("175")))
+      })))
+    )
 ))
