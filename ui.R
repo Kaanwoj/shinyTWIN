@@ -44,15 +44,6 @@ shinyUI(
 
       source(file.path("ui", "ui_Theory.R"), local = TRUE)$value,
 
-    #################
-    ### About Tab ###
-    #################
-
-    navbarMenu("About the Model",
-        source(file.path("ui", "ui_About_FAP.R"), local = TRUE)$value,
-        source(file.path("ui", "ui_About_RTP.R"), local = TRUE)$value
-    ),
-
     ######################
     ### Parameters Tab ###
     ######################
