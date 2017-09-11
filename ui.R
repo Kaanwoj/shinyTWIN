@@ -10,12 +10,23 @@ shinyUI(
 
     tabPanel("Introduction", value = "intro",
       withMathJax(),
+      tags$head(tags$script(HTML('
+        var fakeClick = function(tabName) {
+          var dropdownList = document.getElementsByTagName("a");
+          for (var i = 0; i < dropdownList.length; i++) {
+            var link = dropdownList[i];
+            if(link.getAttribute("data-value") == tabName) {
+              link.click();
+            };
+          }
+        };
+      '))),
       h2("The Time-Window of Integration Model (TWIN)", align = "center"),
       p("This Shiny App helps you to learn about the Time-Window of
         Integration Model (TWIN), developed by Hans Colonius, Adele Diederich,
         and colleagues", align = "center",
         a("(Colonius & Diederich, 2004).",
-          href="https://www.uni-oldenburg.de/fileadmin/user_upload/psycho/ag/kogn/colonius/Jcogn.pdf", target="_blank")),
+          onclick="fakeClick('References')")),
       p("It allows you to visualize model predictions, simulate data, and
         estimate the model parameters either from simulated data or from your
         own datafile.", align = "center"),
@@ -215,5 +226,6 @@ shinyUI(
           plotOutput("plotPredObs")
     ))),
 
-    source(file.path("ui", "ui_Team.R"), local = TRUE)$value
+    source(file.path("ui", "ui_Team.R"), local = TRUE)$value,
+    source(file.path("ui", "ui_References.R"), local = TRUE)$value
 ))
