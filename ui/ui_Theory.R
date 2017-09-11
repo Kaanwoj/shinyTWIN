@@ -1,8 +1,11 @@
 tabPanel("Theory", value = "Theory",
+fluidRow(
+  column(11,
   navlistPanel(
     "Setting",
     tabPanel("Paradigms",
-      h3("Experimental Setup"),
+      h3("Paradigms"),
+      h4("Experimental Setup"),
         withTags({
           div(class="panel-group",
             div(class="panel panel-default",
@@ -16,7 +19,7 @@ tabPanel("Theory", value = "Theory",
               div(class="panel-body",
                 "One stimulus is presented on one modality."))
         )}),
-      h3("Participant's Task"),
+      h4("Participant's Task"),
       p("... depends on the paradigm."),
       fluidRow(
         column(6,
@@ -41,6 +44,7 @@ tabPanel("Theory", value = "Theory",
     )),
     "Assumptions",
     tabPanel("Hypothesis",
+      h3("Hypothesis"),
       p("Multisensory integration of sensory information into a
         perceptual unit ('event') occurs only if the peripheral sensory
         processes all terminate within a given temporal interval, the
@@ -95,6 +99,7 @@ tabPanel("Theory", value = "Theory",
                 presentation asynchrony (SOA) of the stimuli.")))
     )})),
     tabPanel("Reaction Times",
+      h3("Reaction Times"),
       p("The total reaction time in the crossmodal condition (\\(RT_{VA})\\) is
         the sum of the processing times on stage 1 and stage 2. Let \\(M1\\)
         and \\(M2\\) denote two random variables that refer to the first and
@@ -138,7 +143,8 @@ tabPanel("Theory", value = "Theory",
       )})
     ),
     tabPanel("Random Variable Distributions",
-      h3("First Stage"),
+      h3("Random Variable Distributions"),
+      h4("First Stage"),
       p("Random variable \\(M_1\\) refers to the peripheral processing time
         on stage 1. For the processing times for the visual and the
         acoustic stimulus, ", strong("V and A denote the two statistically
@@ -154,12 +160,12 @@ tabPanel("Theory", value = "Theory",
         for \\(t \\geq 0\\), and \\(f_V(t) = f_A(t) \\equiv 0\\) for \\(t<0.\\)
         The corresponding distribution functions are
         \\(F_V(t)\\) and \\(F_A(t)\\), respectively.")),
-      h3("Second Stage"),
+      h4("Second Stage"),
       p("Random variable \\(M_2\\) refers to the processing time on stage to
         and is assumed to be ", strong("normally distributed"), "with mean
         \\(\\mu - \\Delta\\) in the crossmodal condition and mean \\(\\mu\\) in
         the unimodal condition."),
-      h3("Expected Reaction Times"),
+      h4("Expected Reaction Times"),
       withTags({
         div(class="panel-group",
           div(class="panel panel-default",
@@ -196,6 +202,7 @@ tabPanel("Theory", value = "Theory",
       )})
     ),
     tabPanel("Probability of Integration",
+      h3("Probability of Integration"),
       p("The occurrence of multisensory integration depends on the first stage
         processing times \\(V\\) and \\(A\\), the stimulus onset asynchrony
         (SOA, denoted by \\(\\tau\\)), and the width of the
@@ -334,7 +341,8 @@ tabPanel("Theory", value = "Theory",
     ))})),
     "Parameter Estimation",
     tabPanel("Minimal Least Squares",
-      h4("Minimal Least Squares: The Objective Function"),
+      h3("Parameter Estimation with Minimal Least Squares"),
+      h4("The Objective Function"),
       p("Parameters are estimated by minimizing the
         \\(\\chi^2\\) statistic:
         $$\\begin{align}
@@ -344,17 +352,67 @@ tabPanel("Theory", value = "Theory",
         \\end{align},$$
         with \\(RT_{obs}\\) and \\(RT_{pred}\\) are the observed and predicted
         reaction times, respectively."),
+      h4("Parameter bounds"),
       p("The following boundaries are set for the parameters:"),
       fluidRow(
         column(4, offset=4,
           withTags({
             table(width="50%", class="table table-striped table-condensed",
               tr(th("Parameter"), th("Upper Bound"), th("Lower Bound")),
-              tr(td("\\(\\frac{1}{\\lambda_A}\\)"), td("5"), td("250")),
-              tr(td("\\(\\frac{1}{\\lambda_V}\\)"), td("5"), td("250")),
+              tr(td("\\(^1/_{\\lambda_A}\\)"), td("5"), td("250")),
+              tr(td("\\(^1/_{\\lambda_V}\\)"), td("5"), td("250")),
               tr(td("\\(\\mu\\)"), td("0"), td("Inf")),
               tr(td("\\(\\omega\\)"), td("5"), td("1000")),
               tr(td("\\(\\Delta\\)"), td("0"), td("175")))
       })))
-    )
+    ),
+    widths = c(2, 10)
+)),
+  column(1,
+    h4("Glossary"),
+    bsButton("glossOmega", "\\(\\omega\\)"),
+    bsPopover(id="glossOmega", title="&#969 (omega)",
+              content="width of the time-window of integration",
+              placement="bottom", trigger="hover"),
+    bsButton("glossrtva", "\\(RT_{VA}\\)"),
+    bsPopover(id="glossrtva", title="RT<sub>VA</sub>",
+              content="reaction time in the crossmodal condition",
+              placement="bottom", trigger="hover"),
+    bsButton("glossm1", "\\(M_{1}\\)"),
+    bsPopover(id="glossm1", title="M<sub>1</sub>",
+              content="first stage processing time",
+              placement="bottom", trigger="hover"),
+    bsButton("glossm2", "\\(M_{2}\\)"),
+    bsPopover(id="glossm2", title="M<sub>2</sub>",
+              content="second stage processing time",
+              placement="bottom", trigger="hover"),
+    bsButton("glossi", "\\(I\\)"),
+    bsPopover(id="glossi", title="I",
+              content="event that multisensory integration occurs",
+              placement="bottom", trigger="hover"),
+    bsButton("glosspi", "\\(P(I)\\)"),
+    bsPopover(id="glosspi", title="P(I)",
+              content="probability of multisensory integration",
+              placement="bottom", trigger="hover"),
+    bsButton("glossDelta", "\\(\\Delta\\)"),
+    bsPopover(id="glossDelta", title="&#916 (delta)",
+              content="size of the crossmodal interaction effect",
+              placement="bottom", trigger="hover"),
+    bsButton("glossav", "\\(V\\), \\(A\\)"),
+    bsPopover(id="glossav", title="V, A",
+              content="first stage processing time of the visual / auditory stimulus",
+              placement="bottom", trigger="hover"),
+    bsButton("glosslambdaav", "\\(\\lambda_V\\), \\(\\lambda_A\\)"),
+    bsPopover(id="glosslambdaav", title="&#955<sub>V</sub>, &#955<sub>A</sub>",
+              content="rate parameter of the exponential distribution of the first stage processing time for the visual / auditory stimulus",
+              placement="bottom", trigger="hover"),
+    bsButton("glossMu", "\\(\\mu\\)"),
+    bsPopover(id="glossMu", title="&#956 (mu)",
+              content="expected second stage reaction time in the unimodal condition",
+              placement="bottom", trigger="hover"),
+    bsButton("glossSOAtau", "SOA / \\(\\tau\\)"),
+    bsPopover(id="glossSOAtau", title="SOA / &#964 (tau)",
+              content="stimulus onset asynchrony; time between the presentation of the two stimuli",
+              placement="bottom", trigger="hover")
+  )
 ))

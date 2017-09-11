@@ -1,5 +1,6 @@
 library(shiny)
-library(shinydashboard)
+library(shinyBS)
+#library(shinydashboard)
 
 shinyUI(
   navbarPage(title = "TWIN Model", theme = "style.css", id = "page",
