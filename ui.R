@@ -59,9 +59,9 @@ shinyUI(
              your own data</p>"), icon("paper-plane"), style="background-color:
              #2f84ff", width="300px"))),
         # adding footer: <div class="footer">Footer text</div>
-        tags$div(class = "footer", tags$p("Contact: ---ADD EMAIL HERE---"),
-                 a(icon("github"),"Github",
-                   href ="https://github.com/Kaanwoj/shinyTWIN"))
+        tags$div(class = "footer",
+                 p("Contact us on", a(icon("github"),"Github",
+                   href ="https://github.com/Kaanwoj/shinyTWIN")))
     ),
 
       source(file.path("ui", "ui_Theory.R"), local = TRUE)$value,
