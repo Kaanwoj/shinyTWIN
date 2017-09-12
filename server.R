@@ -235,13 +235,14 @@ server <- shinyServer(function(input, output, session) {
               default.soa)
   })
 
+
   # Get SOAs from input
   soa <- eventReactive(input$sim_button, {
-    if (input$paradigmSim == "fap") {
-      soa <- sort(as.numeric(unlist(strsplit(input$soa.in, ","))))
-    } else if (input$paradigmSim == "rtp") {
-      soa <- sort(as.numeric(unlist(strsplit(input$soa.in, ","))))
-    }
+    validate(need(
+    tryCatch(soa <- sort(as.numeric(unlist(strsplit(input$soa.in, ",")))),
+             error=function(e){}, warning=function(w){}),
+                 "SOA input can not be used. Make sure its only comma-separated numbers."))
+    soa
   })
 
   # Simulate data
