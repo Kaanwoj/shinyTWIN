@@ -211,7 +211,10 @@ shinyUI(
                         accept = c('text/csv', 'text/comma-separated-values', '.csv')),
               radioButtons("paradigmUpload", "Which paradigm was used?",
                              c("Focused Attention" = "fap",
-                               "Redundant Target" = "rtp")))),
+                               "Redundant Target" = "rtp"))),
+          a("How does the estimation procedure work?",
+            onclick="fakeClick('Theory')")
+        ),
         mainPanel(
           h4("2. Estimate parameters"),
           tags$div(class = "help-tip",
