@@ -13,19 +13,20 @@ server <- shinyServer(function(input, output, session) {
   ########################
 
   # Action Buttons that redirect you to the corresponding tab
+  observeEvent(input$theorybutton, {
+    updateNavbarPage(session, "page", selected = "Theory")
+  })
+
   observeEvent(input$parambutton, {
-    updateNavbarPage(session, "page",
-                     selected = "Para")
+    updateNavbarPage(session, "page", selected = "Para")
   })
 
   observeEvent(input$simbutton, {
-    updateNavbarPage(session, "page",
-                     selected = "Sim")
+    updateNavbarPage(session, "page", selected = "Sim")
   })
 
   observeEvent(input$estbutton, {
-    updateNavbarPage(session, "page",
-                     selected = "Est")
+    updateNavbarPage(session, "page", selected = "Est")
   })
 
   ######################

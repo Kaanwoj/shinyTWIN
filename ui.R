@@ -32,21 +32,32 @@ shinyUI(
         own datafile.", align = "center"),
       # define action buttons, using raw html. Redirecting doesnt work in CSS
         # because of reasons. ;)
+      fluidRow(
+        column(3, offset=3,
+      actionButton("theorybutton",
+        HTML("<strong>Theory</strong><br><p> To learn about the theoratical
+             <br> background of the experimental <br> paradigms and the TWIN
+             </p>"),icon("book"), style = "background-color: #ffff99",
+             width="300px")),
+        column(3,
       actionButton("parambutton",
         HTML("<strong>Parameters</strong><br><p> To play around and visualize
              <br> the model parameters in <br> the Focused Attention Paradigm
              </p>"),icon("area-chart"), style = "background-color: #5fdc5f",
-             width="300px"),
+             width="300px"))),
+      fluidRow(
+        column(3, offset=3,
       actionButton("simbutton",
         HTML("<strong>Simulation</strong> <br><p>To simulate virtual data using
              different <br> start parameters and SOAs for both <br>
              Paradigms</p>"), icon("dashboard"), style="background-color:
-             #ed3f40",width="300px"),
+             #ed3f40",width="300px")),
+        column(3,
       actionButton("estbutton",
         HTML("<strong>Estimation</strong> <br> <p>To estimate the parameters
              either from <br> previously created data (Simulation), <br> or
              your own data</p>"), icon("paper-plane"), style="background-color:
-             #2f84ff", width="300px"),
+             #2f84ff", width="300px"))),
         # adding footer: <div class="footer">Footer text</div>
         tags$div(class = "footer", tags$p("Contact: ---ADD EMAIL HERE---"),
                  a(icon("github"),"Github",
