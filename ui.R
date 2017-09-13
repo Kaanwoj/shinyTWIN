@@ -145,61 +145,7 @@ shinyUI(
     ### Simulation Tab ###
     ######################
 
-    tabPanel("Simulation", value = "Sim",
-      sidebarLayout(
-        sidebarPanel(
-          selectInput("paradigmSim", h4("1. Choose paradigm"), choices =
-                      c("Focused Attention Paradigm" = "fap",
-                        "Redundant Target Paradigm" = "rtp")),
-          h4("2. Set parameter values"),
-          uiOutput("soa_input"),
-          sliderInput("N","Number of trials:",
-                      min = 1, max = 1000, value = 500),
-          h5("First stage"),
-          p("Processing time is simulated from an exponential distribution.
-            Select its expected value."),
-          sliderInput("proc.A","Auditory processing time
-                      (\\(\\frac{1}{\\lambda_A}\\))",
-                      min = 20, max = 150, value = 100),
-          sliderInput("proc.V","Visual processing time
-                      (\\(\\frac{1}{\\lambda_V}\\))",
-                      min = 20, max = 150, value = 50),
-          h5("Second stage"),
-          p("Processing time is simulated from a normal distribution. Select
-            its expected value."),
-          sliderInput("mu","... processing time (\\(\\mu\\))",
-                      min = 100, max = 500, value = 200),
-          p("The standard deviation of the second stage processing time is
-            fixed to \\(\\frac{\\mu}{5}\\)."),
-          sliderInput("sim.omega","Window width (\\(\\omega\\))",
-                      min = 100, max = 300, value = 200),
-          sliderInput("sim.delta","Amount of integration (\\(\\delta\\))",
-                      min = 20, max = 100, value = 50)),
-        mainPanel(
-          fluidRow(
-            column(3,
-                   h4("3. Simulate data"),
-                   tags$div(class = "help-tip",
-                            tags$p("To simulate your own data, first specify
-                                   which paradigm and parameter values you want
-                                   to use. In order to apply your changes and
-                                   start the simulation, press Simulate!")),
-                   actionButton("sim_button", "Simulate!")),
-            column(9,
-                   h4("4. To download your simulated data, press on the button
-                      below"),
-                   downloadButton('downloadData', 'Download (.csv)'))),
-            h3("Simulated Data"),
-            tabsetPanel(
-              tabPanel("Plot",
-                h4("Boxplots of reaction times for each SOA"),
-                plotOutput("simplot")),
-              tabPanel("Table",
-                h4("Table of reaction times for each SOA"),
-                numericInput("nrowShow","Number of rows displayed",
-                             min=1, max=60, value=10),
-                tableOutput("simtable"))
-    )))),
+    source(file.path("ui", "ui_Simulation.R"), local = TRUE)$value,
 
     ######################
     ### Estimation Tab ###
