@@ -151,40 +151,7 @@ shinyUI(
     ### Estimation Tab ###
     ######################
 
-    tabPanel("Estimation", value = "Est",
-      sidebarLayout(
-        sidebarPanel(
-          radioButtons("whichDataEst",
-                       h4("1. Choose data for parameter estimation"),
-                       c("Simulated data (from tab before)" = "sim",
-                                              "Upload data" = "upload")),
-          conditionalPanel(
-            p('The file must contain a header in the first line giving
-              information about the durations of SOA. See the table in the
-              Simulation tab. The data in the file must be semicolon-separated (;).',
-              style = "color: gray; font-size: 12px; font-style: italic;"),
-            condition = "input.whichDataEst == 'upload'",
-              fileInput('file1', 'Choose file to upload',
-                        accept = c('text/csv', 'text/comma-separated-values', '.csv')),
-              radioButtons("paradigmUpload", "Which paradigm was used?",
-                             c("Focused Attention" = "fap",
-                               "Redundant Target" = "rtp"))),
-          a("How does the estimation procedure work?",
-            onclick="fakeClick('Theory')")
-        ),
-        mainPanel(
-          h4("2. Estimate parameters"),
-          tags$div(class = "help-tip",
-            tags$p("To estimate the parameters from your simulation, please go
-                   to the Simulation Tab and simulate the data first. You can
-                   also upload your own datafile (.csv), then you don't need to
-                   do the simulation first.")),
-          actionButton("est_button", "Estimate!"),
-          h4("Parameter values"),
-          tableOutput("estTextOut"),
-          h4("Predicted and observed reaction times"),
-          plotOutput("plotPredObs")
-    ))),
+    source(file.path("ui", "ui_Estimation.R"), local = TRUE)$value,
 
     source(file.path("ui", "ui_Team.R"), local = TRUE)$value,
     source(file.path("ui", "ui_References.R"), local = TRUE)$value

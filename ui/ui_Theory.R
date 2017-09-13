@@ -4,8 +4,8 @@ fluidRow(
   navlistPanel(
     "Setting",
     tabPanel("Paradigms",
-      h3("Paradigms"),
-      h4("Experimental Setup"),
+      h4("Paradigms"),
+      h5("Experimental Setup"),
         withTags({
           div(class="panel-group",
             div(class="panel panel-default",
@@ -19,7 +19,7 @@ fluidRow(
               div(class="panel-body",
                 "One stimulus is presented on one modality."))
         )}),
-      h4("Participant's Task"),
+      h5("Participant's Task"),
       p("... depends on the paradigm."),
       fluidRow(
         column(6,
@@ -44,7 +44,7 @@ fluidRow(
     )),
     "Assumptions",
     tabPanel("Hypothesis",
-      h3("Hypothesis"),
+      h4("Hypothesis"),
       p("Multisensory integration of sensory information into a
         perceptual unit ('event') occurs only if the peripheral sensory
         processes all terminate within a given temporal interval, the
@@ -56,7 +56,7 @@ fluidRow(
         # First Stage Assumption
           div(class="panel panel-default",
             div(class="panel-heading",
-              h4(class="panel-title",
+              h5(class="panel-title",
                 a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse1", "First Stage Assumption"))),
             div(id="collapse1", class="panel-collapse collapse in",
@@ -67,7 +67,7 @@ fluidRow(
         # Second Stage Assumption
           div(class="panel panel-default",
             div(class="panel-heading",
-              h4(class="panel-title",
+              h5(class="panel-title",
                 a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse2", "Second Stage Assumption"))),
             div(id="collapse2", class="panel-collapse collapse",
@@ -77,7 +77,7 @@ fluidRow(
         # Time-Window of Integration Assumption"
           div(class="panel panel-default",
             div(class="panel-heading",
-              h4(class="panel-title",
+              h5(class="panel-title",
                 a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse3", "Time-Window of Integration Assumption"))),
             div(id="collapse3", class="panel-collapse collapse",
@@ -88,7 +88,7 @@ fluidRow(
         # Temporal Separability Assumption
           div(class="panel panel-default",
             div(class="panel-heading",
-              h4(class="panel-title",
+              h5(class="panel-title",
                 a('data-toggle'="collapse", 'data-parent'="#accordionAssumptions",
                   href="#collapse4", "Assumption of Temporal Separability"))),
             div(id="collapse4", class="panel-collapse collapse",
@@ -99,7 +99,7 @@ fluidRow(
                 presentation asynchrony (SOA) of the stimuli.")))
     )})),
     tabPanel("Reaction Times",
-      h3("Reaction Times"),
+      h4("Reaction Times"),
       p("The total reaction time in the crossmodal condition (\\(RT_{VA})\\) is
         the sum of the processing times on stage 1 and stage 2. Let \\(M1\\)
         and \\(M2\\) denote two random variables that refer to the first and
@@ -143,8 +143,8 @@ fluidRow(
       )})
     ),
     tabPanel("Random Variable Distributions",
-      h3("Random Variable Distributions"),
-      h4("First Stage"),
+      h4("Random Variable Distributions"),
+      h5("First Stage"),
       p("Random variable \\(M_1\\) refers to the peripheral processing time
         on stage 1. For the processing times for the visual and the
         acoustic stimulus, ", strong("V and A denote the two statistically
@@ -160,12 +160,12 @@ fluidRow(
         for \\(t \\geq 0\\), and \\(f_V(t) = f_A(t) \\equiv 0\\) for \\(t<0.\\)
         The corresponding distribution functions are
         \\(F_V(t)\\) and \\(F_A(t)\\), respectively.")),
-      h4("Second Stage"),
+      h5("Second Stage"),
       p("Random variable \\(M_2\\) refers to the processing time on stage to
         and is assumed to be ", strong("normally distributed"), "with mean
         \\(\\mu - \\Delta\\) in the crossmodal condition and mean \\(\\mu\\) in
         the unimodal condition."),
-      h4("Expected Reaction Times"),
+      h5("Expected Reaction Times"),
       withTags({
         div(class="panel-group",
           div(class="panel panel-default",
@@ -202,7 +202,7 @@ fluidRow(
       )})
     ),
     tabPanel("Probability of Integration",
-      h3("Probability of Integration"),
+      h4("Probability of Integration"),
       p("The occurrence of multisensory integration depends on the first stage
         processing times \\(V\\) and \\(A\\), the stimulus onset asynchrony
         (SOA, denoted by \\(\\tau\\)), and the width of the
@@ -219,7 +219,7 @@ fluidRow(
         # FAP
           div(class="panel panel-default",
             div(class="panel-heading",
-              h4(class="panel-title",
+              h5(class="panel-title",
                 a('data-toggle'="collapse", 'data-parent'="#accordionPI",
                   href="#collapseFAP", "Focused Attention Paradigm"))),
             div(id="collapseFAP", class="panel-collapse collapse in",
@@ -275,7 +275,7 @@ fluidRow(
         # RTP
           div(class="panel panel-default",
             div(class="panel-heading",
-              h4(class="panel-title",
+              h5(class="panel-title",
                 a('data-toggle'="collapse", 'data-parent'="#accordionPI",
                   href="#collapseRTP", "Redundant Target Paradigm"))),
             div(id="collapseRTP", class="panel-collapse collapse",
@@ -341,8 +341,8 @@ fluidRow(
     ))})),
     "Parameter Estimation",
     tabPanel("Minimal Least Squares",
-      h3("Parameter Estimation with Minimal Least Squares"),
-      h4("The Objective Function"),
+      h4("Parameter Estimation with Minimal Least Squares"),
+      h5("The Objective Function"),
       p("Parameters are estimated by minimizing the
         \\(\\chi^2\\) statistic:
         $$\\begin{align}
@@ -352,7 +352,7 @@ fluidRow(
         \\end{align},$$
         with \\(RT_{obs}\\) and \\(RT_{pred}\\) are the observed and predicted
         reaction times, respectively."),
-      h4("Parameter bounds"),
+      h5("Parameter bounds"),
       p("The following boundaries are set for the parameters:"),
       fluidRow(
         column(4, offset=4,
@@ -369,7 +369,7 @@ fluidRow(
     widths = c(2, 10)
 )),
   column(1,
-    h4("Glossary"),
+    h5("Glossary"),
     bsButton("glossOmega", "\\(\\omega\\)"),
     bsPopover(id="glossOmega", title="&#969 (omega)",
               content="width of the time-window of integration",

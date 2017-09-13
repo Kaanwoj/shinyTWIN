@@ -2,12 +2,12 @@ tabPanel("Simulation", value = "Sim",
   p(class="text-info", "To simulate your own data, first specify which paradigm and
     parameter values you want to use. In order to apply your changes and
     start the simulation, press Simulate!"),
-  selectInput("paradigmSim", "1. Choose paradigm", choices =
+  selectInput("paradigmSim", h4("1. Choose paradigm"), choices =
               c("Focused Attention Paradigm" = "fap",
                 "Redundant Target Paradigm" = "rtp")),
   fluidRow(
     column(3,
-      h5("2. Set parameter values"),
+      h4("2. Set parameter values"),
       uiOutput("soa_input"),
       sliderInput("N","Number of trials:",
                   min = 1, max = 1000, value = 500)),
@@ -27,7 +27,7 @@ tabPanel("Simulation", value = "Sim",
       tags$div(class = "help-tip",
         p("Processing time is simulated from a normal distribution. Select
           its expected value.")),
-      sliderInput("mu","Second stage processing time \\(\\mu\\)",
+      sliderInput("mu","\\(\\mu\\)",
                   min = 100, max = 500, value = 200),
       p("The standard deviation of the second stage processing time is
         fixed to \\(\\frac{\\mu}{5}\\).")),
@@ -38,13 +38,13 @@ tabPanel("Simulation", value = "Sim",
                   min = 20, max = 100, value = 50))),
   fluidRow(
     column(3,
-      h5("3. Simulate data"),
+      h4("3. Simulate data"),
       actionButton("sim_button", "Simulate!")),
     column(9,
-      h5("4. To download your simulated data, press on the button
+      h4("4. To download your simulated data, press on the button
          below"),
       downloadButton('downloadData', 'Download (.csv)'))),
-    h5("5. View Simulated Data"),
+    h4("5. View Simulated Data"),
     tabsetPanel(
       tabPanel("Plot",
         h5("Boxplots of reaction times for each SOA"),
