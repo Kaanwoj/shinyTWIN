@@ -38,52 +38,44 @@ server <- shinyServer(function(input, output, session) {
 
     # x-sequence for plotting the unimodal distributions
     x <- seq(0,300)
+    density.plot <- ggplot(data.frame(x=x),aes(x=x))
 
     if (input$distPar == "expFAP") {
-
-    ggplot(data.frame(x=seq(0,300)),aes(x=x)) +
-      stat_function(fun=dexp,geom = "line", size=1, col= "blue", args =
-                    (mean=1/input$mu_nt)) +
-      stat_function(fun=dexp,geom = "line", size=1, col= "red", args =
-                    (mean=1/input$mu_t)) +
-      labs(title = "Distribution of 1st stage processing",
-           x = "Time (ms)", y = "Density function") +
-      theme(aspect.ratio=0.75) +
-      theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
-                                      margin = margin(10, 0, 10, 0)))
+      density.plot <- density.plot +
+        stat_function(fun=dexp,geom = "line", size=1, col= "blue", args =
+                      (mean=1/input$mu_nt)) +
+        stat_function(fun=dexp,geom = "line", size=1, col= "red", args =
+                      (mean=1/input$mu_t))
 
     } else if (input$distPar == "normFAP") {
-
-      ggplot(data.frame(x=seq(0,300)),aes(x=x)) +
+      density.plot <- density.plot +
         stat_function(fun=dnorm, geom = "line", size=1, col= "blue", args =
                       list(mean=input$mun_s1, sd = input$sd_s1)) +
         stat_function(fun=dnorm, geom = "line", size=1, col= "red", args =
-                      list(mean=input$mun_s2, sd = input$sd_s2)) +
-        labs(title = "Distribution of 1st stage processing",
-             x = "Time (ms)", y = "Density function") +
-        theme(aspect.ratio=0.75) +
-        theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
-                                      margin = margin(10, 0, 10, 0)))
+                      list(mean=input$mun_s2, sd = input$sd_s2))
     } else {
 
-    # check if given values make sense (kept it in here because we need an interval. Gives error message )
+    # check if given values make sense (kept it in here because we need an
+    # interval. Gives error message )
       validate(
         need(input$range_s1[2] - input$range_s1[1] > 0,
              "Please check your input data for the first stimulus!"),
         need(input$range_s2[2] - input$range_s2[1] > 0,
              "Please check your input data for the second stimulus!")
       )
-      ggplot(data.frame(x=seq(0,300)),aes(x=x)) + 
+      density.plot <- density.plot +
         stat_function(fun=dunif, geom = "line", size=1, col= "blue", args =
                       list(min=input$range_s1[1], max = input$range_s1[2])) +
         stat_function(fun=dunif, geom = "line", size=1, col= "red", args =
-                      list(min=input$range_s2[1], max = input$range_s2[2])) +
-        labs(title = "Distribution of 1st stage processing",
-             x = "Time (ms)", y = "Density function") +
-        theme(aspect.ratio=0.75) +
-        theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
-                                        margin = margin(10, 0, 10, 0)))
-      }
+                      list(min=input$range_s2[1], max = input$range_s2[2]))
+    }
+    density.plot <- density.plot +
+      labs(title = "First Stage Processing Time Density Function", x =
+           "time (ms)", y = "density") +
+      theme(aspect.ratio=0.75) +
+      theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
+                                      margin = margin(10, 0, 10, 0)))
+    density.plot
   })
 
   ### Plot simulated RT means as a function of SOA ###
@@ -171,9 +163,9 @@ server <- shinyServer(function(input, output, session) {
     ggplot(data = results) +
       geom_line( aes(tau, means), color = "red", size = 1) +
       geom_line (aes(tau, mean_t), color = "blue", size = 1) +
-      labs(x = "Stimulus-onset asynchrony \n(SOA)",
-           y = "Reaction Times (ms)",
-           title = "Mean Reaction Times for the unimodal \nand bimodal task condition") +
+      labs(x = "stimulus-onset asynchrony (SOA)",
+           y = "reaction time (ms)",
+           title = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition") +
       ylim(c(0,max)) +
       theme(aspect.ratio=0.75) +
       theme(plot.title = element_text(size=16, face="bold", hjust = 0.5, margin
@@ -207,9 +199,9 @@ server <- shinyServer(function(input, output, session) {
 
     else(
       ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue")
-        + labs(title="Integration function",
-             x = "SOA",
-             y = "Probability of integration")
+        + labs(title="Probability of Integration as a Function of SOA",
+             x = "stimulus-onset asynchrony (SOA)",
+             y = "probability of integration")
       + theme(aspect.ratio=0.75)
       + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
                                         margin = margin(10, 0, 10, 0)))
