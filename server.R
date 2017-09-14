@@ -385,9 +385,9 @@ server <- shinyServer(function(input, output, session) {
                               "1&#8260&#955<sub>B</sub>", "&#956", "&#969",
                               "&#948"))
 
-    if (datasetEst()$trueValues == FALSE) {
+    suppressWarnings( if (datasetEst()$trueValues == FALSE) {
         tab <- tab[1:2,]
-    }
+    })
 
       tab
   })
