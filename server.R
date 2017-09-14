@@ -1,6 +1,4 @@
 library(ggplot2)
-library(plyr)
-library(xtable)
 source("simulateFAP.R")
 source("simulateRTP.R")
 source("estimate.R")
