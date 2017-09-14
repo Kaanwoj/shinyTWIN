@@ -36,23 +36,14 @@ server <- shinyServer(function(input, output, session) {
 
     # x-sequence for plotting the unimodal distributions
     x <- seq(0,300)
-    density.plot <- ggplot(data.frame(x=x),aes(x=x))
 
     if (input$distPar == "expFAP") {
-      density.plot <- density.plot +
-        stat_function(fun=dexp,geom = "line", size=1, col= "blue", args =
-                      (mean=1/input$mu_nt)) +
-        stat_function(fun=dexp,geom = "line", size=1, col= "red", args =
-                      (mean=1/input$mu_t))
-
+      density.t <- dexp(x, rate=1/input$mu_t)
+      density.nt <- dexp(x, rate=1/input$mu_nt)
     } else if (input$distPar == "normFAP") {
-      density.plot <- density.plot +
-        stat_function(fun=dnorm, geom = "line", size=1, col= "blue", args =
-                      list(mean=input$mun_s1, sd = input$sd_s1)) +
-        stat_function(fun=dnorm, geom = "line", size=1, col= "red", args =
-                      list(mean=input$mun_s2, sd = input$sd_s2))
+      density.t <- dnorm(x, mean=input$mun_s1, sd=input$sd_s1)
+      density.nt <- dnorm(x, mean=input$mun_s2, sd=input$sd_s2)
     } else {
-
     # check if given values make sense (kept it in here because we need an
     # interval. Gives error message )
       validate(
@@ -61,19 +52,14 @@ server <- shinyServer(function(input, output, session) {
         need(input$range_s2[2] - input$range_s2[1] > 0,
              "Please check your input data for the second stimulus!")
       )
-      density.plot <- density.plot +
-        stat_function(fun=dunif, geom = "line", size=1, col= "blue", args =
-                      list(min=input$range_s1[1], max = input$range_s1[2])) +
-        stat_function(fun=dunif, geom = "line", size=1, col= "red", args =
-                      list(min=input$range_s2[1], max = input$range_s2[2]))
+      density.t <- dunif(x, min=input$range_s1[1], max=input$range_s1[2])
+      density.nt <- dunif(x, min=input$range_s2[1], max=input$range_s2[2])
     }
-    density.plot <- density.plot +
-      labs(title = "First Stage Processing Time Density Function", x =
-           "time (ms)", y = "density") +
-      theme(aspect.ratio=0.75) +
-      theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
-                                      margin = margin(10, 0, 10, 0)))
-    density.plot
+    plot(density.t, type="l", xlim=c(0,300), col="red",
+      main="First Stage Processing Time Density Function", xlab="time (ms)",
+      ylab="density")
+    lines(density.nt, xlim=c(0,300), col="blue")
+    legend("topright", c("target stimulus", "nontarget stimulus"), col=c("red", "blue"), lty=1)
   })
 
   ### Plot simulated RT means as a function of SOA ###
@@ -158,16 +144,12 @@ server <- shinyServer(function(input, output, session) {
 
 
     # plot the means against the SOA values
-    ggplot(data = results) +
-      geom_line( aes(tau, means), color = "red", size = 1) +
-      geom_line (aes(tau, mean_t), color = "blue", size = 1) +
-      labs(x = "stimulus-onset asynchrony (SOA)",
-           y = "reaction time (ms)",
-           title = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition") +
-      ylim(c(0,max)) +
-      theme(aspect.ratio=0.75) +
-      theme(plot.title = element_text(size=16, face="bold", hjust = 0.5, margin
-                                      = margin(10, 0, 10, 0)))
+    plot(results$tau, results$means, type = "b", col = "red", ylim=c(0, max),
+         ylab = "reaction times (ms)", xlab = "stimulus-onset asynchrony (SOA)",
+         main = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition")
+    points(results$tau, results$mean_t, type = "l", col = "blue")
+    legend("bottomright", title="Condition",
+           legend=c("crossmodal", "unimodal"), col=c("red", "blue"), lty=1)
   })
 
   ### Plot probability of integration as a function of SOA
@@ -192,18 +174,16 @@ server <- shinyServer(function(input, output, session) {
     results <- data.frame(tau, prob_value)
 
     # plot the results
-    if (input$distPar == "uniFAP" && (input$range_s1[2] == input$range_s1[1] || input$range_s2[2] == input$range_s2[1]))
-      ggplot()  # plot nothing if it doesnt make sense (they didnt tick an interval, but a single number)
+    if (input$distPar == "uniFAP" && (input$range_s1[2] == input$range_s1[1] ||
+                                      input$range_s2[2] == input$range_s2[1]))
+      plot()  # plot nothing if it doesnt make sense (they didnt tick an interval, but a single number)
 
-    else(
-      ggplot(data= results, aes(x=tau, y=prob_value)) + geom_line(size=1, color= "blue")
-        + labs(title="Probability of Integration as a Function of SOA",
-             x = "stimulus-onset asynchrony (SOA)",
-             y = "probability of integration")
-      + theme(aspect.ratio=0.75)
-      + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5,
-                                        margin = margin(10, 0, 10, 0)))
-    )
+    else {
+      plot(results$tau, results$prob_value, type = "b", col = "blue",
+              main = "Probability of Integration as a Function of SOA",
+              xlab = "stimulus-onset asynchrony (SOA)",
+              ylab = "probability of integration")
+    }
   })
 
   ######################
