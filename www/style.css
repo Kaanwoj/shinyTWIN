@@ -132,4 +132,11 @@ text-decoration: none;
 	100% { opacity:100%; }
 }
 
+/*------------------------------------
+	Vertical Line for Glossary
+-------------------------------------*/
+
+.verticalLine {
+  border-left: thick solid #ff0000;
+}
 

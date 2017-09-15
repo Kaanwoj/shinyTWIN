@@ -371,7 +371,8 @@ fluidRow(
     widths = c(2, 10)
 )),
   column(1,
-    h5("Glossary"),
+    h5("Glossary", style = "color:black"),
+
     bsButton("glossOmega", "\\(\\omega\\)"),
     bsPopover(id="glossOmega", title="&#969 (omega)",
               content="width of the time-window of integration",
@@ -425,6 +426,6 @@ fluidRow(
     bsButton("glossSOAtau", "SOA / \\(\\tau\\)"),
     bsPopover(id="glossSOAtau", title="SOA / &#964 (tau)",
               content="stimulus onset asynchrony; time between the presentation of the two stimuli",
-              placement="bottom", trigger="hover")
-  )
+              placement="bottom", trigger="hover"),
+    style='margin-left:0px;border-left:1px solid; padding: 10px; color:#D3D3D3')
 ))

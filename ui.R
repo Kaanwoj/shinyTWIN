@@ -3,7 +3,6 @@ library(shinyBS)
 
 shinyUI(
   navbarPage(title = "TWIN Model", theme = "style.css", id = "page",
-
     ########################
     ### Introduction Tab ###
     ########################
@@ -36,7 +35,7 @@ shinyUI(
         column(3, offset=3,
       actionButton("theorybutton",
         HTML("<strong>Theory</strong><br><p> To learn about the theoretical
-             <br> background of the experimental <br> paradigms and the TWIN
+             <br> background of the experimental <br> paradigms and the TWIN model
              </p>"),icon("book"), style = "background-color: #ffff99",
              width="300px")),
         column(3,

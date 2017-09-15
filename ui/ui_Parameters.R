@@ -2,7 +2,7 @@ tabPanel("Parameters", value = "Para",
   p(class="text-info", "Play around with the parameter values and see how
     that affects the distribution of the first stage processing times, the
     predicted mean reaction times, and the probability of integration."),
-  h5("First stage processing time (in ms)"),
+  h4("First stage processing time (in ms)"),
   fluidRow(
     column(2,
       selectInput("distPar", "Distribution",
@@ -46,7 +46,7 @@ tabPanel("Parameters", value = "Para",
             sliderInput("range_s2","Range for non-target stimulus",
                     min = 1, max = 300, value = c(70,150)))))
     )),
-    h5("Second stage processing time (in ms)"),
+    h4("Second stage processing time (in ms)"),
     fluidRow(
       column(3,
         sliderInput("mu_second","Mean (\\(\\mu\\))",
