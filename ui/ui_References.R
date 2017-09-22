@@ -8,7 +8,7 @@ tabPanel("References", value = "References",
         a("doi:10.1162/0898929041502733", target="_blank",
           href="http://www.mitpressjournals.org/doi/abs/10.1162/0898929041502733"),
         a("[pdf]", target="_blank",
-          href="https://www.uni-oldenburg.de/fileadmin/user_upload/psycho/ag/kogn/colonius/Jcogn.pdf")
+          href="https://www.uni-oldenburg.de/fileadmin/user_upload/psycho/ag/kogn/colonius/Jcogn.pdf") # can't be changed to article because the article is not publicly available
         ),
       li(HTML("Diederich, A., & Colonius, H. (2015). The time window of
               multisensory integration: Relating reaction times and judgments
@@ -25,7 +25,7 @@ tabPanel("References", value = "References",
         a("doi:10.1167/14.11.14", target="_blank",
           href="http://jov.arvojournals.org/article.aspx?articleid=2193864"),
         a("[pdf]", target="_blank",
-          href="https://www.researchgate.net/profile/Hans_Colonius/publication/266151642_Parameter_recovery_for_the_time-window-of-integration_TWIN_model_of_multisensory_integration_in_focused_attention/links/5432c6560cf225bddcc7e0a3.pdf")
+          href="http://jov.arvojournals.org/data/journals/jov/933543/i1534-7362-14-11-14.pdf") #changed to article
         )
       )
     })
