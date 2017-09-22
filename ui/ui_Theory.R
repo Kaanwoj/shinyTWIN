@@ -11,13 +11,13 @@ fluidRow(
             div(class="panel panel-default",
               div(class="panel-heading", "Crossmodal condition:"),
               div(class="panel-body",
-                "Two (or more) stimuli are presented on different modalities
+                "Two (or more) stimuli are presented in different modalities
                 simultaneously or with a short delay (stimulus-onset
                 asynchrony) between the stimuli.")),
             div(class="panel panel-default",
               div(class="panel-heading", "Unimodal condition:"),
               div(class="panel-body",
-                "One stimulus is presented on one modality."))
+                "One stimulus is presented in one modality."))
         )}),
       h5("Participant's Task"),
       p("... depends on the paradigm."),
@@ -101,7 +101,7 @@ fluidRow(
     tabPanel("Reaction Times",
       h4("Reaction Times"),
       p("The total reaction time in the crossmodal condition (\\(RT_{VA})\\) is
-        the sum of the processing times on stage 1 and stage 2. Let \\(M1\\)
+        the sum of the processing times in stage 1 and stage 2. Let \\(M1\\)
         and \\(M2\\) denote two random variables that refer to the first and
         second stage processing times, so that the overall reaction time
         becomes $$RT_{VA} = M_1 + M_2.$$"),
@@ -146,7 +146,7 @@ fluidRow(
       h4("Random Variable Distributions"),
       h5("First Stage"),
       p("Random variable \\(M_1\\) refers to the peripheral processing time
-        on stage 1. For the processing times for the visual and the
+        in stage 1. For the processing times for the visual and the
         acoustic stimulus, ", strong("V and A denote the two statistically
         independent, exponentially distributed random variables.")),
       a(href="#densityfirst", 'data-toggle'="collapse",
@@ -161,7 +161,7 @@ fluidRow(
         The corresponding distribution functions are
         \\(F_V(t)\\) and \\(F_A(t)\\), respectively.")),
       h5("Second Stage"),
-      p("Random variable \\(M_2\\) refers to the processing time on stage to
+      p("Random variable \\(M_2\\) refers to the processing time in stage two
         and is assumed to be ", strong("normally distributed"), "with mean
         \\(\\mu - \\Delta\\) in the crossmodal condition and mean \\(\\mu\\) in
         the unimodal condition."),
@@ -209,10 +209,10 @@ fluidRow(
         Time-Window of Integration, denoted by \\(\\omega\\)."),
       p("The SOA is defined such that the visual stimulus is always presented
         at \\(\\tau = 0\\). Thus, \\(\\tau > 0\\) indicates that that the
-        visual stimulus is presented before the auditory, and \\(\\tau < 0\\)
+        visual is presented before the auditory stimulus, and \\(\\tau < 0\\)
         indicates the reverse presentation order."),
       p("For the different paradigms, the event of multisensory integration
-        is be defined somewhat differently."),
+        is defined somewhat differently."),
       withTags({
         # Panel Collapse Accordion
         div(class="panel-group", id="accordionPI",
@@ -342,8 +342,8 @@ fluidRow(
             )))
     ))})),
     "Parameter Estimation",
-    tabPanel("Minimal Least Squares",
-      h4("Parameter Estimation with Minimal Least Squares"),
+    tabPanel("Minimum Least Squares",
+      h4("Parameter Estimation with Minimum Least Squares"),
       h5("The Objective Function"),
       p("Parameters are estimated by minimizing the
         \\(\\chi^2\\) statistic:
