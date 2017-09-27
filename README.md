@@ -1,2 +1,4 @@
 # shinyTWIN
-A Shiny app for visualizing, estimating and simulating the time-window-of-integration (TWIN) model
+A Shiny App for visualizing, simulating and estimating the
+Time-Window of integration (TWIN) model
+
