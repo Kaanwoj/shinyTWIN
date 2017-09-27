@@ -1,4 +1,3 @@
-library(ggplot2)
 source("simulateFAP.R")
 source("simulateRTP.R")
 source("estimate.R")
