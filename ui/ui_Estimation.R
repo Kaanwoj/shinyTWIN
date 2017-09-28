@@ -27,6 +27,7 @@ tabPanel("Estimation", value = "Est",
     mainPanel(
       h4("Parameter values"),
       tableOutput("estTextOut"),
+      tableOutput("chisqValue"),
       h4("Predicted and observed reaction times"),
       plotOutput("plotPredObs")
 )))

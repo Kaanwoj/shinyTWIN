@@ -373,6 +373,11 @@ server <- shinyServer(function(input, output, session) {
       estTab()
   }, rownames=TRUE, sanitize.text.function=function(x) x)
 
+  output$chisqValue <- renderTable({
+      paste("Objective function value: &#967<sup>2</sup> = ",
+            signif(est.out()$est$value, digits=4))
+  }, colnames=FALSE, sanitize.text.function=function(x) x)
+
   # Plot predicted and observed RTs as a function of SOA
   predObsPlot <- eventReactive(input$est_button, {
     est <- est.out()
