@@ -2,14 +2,18 @@ tabPanel("Parameters", value = "Para",
   p(class="text-info", "Play around with the parameter values and see how
     that affects the distribution of the first stage processing times, the
     predicted mean reaction times, and the probability of integration."),
-  h4("First stage processing time (in ms)"),
   fluidRow(
     column(2,
-      selectInput("distPar", "Distribution",
+      selectInput("ParadigmPar",h4("1. Choose Paradigm"), 
+                  choices = c("Focused Attention Paradigm" = "fap",
+                                "Redundant Target Paradigm" = "rtp"))),
+    column(2,
+      selectInput("distPar", h4("2. Select Distribution of First Stage processing Time"),
         choices = c("Exponential" = "expFAP",
                     "Normal" = "normFAP",
                     "Uniform" = "uniFAP"))),
-    column(10,
+    h4("3. Select Parameter values for the first stage (in ms)"),
+    column(8,
       # exponential distribution
       conditionalPanel(condition = ("input.distPar == 'expFAP'"),
         fluidRow(
@@ -46,7 +50,7 @@ tabPanel("Parameters", value = "Para",
             sliderInput("range_s2","Range for non-target stimulus",
                     min = 1, max = 300, value = c(70,150)))))
     )),
-    h4("Second stage processing time (in ms)"),
+    h4("4. Select Second stage parameters (in ms)"),
     fluidRow(
       column(3,
         sliderInput("mu_second","Mean (\\(\\mu\\))",
