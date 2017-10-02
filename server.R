@@ -1,4 +1,3 @@
-library(ggplot2)
 source("simulateFAP.R")
 source("simulateRTP.R")
 source("estimate.R")
@@ -373,6 +372,11 @@ server <- shinyServer(function(input, output, session) {
   output$estTextOut <- renderTable({
       estTab()
   }, rownames=TRUE, sanitize.text.function=function(x) x)
+
+  output$chisqValue <- renderTable({
+      paste("Objective function value: &#967<sup>2</sup> = ",
+            signif(est.out()$est$value, digits=4))
+  }, colnames=FALSE, sanitize.text.function=function(x) x)
 
   # Plot predicted and observed RTs as a function of SOA
   predObsPlot <- eventReactive(input$est_button, {
