@@ -30,59 +30,52 @@ server <- shinyServer(function(input, output, session) {
   ### Parameters Tab ###
   ######################
 
-  ### Plot distribution of first stage ###
-  output$uni_data_t <- renderPlot({
-
-    # x-sequence for plotting the unimodal distributions
-    x <- seq(0,300)
-
-    if (input$distPar == "expFAP") {
-      density.t <- dexp(x, rate=1/input$mu_t)
-      density.nt <- dexp(x, rate=1/input$mu_nt)
-    } else if (input$distPar == "normFAP") {
-      density.t <- dnorm(x, mean=input$mun_s1, sd=input$sd_s1)
-      density.nt <- dnorm(x, mean=input$mun_s2, sd=input$sd_s2)
-    } else {
-    # check if given values make sense (kept it in here because we need an
-    # interval. Gives error message )
-      validate(
-        need(input$range_s1[2] - input$range_s1[1] > 0,
-             "Please check your input data for the first stimulus!"),
-        need(input$range_s2[2] - input$range_s2[1] > 0,
-             "Please check your input data for the second stimulus!")
-      )
-      density.t <- dunif(x, min=input$range_s1[1], max=input$range_s1[2])
-      density.nt <- dunif(x, min=input$range_s2[1], max=input$range_s2[2])
-    }
-    plot(density.t, type="l", xlim=c(0,300), col="red",
-      main="First Stage Processing Time Density Function", xlab="time (ms)",
-      ylab="density")
-    lines(density.nt, xlim=c(0,300), col="blue")
-    legend("topright", c("target stimulus", "nontarget stimulus"), col=c("red", "blue"), lty=1)
-  })
-
-  ### Plot simulated RT means as a function of SOA ###
-
+  # Set fixed parameters
   # different stimulus onsets for the non-target stimulus
   tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
   SOA <- length(tau)
   n <- 1000 # number of simulated observations
+  x <- seq(0, 300) # range for density
 
-  # Simulation of fist stage, depending on chosen distribution
+  # Density and simulation of first stage, depending on chosen distribution
   # target stimulus
   stage1_t <- reactive({
-    if (input$distPar == "expFAP") (rexp(n, rate = 1/input$mu_t))
-    else if (input$distPar == "normFAP") (rnorm(n, mean = input$mun_s1, sd =
-                                             input$sd_s1))
-    else (runif(n, min = input$range_s1[1], max = input$range_s1[2]))
+    if (input$distPar == "expFAP") {
+      density.t <- dexp(x, rate=1/input$mu_t)
+      sim.t <- rexp(n, rate = 1/input$mu_t)
+    } else if (input$distPar == "normFAP") {
+      density.t <- dnorm(x, mean=input$mun_s1, sd=input$sd_s1)
+      sim.t <- rnorm(n, mean = input$mun_s1, sd = input$sd_s1)
+    } else if (input$distPar =="uniFAP") {
+      # check if given values make sense (kept it in here because we need an
+      # interval. Gives error message )
+      validate(
+        need(input$range_s1[2] - input$range_s1[1] > 0,
+             "Please check your input data for the first stimulus!")
+      )
+      density.t <- dunif(x, min=input$range_s1[1], max=input$range_s1[2])
+      sim.t <- runif(n, min = input$range_s1[1], max = input$range_s1[2])
+    }
+    list(sim=sim.t, density=density.t)
   })
 
   # non-target stimulus
   stage1_nt <- reactive({
-    if (input$distPar == "expFAP") (rexp(n, rate = 1/input$mu_nt))
-    else if (input$distPar == "normFAP") (rnorm(n, mean = input$mun_s2, sd =
-                                             input$sd_s2))
-    else (runif(n, min = input$range_s2[1], max = input$range_s2[2]))
+    if (input$distPar == "expFAP") {
+      density.nt <- dexp(x, rate=1/input$mu_nt)
+      sim.nt <- rexp(n, rate = 1/input$mu_nt)
+    } else if (input$distPar == "normFAP") {
+      density.nt <- dnorm(x, mean=input$mun_s2, sd=input$sd_s2)
+      sim.nt <- rnorm(n, mean = input$mun_s2, sd = input$sd_s2)
+    } else if (input$distPar =="uniFAP") {
+      validate(
+        need(input$range_s2[2] - input$range_s2[1] > 0,
+             "Please check your input data for the second stimulus!")
+      )
+      density.nt <- dunif(x, min=input$range_s2[1], max=input$range_s2[2])
+      sim.nt <- runif(n, min = input$range_s2[1], max = input$range_s2[2])
+    }
+    list(sim=sim.nt, density=density.nt)
   })
 
   # Simulation of the second stage (assumed normal distribution)
@@ -90,99 +83,65 @@ server <- shinyServer(function(input, output, session) {
     rnorm(n, mean = input$mu_second, sd = input$sd_second)
   })
 
-  # the matrix where integration is simulated in (later on)
-  integration <- matrix(0, nrow = n, ncol = SOA)
-
-  output$data <- renderPlot({
-    # check if the input variables make sense for the uniform data
-
-
-    # unimodal reaction times (first plus second stage, without integration)
-    obs_t <- stage1_t() + stage2()
-
-    # integration can only occur if the non-target wins the race
-    # and the target falls into the time-window <=> non-target + tau < target
-
-    for(i in 1:SOA){
-      integration[,i] <- stage1_t() - (stage1_nt() + tau[i])
-    } # > 0 if non-target wins, <= 0 if target wins
-
-    # no integration if target wins (preparation for further calculation)
-    integration[integration <= 0] <- Inf
-
-    # probability for integration:
-    # if the difference between the two stimuli falls into the time-window,
-    # integration occurs
-
-    # matrix with logical entries indicating for each run 
-    # whether integration takes place (1) or not (0)
-    integration <- as.matrix((integration <= input$omega), mode = "integer")
-
-    # bimodal simulation of the data:
-    # first stage RT of the target stimulus, second stage processing time
-    # and the amount of integration if integration takes place
-    obs_bi <- matrix(0, nrow = n, ncol = SOA)
-    obs_bi <- stage1_t() + stage2() - integration*input$delta
-
-    # set negative values to zero
-    obs_bi[obs_bi < 0] <- 0
-
-    # calculate the RT means of the simulated data for each SOA
-    means <- vector(mode = "integer", length = SOA)
-    mean_t <- vector(mode = "integer", length = SOA)
-    for (i in 1:SOA){
-      means[i] <- mean(obs_bi[,i])
-      mean_t[i] <- mean(obs_t)
+  # the matrix where integration is simulated in
+  integr.matrix <- reactive({
+    integr.matrix <- matrix(0, nrow = n, ncol = SOA)
+    for (i in 1:SOA) {
+        # Integration occurs if:
+        # NT + tau < T < NT + tau + omega
+        integr.matrix[,i] <- (stage1_nt()$sim + tau[i]) < stage1_t()$sim &
+                    stage1_t()$sim < (stage1_nt()$sim + input$omega + tau[i])
     }
-
-    # store the results in a data frame
-    results <- data.frame(tau, mean_t, means)
-
-    # maximum value of the data frame (as threshold for the plot)
-    max <- max(mean_t, means) + 50
-
-
-    # plot the means against the SOA values
-    plot(results$tau, results$means, type = "b", col = "red", ylim=c(0, max),
-         ylab = "reaction times (ms)", xlab = "stimulus-onset asynchrony (SOA)",
-         main = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition")
-    points(results$tau, results$mean_t, type = "l", col = "blue")
-    legend("bottomright", title="Condition",
-           legend=c("crossmodal", "unimodal"), col=c("red", "blue"), lty=1)
+    integr.matrix
   })
 
-  ### Plot probability of integration as a function of SOA
-  # check the input data of the uniform distribution
+  ### Plots ###
+  # Plot distribution of first stage
+  output$stage1_density <- renderPlot({
+    plot(stage1_t()$density, type = "l", xlim = c(0, 300), col = "red",
+      main = "First Stage Processing Time Density Function", xlab = "time (ms)",
+      ylab = "density")
+    lines(stage1_nt()$density, xlim = c(0, 300), col = "blue")
+    legend("topright", c("target stimulus", "nontarget stimulus"),
+           col = c("red", "blue"), lty = 1)
+  })
+
+  # Plot probability of integration as a function of SOA
   output$prob <- renderPlot({
-
-    # same integration calculation as for the other plot
-    for (i in 1:SOA) {
-      integration[,i] <- stage1_t() - (stage1_nt() + tau[i])
-    }
-    integration[integration <= 0] <- Inf
-    integration <- as.matrix((integration <= input$omega), mode = "integer")
-
     # calculate the probability for each SOA that integration takes place
-    prob_value <- vector(mode = "integer", length = SOA)
-    for (i in 1:SOA) {
-      prob_value[i] <- sum(integration[,i]) / length(integration[,i])
-      # probability of integration for all runs
-    }
+    prob_value <- colSums(integr.matrix()) / nrow(integr.matrix())
 
-    # put the results into a data frame
-    results <- data.frame(tau, prob_value)
+    plot(tau, prob_value, type = "b", col = "blue",
+         main = "Probability of Integration as a Function of SOA",
+         xlab = "stimulus-onset asynchrony (SOA)",
+         ylab = "probability of integration")
+  })
 
-    # plot the results
-    if (input$distPar == "uniFAP" && (input$range_s1[2] == input$range_s1[1] ||
-                                      input$range_s2[2] == input$range_s2[1]))
-      plot()  # plot nothing if it doesnt make sense (they didnt tick an interval, but a single number)
+  # Plot uni- and bi-modal reaction times as a function of SOA
+  output$data <- renderPlot({
+    # unimodal reaction times (first plus second stage, without integration)
+    rt_uni <- stage1_t()$sim + stage2()
 
-    else {
-      plot(results$tau, results$prob_value, type = "b", col = "blue",
-              main = "Probability of Integration as a Function of SOA",
-              xlab = "stimulus-onset asynchrony (SOA)",
-              ylab = "probability of integration")
-    }
+    # bimodal reaction times:
+    # first stage RT of the target stimulus, second stage processing time
+    # and the amount of integration if integration takes place
+    rt_bi <- stage1_t()$sim + stage2() - integr.matrix() * input$delta
+
+    # calculate the RT means of the simulated data for each SOA
+    means_bi <- colMeans(rt_bi)
+    mean_uni <- mean(rt_uni)
+
+    # plot the means against the SOA values
+    # maximum value of the data frame (as threshold for the plot)
+    max <- max(mean_uni, means_bi) + 50
+    min <- min(means_bi, mean_uni, 0)
+
+    plot(tau, means_bi, type = "b", col = "red", ylim=c(min, max),
+         ylab = "reaction times (ms)", xlab = "stimulus-onset asynchrony (SOA)",
+         main = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition")
+    points(tau, rep(mean_uni, SOA), type = "l", col = "blue")
+    legend("bottomright", title = "Condition",
+           legend = c("crossmodal", "unimodal"), col = c("red", "blue"), lty = 1)
   })
 
   ######################
