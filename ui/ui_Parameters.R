@@ -74,13 +74,13 @@ tabPanel("Parameters", value = "Para",
     fluidRow(
       column(4,
         plotOutput("stage1_density")),
-      column(4,
+      column(4, 
+             tags$div(class = "help-tip",
+                      p("- A decrease in RTs in the bimodal task condition compared to the
+                   unimodal condition implies facilitation.", br(),
+                        "- Negative reaction times may be simulated due to
+                   unrealistic parameter settings.")),
         plotOutput("prob")),
       column(4,
-        tags$div(class = "help-tip",
-          p("- A decrease in RTs in the bimodal task condition compared to the
-              unimodal condition implies facilitation.", br(),
-            "- Negative reaction times may be simulated due to
-                    unrealistic parameter settings.")),
         plotOutput("data")))
 )
