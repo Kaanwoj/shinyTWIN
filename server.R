@@ -32,7 +32,7 @@ server <- shinyServer(function(input, output, session) {
 
   # Set fixed parameters
   # different stimulus onsets for the non-target stimulus
-  tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50)
+  tau <- c(-200 ,-150, -100, -50, -25, 0, 25, 50, 100, 150, 200)
   SOA <- length(tau)
   n <- 1000 # number of simulated observations
   x <- seq(0, 300) # range for density
@@ -86,11 +86,24 @@ server <- shinyServer(function(input, output, session) {
   # the matrix where integration is simulated in
   integr.matrix <- reactive({
     integr.matrix <- matrix(0, nrow = n, ncol = SOA)
-    for (i in 1:SOA) {
-        # Integration occurs if:
-        # NT + tau < T < NT + tau + omega
-        integr.matrix[,i] <- (stage1_nt()$sim + tau[i]) < stage1_t()$sim &
-                    stage1_t()$sim < (stage1_nt()$sim + input$omega + tau[i])
+    V <- stage1_t()$sim
+    A <- stage1_nt()$sim
+    if (input$Parampar == "fap") {
+      for (i in 1:SOA) {
+          # Integration occurs if:
+          # NT + tau < T < NT + tau + omega
+          integr.matrix[,i] <- (A + tau[i] < V) & (V < A + input$omega + tau[i])
+      }
+    } else if (input$Parampar == "rtp") {
+      for (i in 1:SOA) {
+          # Integration occurs if:
+          # {A + tau < V < A + tau + omega} U {V < A + tau > V + omega}
+          # acoustic wins U visual wins, visual stimulus is presented at t=0
+          integr.matrix[,i] <- ((A + tau[i] < V) &
+                                (V < A + input$omega + tau[i])) |
+                               ((V < A + tau[i]) &
+                                (A + tau[i] < V + input$omega))
+      }
     }
     integr.matrix
   })
