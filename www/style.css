@@ -54,9 +54,10 @@ text-decoration: none;
 
 
 .help-tip{
-    	position: absolute;
-	top: 18px;
-	right: 18px;
+    	position: relative;
+	display: inline-block;
+	top: 0px;
+	right: 0px;
 	text-align: center;
 	background-color: #BCDBEA;
 	border-radius: 50%;
@@ -65,7 +66,7 @@ text-decoration: none;
 	font-size: 14px;
 	line-height: 26px;
 	cursor: default;
-	margin-left: -60px;
+	margin-left: -50px;
 }
 
 .help-tip:before{

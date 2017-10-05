@@ -12,10 +12,9 @@ tabPanel("Simulation", value = "Sim",
       sliderInput("N","Number of trials:",
                   min = 1, max = 1000, value = 500)),
     column(3,
-      h5("First stage processing time"),
-      tags$div(class = "help-tip",
-        p("Processing time is simulated from an exponential distribution.
-          Select its expected value.")),
+      h5(tags$div(class = "help-tip",
+                  p("Processing time is simulated from an exponential distribution.
+                    Select its expected value.")), "First stage processing time"),
       sliderInput("proc.A","for auditory stimulus
                   (\\(\\frac{1}{\\lambda_A}\\))",
                   min = 20, max = 150, value = 100),
@@ -23,10 +22,9 @@ tabPanel("Simulation", value = "Sim",
                   (\\(\\frac{1}{\\lambda_V}\\))",
                   min = 20, max = 150, value = 50)),
     column(3,
-      h5("Second stage processing time"),
-      tags$div(class = "help-tip",
-        p("Processing time is simulated from a normal distribution. Select
-          its expected value.")),
+      h5(tags$div(class = "help-tip",
+                  p("Processing time is simulated from a normal distribution. Select
+                    its expected value.")),"Second stage processing time"),
       sliderInput("mu","\\(\\mu\\)",
                   min = 100, max = 500, value = 200),
       p("The standard deviation of the second stage processing time is

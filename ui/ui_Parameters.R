@@ -12,12 +12,11 @@ tabPanel("Parameters", value = "Para",
       selectInput("distPar", h4("2. Select Distribution of First Stage processing Time"),
         choices = c("Exponential" = "expFAP",
                     "Normal" = "normFAP",
-                    "Uniform" = "uniFAP")),
-      tags$div(class = "help-tip",
-               p("In FAP, the visual stimulus is set as the target stimulus. In RTP, the 
-                      stimulus detected first functions as the target, independent from its modality."))
+                    "Uniform" = "uniFAP"))
       ),
-    h4("3. Select Parameter values for the first stage (in ms)"),
+    h4(tags$div(class = "help-tip",
+                p("In FAP, the visual stimulus is set as the target stimulus. In RTP, the 
+                  stimulus detected first functions as the target, independent from its modality.")), "3. Select Parameter values for the first stage (in ms)"),
     column(8,
 # exponential distribution
       conditionalPanel(condition = ("input.distPar == 'expFAP'"),
@@ -75,12 +74,12 @@ tabPanel("Parameters", value = "Para",
       column(4,
         plotOutput("stage1_density")),
       column(4, 
+        plotOutput("prob")),
+      column(4,
              tags$div(class = "help-tip",
                       p("- A decrease in RTs in the bimodal task condition compared to the
                    unimodal condition implies facilitation.", br(),
                         "- Negative reaction times may be simulated due to
                    unrealistic parameter settings.")),
-        plotOutput("prob")),
-      column(4,
         plotOutput("data")))
 )
