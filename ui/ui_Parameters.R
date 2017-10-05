@@ -6,16 +6,17 @@ tabPanel("Parameters", value = "Para",
     column(2,
       selectInput("Parampar",h4("1. Choose Paradigm"), 
                   choices = c("Focused Attention Paradigm" = "fap",
-                                "Redundant Target Paradigm" = "rtp")),
-      tags$div(class = "help-tip",
-               p("In FAP, the visual stimulus is set as the target stimulus. In RTP, the 
-                 stimulus detected first functions as the target, independent from its modality."))
+                                "Redundant Target Paradigm" = "rtp"))
       ),
     column(2,
       selectInput("distPar", h4("2. Select Distribution of First Stage processing Time"),
         choices = c("Exponential" = "expFAP",
                     "Normal" = "normFAP",
-                    "Uniform" = "uniFAP"))),
+                    "Uniform" = "uniFAP")),
+      tags$div(class = "help-tip",
+               p("In FAP, the visual stimulus is set as the target stimulus. In RTP, the 
+                      stimulus detected first functions as the target, independent from its modality."))
+      ),
     h4("3. Select Parameter values for the first stage (in ms)"),
     column(8,
 # exponential distribution
