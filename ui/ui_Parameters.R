@@ -6,7 +6,11 @@ tabPanel("Parameters", value = "Para",
     column(2,
       selectInput("Parampar",h4("1. Choose Paradigm"), 
                   choices = c("Focused Attention Paradigm" = "fap",
-                                "Redundant Target Paradigm" = "rtp"))),
+                                "Redundant Target Paradigm" = "rtp")),
+      tags$div(class = "help-tip",
+               p("In FAP, the visual stimulus is set as the target stimulus. In RTP, the 
+                 stimulus detected first functions as the target, independent from its modality."))
+      ),
     column(2,
       selectInput("distPar", h4("2. Select Distribution of First Stage processing Time"),
         choices = c("Exponential" = "expFAP",
@@ -14,76 +18,42 @@ tabPanel("Parameters", value = "Para",
                     "Uniform" = "uniFAP"))),
     h4("3. Select Parameter values for the first stage (in ms)"),
     column(8,
-      # exponential distribution: FAP
-      conditionalPanel(condition = ("input.Parampar == 'fap' & input.distPar == 'expFAP'"),
+# exponential distribution
+      conditionalPanel(condition = ("input.distPar == 'expFAP'"),
         fluidRow(
           column(5,
-            sliderInput("mu_t","Mean for target stimulus
+            sliderInput("mu_t","Mean for visual stimulus
                         (\\(\\frac{1}{\\lambda_V}\\))", min = 1, max = 100,
                         value = 100)),
           column(5,
-            sliderInput("mu_nt", "Mean for non-target stimulus
+            sliderInput("mu_nt", "Mean for auditory stimulus
                         (\\(\\frac{1}{\\lambda_A}\\))", min = 1, max = 100,
                         value = 50)))),
-      # normal distribution: FAP
-      conditionalPanel( condition = ("input.Parampar == 'fap' & input.distPar == 'normFAP'"),
+      # normal distribution
+      conditionalPanel( condition = ("input.distPar == 'normFAP'"),
         fluidRow(
           column(3,
-            sliderInput("mun_s1","Mean for target stimulus",
+            sliderInput("mun_s1","Mean for visual stimulus",
                     min = 1, max = 150, value = 50)),
           column(3,
-            sliderInput("sd_s1","Standard deviation for target stimulus",
+            sliderInput("sd_s1","Standard deviation for visual stimulus",
                     min = 1, max = 50, value = 25)),
           column(3,
-            sliderInput("mun_s2","Mean for non-target stimulus",
+            sliderInput("mun_s2","Mean for auditory stimulus",
                     min = 1, max = 150, value = 75)),
           column(3,
-            sliderInput("sd_s2", "Standard deviation for non-target stimulus ",
+            sliderInput("sd_s2", "Standard deviation for auditory stimulus ",
                     min = 1, max = 50, value = 40)))),
-# uniform distribution: FAP
-      conditionalPanel( condition = ("input.Parampar == 'fap' & input.distPar == 'uniFAP'"),
+# uniform distribution
+      conditionalPanel( condition = ("input.distPar == 'uniFAP'"),
         fluidRow(
           column(4,
-            sliderInput("range_s1","Range for target stimulus",
+            sliderInput("range_s1","Range for visual stimulus",
                     min = 1, max = 300, value = c(50,110))),
           column(4,
-            sliderInput("range_s2","Range for non-target stimulus",
+            sliderInput("range_s2","Range for auditory stimulus",
                     min = 1, max = 300, value = c(70,150))))
-        ),
-# exponential distribution: RTP
-        conditionalPanel(condition = ("input.Parampar == 'rtp' & input.distPar == 'expFAP'"),
-          fluidRow(
-            column(5,
-                sliderInput("mu_t","Mean for stimulus detected first", min = 1, max = 100,
-                    value = 100)),
-            column(5,
-                sliderInput("mu_nt", "Mean for stimulus detected after", min = 1, max = 100,
-                    value = 50)))),
-# normal distribution: RTP
-    conditionalPanel( condition = ("input.Parampar == 'rtp' & input.distPar == 'normFAP'"),
-           fluidRow(
-            column(3,
-               sliderInput("mun_s1","Mean for first stimulus",
-                      min = 1, max = 150, value = 50)),
-                                         column(3,
-               sliderInput("sd_s1","Standard deviation for first stimulus",
-                              min = 1, max = 50, value = 25)),
-            column(3,
-               sliderInput("mun_s2","Mean for second stimulus",
-                          min = 1, max = 150, value = 75)),
-            column(3,
-               sliderInput("sd_s2", "Standard deviation for second stimulus ",
-                    min = 1, max = 50, value = 40)))),
-# uniform distribution: RTP
-     conditionalPanel( condition = ("input.Parampar == 'rtp' & input.distPar == 'uniFAP'"),
-        fluidRow(
-           column(4,
-        sliderInput("range_s1","Range for first stimulus",
-                    min = 1, max = 300, value = c(50,110))),
-              column(4,
-        sliderInput("range_s2","Range for second stimulus",
-                 min = 1, max = 300, value = c(70,150))))) )
-),
+))),
   
   tags$hr(),
     h4("4. Select Second stage parameters (in ms)"),
