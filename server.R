@@ -115,7 +115,7 @@ server <- shinyServer(function(input, output, session) {
       main = "First Stage Processing Time Density Function", xlab = "time (ms)",
       ylab = "density")
     lines(stage1_nt()$density, xlim = c(0, 300), col = "blue")
-    legend("topright", c("target stimulus", "nontarget stimulus"),
+    legend("topright", c("visual stimulus", "auditory stimulus"),
            col = c("red", "blue"), lty = 1)
   })
 
@@ -136,9 +136,15 @@ server <- shinyServer(function(input, output, session) {
     rt_uni <- stage1_t()$sim + stage2()
 
     # bimodal reaction times:
-    # first stage RT of the target stimulus, second stage processing time
-    # and the amount of integration if integration takes place
-    rt_bi <- stage1_t()$sim + stage2() - integr.matrix() * input$delta
+    if (input$Parampar == "fap") {
+      # E(RT_VA) = E(V) + mu + P(I_FAP) * delta
+      rt_bi <- stage1_t()$sim + stage2() - integr.matrix() * input$delta
+    } else if (input$Parampar == "rtp") {
+      # E(RT_VA) = E(min(V, A)) + mu + P(I_RTP) * delta
+      rt_bi <- sapply(seq_along(stage1_t()$sim),
+                    function(i) min(stage1_t()$sim[i], stage1_nt()$sim[i])) +
+               stage2() - integr.matrix() * input$delta
+    }
 
     # calculate the RT means of the simulated data for each SOA
     means_bi <- colMeans(rt_bi)
@@ -154,7 +160,7 @@ server <- shinyServer(function(input, output, session) {
          main = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition")
     points(tau, rep(mean_uni, SOA), type = "l", col = "blue")
     legend("bottomright", title = "Condition",
-           legend = c("crossmodal", "unimodal"), col = c("red", "blue"), lty = 1)
+           legend = c("crossmodal", "unimodal (visual)"), col = c("red", "blue"), lty = 1)
   })
 
   ######################
