@@ -111,12 +111,12 @@ server <- shinyServer(function(input, output, session) {
   ### Plots ###
   # Plot distribution of first stage
   output$stage1_density <- renderPlot({
-    plot(stage1_t()$density, type = "l", xlim = c(0, 300), col = "red",
+      plot(stage1_t()$density, type = "l", xlim = c(0, 300), col = "blue", lty = 6,
       main = "First Stage Processing Time Density Function", xlab = "time (ms)",
       ylab = "density")
-    lines(stage1_nt()$density, xlim = c(0, 300), col = "blue")
+    lines(stage1_nt()$density, xlim = c(0, 300), col = "mediumseagreen")
     legend("topright", c("visual stimulus", "auditory stimulus"),
-           col = c("red", "blue"), lty = 1)
+           col = c("blue", "mediumseagreen"), lty = c(6, 1))
   })
 
   # Plot probability of integration as a function of SOA
@@ -124,7 +124,7 @@ server <- shinyServer(function(input, output, session) {
     # calculate the probability for each SOA that integration takes place
     prob_value <- colSums(integr.matrix()) / nrow(integr.matrix())
 
-    plot(tau, prob_value, type = "b", col = "blue",
+    plot(tau, prob_value, type = "b", col = "mediumorchid4", ylim = c(0, 1),
          main = "Probability of Integration as a Function of SOA",
          xlab = "stimulus-onset asynchrony (SOA)",
          ylab = "probability of integration")
@@ -158,9 +158,10 @@ server <- shinyServer(function(input, output, session) {
     plot(tau, means_bi, type = "b", col = "red", ylim=c(min, max),
          ylab = "reaction times (ms)", xlab = "stimulus-onset asynchrony (SOA)",
          main = "Mean Predicted Reaction Times for the \nUnimodal and Crossmodal Condition")
-    points(tau, rep(mean_uni, SOA), type = "l", col = "blue")
+    points(tau, rep(mean_uni, SOA), type = "l", col = "blue", lty = 6)
     legend("bottomright", title = "Condition",
-           legend = c("crossmodal", "unimodal (visual)"), col = c("red", "blue"), lty = 1)
+           legend = c("crossmodal", "unimodal (visual)"),
+           col = c("red", "blue"), lty = c(1, 6))
   })
 
   ######################
