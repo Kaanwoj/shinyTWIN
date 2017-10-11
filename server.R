@@ -117,7 +117,7 @@ server <- shinyServer(function(input, output, session) {
     lines(stage1_nt()$density, xlim = c(0, 300), col = "mediumseagreen")
     legend("topright", c("visual stimulus", "auditory stimulus"),
            col = c("blue", "mediumseagreen"), lty = c(6, 1))
-  })
+  }, height = function() {session$clientData$output_stage1_density_width})
 
   # Plot probability of integration as a function of SOA
   output$prob <- renderPlot({
@@ -128,7 +128,7 @@ server <- shinyServer(function(input, output, session) {
          main = "Probability of Integration as a Function of SOA",
          xlab = "stimulus-onset asynchrony (SOA)",
          ylab = "probability of integration")
-  })
+  },  height = function() {session$clientData$output_prob_width})
 
   # Plot uni- and bi-modal reaction times as a function of SOA
   output$data <- renderPlot({
@@ -162,7 +162,7 @@ server <- shinyServer(function(input, output, session) {
     legend("bottomright", title = "Condition",
            legend = c("crossmodal", "unimodal (visual)"),
            col = c("red", "blue"), lty = c(1, 6))
-  })
+  },  height = function() {session$clientData$output_data_width})
 
   ######################
   ### Simulation Tab ###
