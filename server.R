@@ -140,10 +140,12 @@ server <- shinyServer(function(input, output, session) {
       # E(RT_VA) = E(V) + mu + P(I_FAP) * delta
       rt_bi <- stage1_t()$sim + stage2() - integr.matrix() * input$delta
     } else if (input$Parampar == "rtp") {
-      # E(RT_VA) = E(min(V, A)) + mu + P(I_RTP) * delta
+      # E(RT_VA) = E(min(V, A+tau)) + mu + P(I_RTP) * delta   added tau here 
+    for (x in 1:SOA) {
       rt_bi <- sapply(seq_along(stage1_t()$sim),
-                    function(i) min(stage1_t()$sim[i], stage1_nt()$sim[i])) +
+                    function(i) min(stage1_t()$sim[i], (stage1_nt()$sim[i]+tau[x]))) +
                stage2() - integr.matrix() * input$delta
+    }
     }
 
     # calculate the RT means of the simulated data for each SOA
