@@ -349,10 +349,9 @@ fluidRow(
         \\(\\chi^2\\) statistic:
         $$\\begin{align}
           \\chi^2 = \\sum_{\\text{all
-          conditions}}[\\frac{\\text{mean}[RT_{obs}]-[RT_{pred}]}{\\text{standard
-                     error}[RT_{obs}]}]^2
+          conditions}}\\left[\\frac{mean[RT_{obs}]-RT_{pred}}{SE[RT_{obs}]}\\right]^2
         \\end{align},$$
-        with \\(RT_{obs}\\) and \\(RT_{pred}\\) are the observed and predicted
+        where \\(RT_{obs}\\) and \\(RT_{pred}\\) are the observed and predicted
         reaction times, respectively."),
       h5("Parameter bounds"),
       p("The following boundaries are set for the parameters:"),
